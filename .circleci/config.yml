@@ -125,7 +125,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Build container and publish to docker hub
+          name: Build container and publish to quay.io
           command: |
             APP_VERSION=$(cat ./app_version.txt)
             IMAGE_NAME="quay.io/hmpps/prison-to-nhs-update"
