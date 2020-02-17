@@ -1,4 +1,4 @@
-FROM openjdk:13-slim
+FROM openjdk:13-jdk-buster
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 RUN apt-get update && \
@@ -13,7 +13,7 @@ RUN addgroup --gid 2000 --system appgroup && \
 
 WORKDIR /app
 
-COPY --chown=appuser:appgroup build/libs/prison-to-probation-update*.jar /app/app.jar
+COPY --chown=appuser:appgroup build/libs/prison-to-nhs-update*.jar /app/app.jar
 COPY --chown=appuser:appgroup build/libs/applicationinsights-agent*.jar /app/agent.jar
 COPY --chown=appuser:appgroup AI-Agent.xml /app
 
