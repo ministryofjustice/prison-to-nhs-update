@@ -53,7 +53,7 @@ executors:
     working_directory: ~/app
   builder:
     docker:
-      - image: circleci/openjdk:15-jdk-buster
+      - image: circleci/openjdk:13-jdk-buster-node-browsers-legacy
       - image: localstack/localstack:0.10.5
         environment:
           - SERVICES=sqs
