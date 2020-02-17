@@ -139,8 +139,8 @@ jobs:
                --label "build.gitref=$CIRCLE_SHA1"
 
             if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-              # publish to docker hub as the tag
-             docker login -u $QUAYIO_USERNAME -p $QUAYIO_PASSWORD
+              # publish to quay.io as the tag
+             docker login -u $QUAYIO_USERNAME -p $QUAYIO_PASSWORD quay.io
              docker tag $IMAGE_NAME:$APP_VERSION $IMAGE_NAME:latest
              docker push $IMAGE_NAME:$APP_VERSION
              docker push $IMAGE_NAME:latest
