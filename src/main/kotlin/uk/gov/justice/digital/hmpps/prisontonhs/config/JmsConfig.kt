@@ -44,9 +44,9 @@ open class JmsConfig {
 
   @Bean
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "aws")
-  open fun awsSqsClient(@Value("\${aws.access.key.id}") accessKey: String,
-                        @Value("\${aws.secret.access.key}") secretKey: String,
-                        @Value("\${aws.endpoint.region}") region: String): AmazonSQS =
+  open fun awsSqsClient(@Value("\${sqs.aws.access.key.id}") accessKey: String,
+                        @Value("\${sqs.aws.secret.access.key}") secretKey: String,
+                        @Value("\${sqs.endpoint.region}") region: String): AmazonSQS =
       AmazonSQSClientBuilder.standard()
           .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey)))
           .withRegion(region)
@@ -54,9 +54,9 @@ open class JmsConfig {
 
   @Bean
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "aws")
-  open fun awsSqsDlqClient(@Value("\${aws.dlq.access.key.id}") accessKey: String,
-                           @Value("\${aws.dlq.secret.access.key}") secretKey: String,
-                           @Value("\${aws.endpoint.region}") region: String): AmazonSQS =
+  open fun awsSqsDlqClient(@Value("\${sqs.aws.dlq.access.key.id}") accessKey: String,
+                           @Value("\${sqs.aws.dlq.secret.access.key}") secretKey: String,
+                           @Value("\${sqs.endpoint.region}") region: String): AmazonSQS =
       AmazonSQSClientBuilder.standard()
           .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey)))
           .withRegion(region)
