@@ -28,8 +28,8 @@ configurations {
     agentDeps.transitive = false
 }
 
-project.sourceCompatibility = 13
-project.targetCompatibility = 13
+project.sourceCompatibility = 11
+project.targetCompatibility = 11
 
 dependencyCheck {
   failBuildOnCVSS = 5

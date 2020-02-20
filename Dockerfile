@@ -1,4 +1,4 @@
-FROM openjdk:13-jdk-buster
+FROM adoptopenjdk/openjdk11:debian-slim
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 RUN apt-get update && \
