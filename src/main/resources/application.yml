@@ -54,9 +54,6 @@ prisontonhs:
     authentication-scheme: header
     client-authentication-scheme: header
 
-graceful:
-  shutdown.enabled: true
-
 azure:
   application-insights.web.enable-W3C: true
 

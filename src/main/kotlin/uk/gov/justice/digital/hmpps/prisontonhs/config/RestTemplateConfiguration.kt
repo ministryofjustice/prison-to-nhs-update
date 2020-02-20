@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.config
+package uk.gov.justice.digital.hmpps.prisontonhs.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder

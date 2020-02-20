@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.services.health
+package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.*
@@ -12,9 +12,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.Health.Builder
 import org.springframework.boot.actuate.health.HealthIndicator
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.stereotype.Component
-import uk.gov.justice.digital.hmpps.prisontoprobation.services.health.DlqStatus.*
-import uk.gov.justice.digital.hmpps.prisontoprobation.services.health.QueueAttributes.*
+import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus.*
+import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes.*
 
 enum class DlqStatus(val description: String) {
   UP("UP"),
@@ -30,6 +31,7 @@ enum class QueueAttributes(val awsName: String, val healthName: String) {
 }
 
 @Component
+@ConditionalOnExpression("{'aws', 'localstack'}.contains('\${sqs.provider}')")
 class QueueHealth(@Autowired @Qualifier("awsSqsClient") private val awsSqsClient: AmazonSQS,
                   @Autowired @Qualifier("awsSqsDlqClient") private val awsSqsDlqClient: AmazonSQS,
                   @Value("\${sqs.queue.name}") private val queueName: String,

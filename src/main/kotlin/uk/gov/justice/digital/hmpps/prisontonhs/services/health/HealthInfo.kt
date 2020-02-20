@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.services.health
+package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

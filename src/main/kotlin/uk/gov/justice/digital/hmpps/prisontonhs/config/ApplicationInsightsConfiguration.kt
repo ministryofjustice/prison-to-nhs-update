@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.config
+package uk.gov.justice.digital.hmpps.prisontonhs.config
 
 import com.microsoft.applicationinsights.TelemetryClient
 import org.springframework.context.annotation.*

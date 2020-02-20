@@ -13,10 +13,10 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:
       - SERVER_PORT=8080
-      - OAUTH_API_BASE_URL=http://localhost:8090/auth
+      - OAUTH_ENDPOINT_URL=http://localhost:8090/auth
       - ELITE2_ENDPOINT_URL=http://localhost:8093
       - SQS_ENDPOINT_URL=http://localhost:4576
-      - SPRING_PROFILES_ACTIVE=localstack
+      - SQS_PROVIDER=localstack
       - AWS_ACCESS_KEY_ID=foobar
       - AWS_SECRET_ACCESS_KEY=foobar
       - AWS_DEFAULT_REGION=eu-west-2

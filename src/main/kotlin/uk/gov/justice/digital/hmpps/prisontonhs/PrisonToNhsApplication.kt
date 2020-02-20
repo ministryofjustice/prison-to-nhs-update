@@ -6,8 +6,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 @SpringBootApplication
 @EnableResourceServer
-open class PrisonToProbationUpdateApplication
+open class PrisonToNhsUpdateApplication
 
 fun main(args: Array<String>) {
-  runApplication<PrisonToProbationUpdateApplication>(*args)
+  runApplication<PrisonToNhsUpdateApplication>(*args)
 }

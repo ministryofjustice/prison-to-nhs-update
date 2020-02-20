@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.config
+package uk.gov.justice.digital.hmpps.prisontonhs.config
 
 import com.amazon.sqs.javamessaging.ProviderConfiguration
 import com.amazon.sqs.javamessaging.SQSConnectionFactory
@@ -13,6 +13,7 @@ import com.amazonaws.services.sqs.model.QueueAttributeName
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,6 +24,7 @@ import javax.jms.Session
 
 @Configuration
 @EnableJms
+@ConditionalOnExpression("{'aws', 'localstack'}.contains('\${sqs.provider}')")
 open class JmsConfig {
   companion object {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -42,9 +44,9 @@ open class JmsConfig {
 
   @Bean
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "aws")
-  open fun awsSqsClient(@Value("\${sqs.aws.access.key.id}") accessKey: String,
-                        @Value("\${sqs.aws.secret.access.key}") secretKey: String,
-                        @Value("\${sqs.endpoint.region}") region: String): AmazonSQS =
+  open fun awsSqsClient(@Value("\${aws.access.key.id}") accessKey: String,
+                        @Value("\${aws.secret.access.key}") secretKey: String,
+                        @Value("\${aws.endpoint.region}") region: String): AmazonSQS =
       AmazonSQSClientBuilder.standard()
           .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey)))
           .withRegion(region)
@@ -52,9 +54,9 @@ open class JmsConfig {
 
   @Bean
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "aws")
-  open fun awsSqsDlqClient(@Value("\${sqs.aws.dlq.access.key.id}") accessKey: String,
-                           @Value("\${sqs.aws.dlq.secret.access.key}") secretKey: String,
-                           @Value("\${sqs.endpoint.region}") region: String): AmazonSQS =
+  open fun awsSqsDlqClient(@Value("\${aws.dlq.access.key.id}") accessKey: String,
+                           @Value("\${aws.dlq.secret.access.key}") secretKey: String,
+                           @Value("\${aws.endpoint.region}") region: String): AmazonSQS =
       AmazonSQSClientBuilder.standard()
           .withCredentials(AWSStaticCredentialsProvider(BasicAWSCredentials(accessKey, secretKey)))
           .withRegion(region)
