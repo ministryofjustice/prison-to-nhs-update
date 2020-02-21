@@ -46,36 +46,36 @@ env:
   - name: SQS_AWS_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-instance-output
+        name: ptnhs-sqs-instance-output
         key: access_key_id
 
   - name: SQS_AWS_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-instance-output
+        name: ptnhs-sqs-instance-output
         key: secret_access_key
 
   - name: SQS_QUEUE_NAME
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-instance-output
-        key: sqs_p2nhs_name
+        name: ptnhs-sqs-instance-output
+        key: sqs_ptnhs_name
 
   - name: SQS_AWS_DLQ_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-dl-instance-output
+        name: ptnhs-sqs-dl-instance-output
         key: access_key_id
 
   - name: SQS_AWS_DLQ_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-dl-instance-output
+        name: ptnhs-sqs-dl-instance-output
         key: secret_access_key
 
   - name: SQS_DLQ_NAME
     valueFrom:
       secretKeyRef:
-        name: p2nhs-sqs-dl-instance-output
-        key: sqs_p2nhs_name
+        name: ptnhs-sqs-dl-instance-output
+        key: sqs_ptnhs_name
 {{- end -}}
