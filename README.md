@@ -49,3 +49,6 @@ local test data:
 ```bash
 ./create-prison-movements-messages-local.bash 
 ```
+
+#### Running without queues
+This can be done using the `dev` spring profile
