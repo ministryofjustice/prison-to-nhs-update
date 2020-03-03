@@ -111,7 +111,7 @@ dependencies {
   implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
   implementation 'com.google.code.gson:gson:2.8.6'
 
-  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.2'
+  implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3'
   implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3'
 
   implementation 'org.springframework:spring-jms'
