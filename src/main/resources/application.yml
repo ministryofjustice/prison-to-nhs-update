@@ -45,8 +45,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${oauth.api.base.url}/issuer
-          jwk-set-uri: ${oauth.api.base.url}/.well-known/jwks.json
+          issuer-uri: ${api.base.url.oauth}/issuer
+          jwk-set-uri: ${api.base.url.oauth}/.well-known/jwks.json
 
       client:
         registration:
@@ -58,7 +58,7 @@ spring:
             scope: read
         provider:
           hmpps-auth:
-            token-uri: ${oauth.api.base.url}/oauth/token
+            token-uri: ${api.base.url.oauth}/oauth/token
 server:
   port: 8082
   servlet:

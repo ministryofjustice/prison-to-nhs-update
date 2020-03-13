@@ -15,7 +15,7 @@ import java.time.LocalDate
 
 @Service
 open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
-                           @Value("\${nomis.api.base.url}") val baseUri: String) {
+                           @Value("\${api.base.url.nomis}") val baseUri: String) {
 
   private val timeout: Duration = Duration.ofSeconds(30)
 

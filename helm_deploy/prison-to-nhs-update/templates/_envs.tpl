@@ -16,17 +16,17 @@ env:
   - name: SPRING_PROFILES_ACTIVE
     value: "postgres,logstash"
 
-  - name: OAUTH_API_BASE_URL
-    value: "{{ .Values.env.OAUTH_API_BASE_URL }}"
+  - name: API_BASE_URL_OAUTH
+    value: "{{ .Values.env.API_BASE_URL_OAUTH }}"
 
-  - name: NOMIS_API_BASE_URL
-    value: "{{ .Values.env.NOMIS_API_BASE_URL }}"
+  - name: API_BASE_URL_NOMIS
+    value: "{{ .Values.env.API_BASE_URL_NOMIS }}"
 
-  - name: PRISON_ESTATE_API_BASE_URL
-    value: "{{ .Values.env.PRISON_ESTATE_API_BASE_URL }}"
+  - name: API_BASE_URL_PRISON_ESTATE
+    value: "{{ .Values.env.API_BASE_URL_PRISON_ESTATE }}"
 
-  - name: NHS_API_BASE_URL
-    value: "{{ .Values.env.NHS_API_BASE_URL }}"
+  - name: API_BASE_URL_NHS
+    value: "{{ .Values.env.API_BASE_URL_NHS }}"
 
   - name: PRISONTONHS_ONLY_PRISONS
     value: "{{ .Values.env.PRISONTONHS_ONLY_PRISONS }}"

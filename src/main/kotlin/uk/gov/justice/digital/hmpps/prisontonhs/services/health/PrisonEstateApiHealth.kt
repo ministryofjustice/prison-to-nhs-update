@@ -7,6 +7,6 @@ import java.time.Duration
 
 @Component
 class PrisonEstateApiHealth(webClient: WebClient,
-                            @Value("\${prison-estate.api.base.url}") baseUri: String,
+                            @Value("\${api.base.url.prison-estate}") baseUri: String,
                             @Value("\${api.health-timeout:1s}") timeout: Duration)
     : HealthCheck(webClient, baseUri, timeout)

@@ -1,3 +1,7 @@
+sqs:
+  endpoint.url: http://localhost:4576
+  provider: localstack
+
 api:
   base:
     url:
@@ -5,7 +9,3 @@ api:
       nomis: http://localhost:8093
       nhs: http://localhost:7080
       prison-estate: http://localhost:7070
-
-spring:
-  jpa:
-    show-sql: true

@@ -13,7 +13,7 @@ import java.time.Duration
 
 @Service
 open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
-                             @Value("\${nhs.api.base.url}") val baseUri: String) {
+                             @Value("\${api.base.url.nhs}") val baseUri: String) {
 
   private val timeout: Duration = Duration.ofSeconds(30)
 

@@ -21,10 +21,10 @@ ingress:
 
 env:
   JAVA_OPTS: "-Xmx512m"
-  OAUTH_API_BASE_URL: "https://gateway.t3.nomis-api.hmpps.dsd.io/auth"
-  NOMIS_API_BASE_URL: "https://gateway.t3.nomis-api.hmpps.dsd.io/elite2api"
-  PRISON_ESTATE_API_BASE_URL: "https://estate-dev.prison.service.justice.gov.uk"
-  NHS_API_BASE_URL: "http://localhost:9090"
+  API_BASE_URL_OAUTH: "https://gateway.t3.nomis-api.hmpps.dsd.io/auth"
+  API_BASE_URL_NOMIS: "https://gateway.t3.nomis-api.hmpps.dsd.io/elite2api"
+  API_BASE_URL_PRISON_ESTATE: "https://estate-dev.prison.service.justice.gov.uk"
+  API_BASE_URL_NHS: "http://localhost:9090"
   PRISONTONHS_ONLY_PRISONS: "MDI"
 
 whitelist:

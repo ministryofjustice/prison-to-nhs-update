@@ -10,7 +10,7 @@ import java.time.Duration
 
 @Service
 open class PrisonEstateService(@Qualifier("webClient") val webClient: WebClient,
-                               @Value("\${prison-estate.api.base.url}") val baseUri: String) {
+                               @Value("\${api.base.url.prison-estate}") val baseUri: String) {
 
   private val timeout: Duration = Duration.ofSeconds(30)
 
