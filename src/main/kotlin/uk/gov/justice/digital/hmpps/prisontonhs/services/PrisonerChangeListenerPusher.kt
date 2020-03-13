@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-open class PrisonerMovementListenerPusher(
+open class PrisonerChangeListenerPusher(
     private val prisonerPatientUpdateService: PrisonerPatientUpdateService
 ) {
   companion object {
@@ -46,7 +46,6 @@ data class ExternalPrisonerMovementMessage(val bookingId: Long,
                                            val fromAgencyLocationId: String,
                                            val toAgencyLocationId: String,
                                            val directionCode: String,
-                                           val movementType: String
-)
+                                           val movementType: String)
 
 data class OffenderChangedMessage(val bookingId: Long)
