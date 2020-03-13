@@ -9,3 +9,12 @@ api:
 spring:
   jpa:
     show-sql: true
+
+sqs:
+  provider: embedded-localstack
+  endpoint.url: http://localhost:4576
+
+oauth:
+  client:
+    id: prisontonhs-api-client
+    secret: clientsecret
