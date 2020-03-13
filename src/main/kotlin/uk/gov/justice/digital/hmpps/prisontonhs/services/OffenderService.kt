@@ -3,59 +3,83 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.security.oauth2.client.OAuth2RestTemplate
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction
+
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
-import java.time.LocalDateTime
+
+import org.springframework.web.reactive.function.client.WebClient
+import java.time.Duration
+import java.time.LocalDate
 
 @Service
-open class OffenderService(@Qualifier("elite2ApiRestTemplate") val elite2ApiRestTemplate: OAuth2RestTemplate) {
+open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
+                           @Value("\${nomis.api.base.url}") val baseUri: String) {
 
-  private val prisonerListType = object : ParameterizedTypeReference<List<Prisoner>>() {
+  private val timeout: Duration = Duration.ofSeconds(30)
+
+  private val prisonerListType = object : ParameterizedTypeReference<List<PrisonerStatus>>() {
   }
 
-  open fun getOffender(offenderNo: String): Prisoner {
-    val response = elite2ApiRestTemplate.exchange("/api/prisoners/{offenderNo}/full-status", HttpMethod.GET, null, prisonerListType, offenderNo)
-    return response.body!![0]
+  open fun getOffenderForBookingId(bookingId : Long) : OffenderBooking? {
+    return webClient.get()
+            .uri("$baseUri/api/bookings/$bookingId")
+            .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+            .retrieve()
+            .bodyToMono(OffenderBooking::class.java)
+            .block(timeout)
   }
 
-  open fun getMovement(bookingId: Long, movementSeq: Long): Movement? {
-    return try {
-      val response = elite2ApiRestTemplate.getForEntity("/api/bookings/{bookingId}/movement/{movementSeq}", Movement::class.java, bookingId, movementSeq)
-      response.body!!
-    } catch (e: HttpClientErrorException) {
-      if (e.statusCode != HttpStatus.NOT_FOUND) throw e
-      // 404 is "valid" since it means movement is for an inactive booking
-      null
-    }
+  open fun getOffender(offenderNo: String): PrisonerStatus {
+    val response = webClient
+            .get()
+            .uri("$baseUri/api/prisoners/$offenderNo/full-status")
+            .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+            .retrieve()
+            .bodyToMono(prisonerListType)
+            .block(timeout)
+
+    return response!!.first();
   }
+
+  open fun getOffendersInEstablishment(establishmentCode: String): List<PrisonerStatus> {
+    val response = webClient
+            .get()
+            .uri("$baseUri/api/prisoners/by-establishment/$establishmentCode")
+            .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+            .retrieve()
+            .bodyToMono(prisonerListType)
+            .block(timeout)
+
+    return response!!.toList();
+  }
+
 }
 
-data class Prisoner(
-    val offenderNo: String,
-    val pncNumber: String?,
-    val croNumber: String?,
-    val firstName: String,
-    val middleNames: String?,
-    val lastName: String,
-    val dateOfBirth: String,
-    val currentlyInPrison: String,
-    val latestBookingId: Long?,
-    val latestLocationId: String?,
-    val latestLocation: String?,
-    val convictedStatus: String?,
-    val imprisonmentStatus: String?,
-    val receptionDate: String?
+data class PrisonerStatus (
+        val nomsId: String,
+        val establishmentCode: String,
+        val bookingId: Long,
+        val givenName1: String,
+        val givenName2: String?,
+        val lastName: String,
+        val requestedName: String?,
+        val dateOfBirth: LocalDate,
+        val gender: String,
+        val englishSpeaking: String,
+        val unitCode1: String,
+        val unitCode2: String?,
+        val unitCode3: String?,
+        val bookingBeginDate: LocalDate,
+        val admissionDate: LocalDate?,
+        val releaseDate: LocalDate?,
+        val categoryCode: String?,
+        val communityStatus: String,
+        val legalStatus: String
 )
 
-data class Movement(
-    val offenderNo: String,
-    val createDateTime: LocalDateTime,
-    val fromAgency: String?,
-    val toAgency: String?,
-    val movementType: String,
-    val directionCode: String
+data class OffenderBooking(
+        val offenderNo: String,
+        val bookingId: Long
 )

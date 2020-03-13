@@ -1,0 +1,26 @@
+oauth:
+  api:
+    base:
+      url: http://localhost:8090/auth
+
+nomis:
+  api:
+    base:
+      url: http://localhost:8093
+
+prison-estate:
+  api:
+    base:
+      url: http://localhost:7070
+
+nhs:
+  api:
+    base:
+      url: http://localhost:7080
+
+sqs:
+  provider: none
+
+spring:
+  jpa:
+    show-sql: true

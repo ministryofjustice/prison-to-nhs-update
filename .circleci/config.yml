@@ -113,7 +113,7 @@ jobs:
           root: .
           paths:
             - build/libs
-            - build.gradle
+            - build.gradle.kts
             - app_version.txt
 
   build_docker:
