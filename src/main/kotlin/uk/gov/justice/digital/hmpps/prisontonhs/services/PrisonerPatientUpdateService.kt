@@ -26,23 +26,27 @@ open class PrisonerPatientUpdateService(
   }
 
   open fun externalMovement(message: ExternalPrisonerMovementMessage) {
-    log.debug("Offender Movement {}", message)
 
-      val (offenderNo, _) = offenderService.getOffenderForBookingId(message.bookingId)!!
+    if (message.movementType in ("ADM,REL")) {
+      log.debug("Offender Movement {}", message)
 
-    processPrisoner(offenderNo)
+      if (allowedPrisons.contains(message.fromAgencyLocationId) || (allowedPrisons.contains(message.toAgencyLocationId))) {
+        processPrisoner(message.offenderIdDisplay, if (message.movementType === "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION)
+      }
+    }
 
   }
 
   open fun offenderChange(message: OffenderChangedMessage) {
     log.debug("Offender Change {}", message)
-    val (offenderNo, _) = offenderService.getOffenderForBookingId(message.bookingId)!!
+    val (offenderNo, _, agencyId) = offenderService.getOffenderForBookingId(message.bookingId)!!
 
-    processPrisoner(offenderNo)
-
+    if (allowedPrisons.contains(agencyId)) {
+      processPrisoner(offenderNo, ChangeType.AMENDMENT)
+    }
   }
 
-  private fun processPrisoner(offenderNo: String) {
+  private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
     val offender = offenderService.getOffender(offenderNo)
 
     val patientRecord = gson.toJson(offender)
@@ -70,7 +74,7 @@ open class PrisonerPatientUpdateService(
     }
 
     // post data to TTP system
-    nhsReceiveService.postNhsData(nhsPrisoner)
+    nhsReceiveService.postNhsData(nhsPrisoner, changeType)
   }
 }
 

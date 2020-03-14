@@ -1,5 +1,3 @@
-@file:Suppress("DEPRECATION")
-
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import org.springframework.beans.factory.annotation.Qualifier
@@ -17,16 +15,15 @@ open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
 
   private val timeout: Duration = Duration.ofSeconds(30)
 
-  open fun postNhsData(nhsPrisonerData : NhsPrisoner) {
+  open fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) {
     webClient.post()
-            .uri("$baseUri/updatePatient")
-            .header("Type", "UPDATE")
+            .uri("$baseUri/patient-upsert")
+            .header("change-type", changeType.name)
             .accept( MediaType.APPLICATION_JSON )
-            .body(BodyInserters.fromObject(nhsPrisonerData))
+            .body(BodyInserters.fromValue(nhsPrisonerData))
             .retrieve()
             .bodyToMono(String::class.java)
+            .block(timeout)
   }
-
-
-
 }
+

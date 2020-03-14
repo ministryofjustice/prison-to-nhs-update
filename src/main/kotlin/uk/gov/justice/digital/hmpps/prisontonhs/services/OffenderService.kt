@@ -81,5 +81,6 @@ data class PrisonerStatus (
 
 data class OffenderBooking(
         val offenderNo: String,
-        val bookingId: Long
+        val bookingId: Long,
+        val agencyId: String
 )
