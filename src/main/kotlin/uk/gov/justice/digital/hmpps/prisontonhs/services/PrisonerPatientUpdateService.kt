@@ -10,72 +10,90 @@ import uk.gov.justice.digital.hmpps.prisontonhs.controllers.NhsPrisoner
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
 import java.time.LocalDateTime
+import javax.persistence.EntityNotFoundException
 
 
 @Service
 open class PrisonerPatientUpdateService(
-    private val offenderService: OffenderService,
-    private val prisonEstateService: PrisonEstateService,
-    private val nhsReceiveService: NhsReceiveService,
-    private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
-    @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>
+        private val offenderService: OffenderService,
+        private val prisonEstateService: PrisonEstateService,
+        private val nhsReceiveService: NhsReceiveService,
+        private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
+        @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>
 ) {
-  companion object {
-    val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val gson: Gson = GsonBuilder().create()
-  }
-
-  open fun externalMovement(message: ExternalPrisonerMovementMessage) {
-
-    if (message.movementType in ("ADM,REL")) {
-      log.debug("Offender Movement {}", message)
-
-      if (allowedPrisons.contains(message.fromAgencyLocationId) || (allowedPrisons.contains(message.toAgencyLocationId))) {
-        processPrisoner(message.offenderIdDisplay, if (message.movementType === "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION)
-      }
+    companion object {
+        val log: Logger = LoggerFactory.getLogger(this::class.java)
+        val gson: Gson = GsonBuilder().create()
     }
 
-  }
+    fun externalMovement(externalMovement: ExternalPrisonerMovementMessage) {
 
-  open fun offenderChange(message: OffenderChangedMessage) {
-    log.debug("Offender Change {}", message)
-    val (offenderNo, _, agencyId) = offenderService.getOffenderForBookingId(message.bookingId)!!
+        if (externalMovement.movementType in listOf("ADM", "REL")) {
 
-    if (allowedPrisons.contains(agencyId)) {
-      processPrisoner(offenderNo, ChangeType.AMENDMENT)
-    }
-  }
+            val changeType = if (externalMovement.movementType === "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
 
-  private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
-    val offender = offenderService.getOffender(offenderNo)
+            if ((externalMovement.movementType === "ADM" && externalMovement.toAgencyLocationId in allowedPrisons)
+                    || (externalMovement.movementType === "REL" && externalMovement.fromAgencyLocationId in allowedPrisons)) {
+                log.debug("Offender Movement {}", externalMovement)
+                processPrisoner(externalMovement.offenderIdDisplay, changeType)
+            } else {
 
-    val patientRecord = gson.toJson(offender)
+                log.debug("Skipping movement {} as not in allowed prisons yet", externalMovement)
+            }
+        }
 
-    // check if changed
-    val savedPatientData = offenderPatientRecordRepository.findById(offenderNo)
-    if (savedPatientData.isPresent) {
-      if (savedPatientData.get().patientRecord == patientRecord) {
-        return
-      }
     }
 
-    // store the change
-    offenderPatientRecordRepository.save(OffenderPatientRecord(offenderNo, patientRecord, LocalDateTime.now()))
-
-    // look up the establishment code to get gp code
-    val (_, _, _, gpPracticeCode) = prisonEstateService.getPrisonEstateByPrisonId(offender.establishmentCode)!!
-
-    // map the option to NhsPrisoner
-    val nhsPrisoner = with(offender) {
-      val nhsPrisoner = NhsPrisoner(nomsId, establishmentCode, gpPracticeCode, givenName1, givenName2, lastName,
-              requestedName, dateOfBirth, gender, englishSpeaking, unitCode1, unitCode2, unitCode3,
-              bookingBeginDate, admissionDate, releaseDate, categoryCode, communityStatus, legalStatus)
-      nhsPrisoner
+    fun offenderChange(message: OffenderChangedMessage) {
+        log.debug("Offender Change {}", message)
+        // check if the offender is in an allowed prison
+        val let = offenderService.getOffenderForBookingId(message.bookingId)?.let {
+            if (it.agencyId in allowedPrisons) {
+                processPrisoner(it.offenderNo, ChangeType.AMENDMENT)
+            } else {
+                log.debug("$it.offenderNo not in allowed list of prisons")
+            }
+        }
     }
 
-    // post data to TTP system
-    nhsReceiveService.postNhsData(nhsPrisoner, changeType)
-  }
+    private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
+        offenderService.getOffender(offenderNo)?.let { offender ->
+
+        // check if changed
+        offenderPatientRecordRepository.findById(offenderNo)
+            .map {
+                val prisonerData = fromJson<PrisonerStatus>(it.patientRecord)
+                if (prisonerData != offender) {
+                    updateNhsSystem(offender, changeType)
+                } else {
+                    log.debug("offender {} data not changed", offender.nomsId)
+                }
+            } ?: updateNhsSystem(offender, changeType)
+        } ?: log.error("Offender not found {}", offenderNo)
+
+    }
+
+
+    private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType) {
+        offenderPatientRecordRepository.save(OffenderPatientRecord(offender.nomsId, gson.toJson(offender), LocalDateTime.now()))
+
+        // look up the establishment code to get gp code
+        prisonEstateService.getPrisonEstateByPrisonId(offender.establishmentCode)?.let { prison ->
+
+            // map the option to NhsPrisoner
+            with(offender) {
+                val nhsPrisoner = NhsPrisoner(nomsId, establishmentCode, prison.gpPracticeCode, givenName1, givenName2, lastName,
+                        requestedName, dateOfBirth, gender, englishSpeaking, unitCode1, unitCode2, unitCode3,
+                        bookingBeginDate, admissionDate, releaseDate, categoryCode, communityStatus, legalStatus)
+
+                nhsReceiveService.postNhsData(nhsPrisoner, changeType)
+            }
+        } ?: throw EntityNotFoundException("Prison with prison id $offender.establishmentCode not found")
+    }
+
+    private inline fun <reified T> fromJson(message: String): T {
+        return gson.fromJson(message, T::class.java)
+    }
 }
 
 

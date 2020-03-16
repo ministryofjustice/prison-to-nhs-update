@@ -18,7 +18,7 @@ open class PrisonerChangeListenerPusher(
   }
 
   @JmsListener(destination = "\${sqs.queue.name}")
-  open fun pushPrisonUpdateToProbation(requestJson: String?) {
+  open fun pushPrisonUpdateToxProbation(requestJson: String?) {
     log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
     val eventType = messageAttributes.eventType.Value
