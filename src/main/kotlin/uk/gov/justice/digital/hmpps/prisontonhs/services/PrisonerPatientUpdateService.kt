@@ -51,7 +51,7 @@ class PrisonerPatientUpdateService(
     }
 
     fun offenderChange(message: OffenderChangedMessage) {
-        log.debug("Offender Change {}", message)
+        log.debug("Offender Change [booking ID ${message.bookingId}]")
         // check if the offender is in an allowed prison
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
             if (it.agencyId in allowedPrisons) {
