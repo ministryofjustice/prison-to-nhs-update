@@ -5,10 +5,9 @@ package uk.gov.justice.digital.hmpps.prisontonhs.services
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
+import org.springframework.data.domain.Page
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction
-
 import org.springframework.stereotype.Service
-
 import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 import java.time.LocalDate
@@ -19,8 +18,7 @@ open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClien
                            @Value("\${api.offender.timeout:5s}") val offenderTimeout: Duration,
                            @Value("\${api.nomis.timeout:90s}") val offenderListTimeout: Duration) {
 
-  private val prisonerListType = object : ParameterizedTypeReference<List<PrisonerStatus>>() {
-  }
+  private val prisonerPageType = object : ParameterizedTypeReference<Page<PrisonerStatus>>() {}
 
   open fun getOffenderForBookingId(bookingId : Long) : OffenderBooking? {
     return webClient.get()
@@ -37,21 +35,20 @@ open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClien
             .uri("$baseUri/api/prisoners/$offenderNo/full-status")
             .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
             .retrieve()
-            .bodyToMono(prisonerListType)
-            .block(offenderTimeout)?.first();
-
+            .bodyToMono(PrisonerStatus::class.java)
+            .block(offenderTimeout);
   }
 
   open fun getOffendersInEstablishment(establishmentCode: String): List<PrisonerStatus>? {
     val response = webClient
             .get()
-            .uri("$baseUri/api/prisoners/by-establishment/$establishmentCode")
+            .uri("$baseUri/api/prisoners/by-establishment/${establishmentCode}?size=2000")
             .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
             .retrieve()
-            .bodyToMono(prisonerListType)
+            .bodyToMono(prisonerPageType)
             .block(offenderListTimeout)
 
-    return response?.toList();
+    return response?.content;
   }
 
 }
