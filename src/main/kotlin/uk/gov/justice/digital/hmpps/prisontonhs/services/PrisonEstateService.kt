@@ -10,9 +10,8 @@ import java.time.Duration
 
 @Service
 open class PrisonEstateService(@Qualifier("webClient") val webClient: WebClient,
-                               @Value("\${api.base.url.prison-estate}") val baseUri: String) {
-
-  private val timeout: Duration = Duration.ofSeconds(30)
+                               @Value("\${api.base.url.prison-estate}") val baseUri: String,
+                               @Value("\${api.prison-estate.timeout:5s}") val timeout: Duration) {
 
   open fun getPrisonEstateByPrisonId(prisonId : String) : PrisonEstate? {
     return webClient.get()

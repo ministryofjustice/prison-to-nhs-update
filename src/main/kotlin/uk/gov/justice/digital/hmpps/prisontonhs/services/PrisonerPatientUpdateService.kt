@@ -31,17 +31,18 @@ class PrisonerPatientUpdateService(
     }
 
     fun externalMovement(externalMovement: ExternalPrisonerMovementMessage) {
-
+        // only interested in ADM (Admissions) or REL (Releases)
         if (externalMovement.movementType in listOf("ADM", "REL")) {
 
             val changeType = if (externalMovement.movementType === "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
 
+            // only support admission into an allowed prison or release from an allowed prison
             if ((externalMovement.movementType === "ADM" && externalMovement.toAgencyLocationId in allowedPrisons)
                     || (externalMovement.movementType === "REL" && externalMovement.fromAgencyLocationId in allowedPrisons)) {
                 log.debug("Offender Movement $externalMovement")
                 processPrisoner(externalMovement.offenderIdDisplay, changeType)
             } else {
-                log.debug("Skipping movement as not in allowed prisons yet $externalMovement")
+                log.debug("Skipping movement as not in allowed this prison yet $externalMovement")
             }
         } else {
             log.debug("Ignored movement type $externalMovement")

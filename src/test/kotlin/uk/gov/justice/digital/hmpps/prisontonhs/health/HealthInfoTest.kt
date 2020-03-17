@@ -1,9 +1,8 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.services.health
+package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.info.BuildProperties
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.HealthInfo
 import java.util.*
 
 class HealthInfoTest {

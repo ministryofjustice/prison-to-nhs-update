@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontoprobation.services.health
+package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.model.*
@@ -8,10 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.springframework.boot.actuate.health.Status
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus
-
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes.*
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueHealth
 
 class QueueHealthTest {
 

@@ -9,3 +9,6 @@ api:
       nomis: http://localhost:8093
       nhs: http://localhost:7080
       prison-estate: http://localhost:7070
+
+graceful:
+  shutdown.enabled: false

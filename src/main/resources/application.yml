@@ -99,3 +99,6 @@ sqs:
   queue.name: prison_to_nhs_queue
   dlq.name: prison_to_nhs_dlq
   endpoint.region: eu-west-2
+
+graceful:
+  shutdown.enabled: true

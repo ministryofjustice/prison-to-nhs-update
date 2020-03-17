@@ -13,12 +13,11 @@ import java.time.Duration
 
 @Service
 open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
-                             @Value("\${api.base.url.nhs}") val baseUri: String) {
+                             @Value("\${api.base.url.nhs}") val baseUri: String,
+                             @Value("\${api.nhs.timeout:30s}") val timeout: Duration) {
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
-
-  private val timeout: Duration = Duration.ofSeconds(30)
 
   open fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) {
     log.debug("Sending patient record {} to NHS", nhsPrisonerData.nomsId)

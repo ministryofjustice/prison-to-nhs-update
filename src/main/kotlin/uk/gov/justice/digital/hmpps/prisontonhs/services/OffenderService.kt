@@ -15,9 +15,9 @@ import java.time.LocalDate
 
 @Service
 open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
-                           @Value("\${api.base.url.nomis}") val baseUri: String) {
-
-  private val timeout: Duration = Duration.ofSeconds(30)
+                           @Value("\${api.base.url.nomis}") val baseUri: String,
+                           @Value("\${api.offender.timeout:5s}") val offenderTimeout: Duration,
+                           @Value("\${api.nomis.timeout:90s}") val offenderListTimeout: Duration) {
 
   private val prisonerListType = object : ParameterizedTypeReference<List<PrisonerStatus>>() {
   }
@@ -28,7 +28,7 @@ open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClien
             .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
             .retrieve()
             .bodyToMono(OffenderBooking::class.java)
-            .block(timeout)
+            .block(offenderTimeout)
   }
 
   fun getOffender(offenderNo: String): PrisonerStatus? {
@@ -38,7 +38,7 @@ open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClien
             .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
             .retrieve()
             .bodyToMono(prisonerListType)
-            .block(timeout)?.first();
+            .block(offenderTimeout)?.first();
 
   }
 
@@ -49,7 +49,7 @@ open class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClien
             .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
             .retrieve()
             .bodyToMono(prisonerListType)
-            .block(timeout)
+            .block(offenderListTimeout)
 
     return response?.toList();
   }

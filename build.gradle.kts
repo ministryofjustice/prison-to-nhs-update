@@ -106,7 +106,7 @@ dependencies {
 
   implementation("org.springframework:spring-jms")
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
-//  implementation platform("com.amazonaws:aws-java-sdk-bom:1.11.735")
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.735"))
 
   runtimeOnly("com.h2database:h2:1.4.200")
   runtimeOnly("org.flywaydb:flyway-core:6.2.4")
