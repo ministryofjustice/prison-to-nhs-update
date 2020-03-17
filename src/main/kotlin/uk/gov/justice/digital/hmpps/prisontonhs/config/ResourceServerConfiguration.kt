@@ -61,7 +61,7 @@ open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
     }
 
     @Bean
-    open fun api(): Docket? {
+    open fun api(): Docket {
         val apiInfo = ApiInfo("Prison To NHS API Documentation", "API for providing Prisoner Information to NHS",
                 version, "", Contact("HMPPS Digital Studio", "", "feedback@digital.justice.gov.uk"),
                 "", "", emptyList())
