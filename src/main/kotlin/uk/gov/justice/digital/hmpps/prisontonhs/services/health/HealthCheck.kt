@@ -1,29 +1,27 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.HealthIndicator
-import org.springframework.stereotype.Component
-import org.springframework.web.client.RestClientException
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
+import java.time.Duration
 
-abstract class HealthCheck(private val restTemplate: RestTemplate) : HealthIndicator {
+abstract class HealthCheck(private val webClient: WebClient,
+                           private val baseUri: String,
+                           private val timeout: Duration
+) : HealthIndicator {
 
-  override fun health(): Health {
-    return try {
-      val responseEntity = restTemplate.getForEntity("/ping", String::class.java)
-      Health.up().withDetail("HttpStatus", responseEntity.statusCode).build()
-    } catch (e: RestClientException) {
-      Health.down(e).build()
+    override fun health(): Health? {
+        return try {
+            val uri = "$baseUri/health/ping"
+            val response = webClient.get()
+                    .uri(uri)
+                    .exchange()
+                    .block(timeout)
+            Health.up().withDetail("HttpStatus", response?.statusCode()).build()
+        } catch (e: Exception) {
+            Health.down(e).build()
+        }
     }
-  }
+
 }
-
-@Component
-class Elite2ApiHealth
-constructor(@Qualifier("elite2ApiHealthRestTemplate") restTemplate: RestTemplate) : HealthCheck(restTemplate)
-
-@Component
-class OAuthApiHealth
-constructor(@Qualifier("oauthApiRestTemplate") restTemplate: RestTemplate) : HealthCheck(restTemplate)
 

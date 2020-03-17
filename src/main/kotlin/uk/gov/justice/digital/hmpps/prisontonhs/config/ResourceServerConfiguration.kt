@@ -1,80 +1,80 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.config
 
 
-import org.apache.commons.codec.binary.Base64
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter
-import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices
-import org.springframework.security.oauth2.provider.token.TokenStore
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore
+import springfox.documentation.builders.PathSelectors
+import springfox.documentation.builders.RequestHandlerSelectors
+import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.Contact
+import springfox.documentation.spi.DocumentationType
+import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.swagger2.annotations.EnableSwagger2
+import uk.gov.justice.digital.hmpps.prisontonhs.controllers.PrisonerListResource
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.util.*
 
 @Configuration
+@EnableWebSecurity
+@EnableSwagger2
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
-open class ResourceServerConfiguration : ResourceServerConfigurerAdapter() {
+open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
 
-  @Value("\${jwt.public.key}")
-  private val jwtPublicKey: String? = null
+    @Autowired(required = false)
+    private val buildProperties: BuildProperties? = null
 
-  @Autowired(required = false)
-  private val buildProperties: BuildProperties? = null
+    /**
+     * @return health data. Note this is unsecured so no sensitive data allowed!
+     */
+    private val version: String
+        get() = if (buildProperties == null) "version not available" else buildProperties.version
 
-  /**
-   * @return health data. Note this is unsecured so no sensitive data allowed!
-   */
-  private val version: String
-    get() = if (buildProperties == null) "version not available" else buildProperties.version
+    @Throws(Exception::class)
+    override fun configure(http: HttpSecurity) {
 
-  @Throws(Exception::class)
-  override fun configure(http: HttpSecurity) {
+        http.headers().frameOptions().sameOrigin().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-    http.headers().frameOptions().sameOrigin().and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                // Can't have CSRF protection as requires session
+                .and().csrf().disable()
+                .authorizeRequests { auth ->
+                    auth.antMatchers(
+                                    "/webjars/**", "/favicon.ico", "/csrf",
+                                    "/health", "/info", "/ping", "/h2-console/**",
+                                    "/v2/api-docs",
+                                    "/swagger-ui.html", "/swagger-resources", "/swagger-resources/configuration/ui",
+                                    "/swagger-resources/configuration/security"
+                            ).permitAll()
+                            .anyRequest()
+                            .authenticated()
+                }.oauth2ResourceServer()
+                .jwt()
+    }
 
-        // Can't have CSRF protection as requires session
-        .and().csrf().disable()
-        .authorizeRequests()
-        .antMatchers("/webjars/**", "/favicon.ico", "/csrf",
-            "/health", "/info", "/health/ping").permitAll()
-        .anyRequest()
-        .authenticated()
-  }
-
-  override fun configure(config: ResourceServerSecurityConfigurer) {
-    config.tokenServices(tokenServices())
-  }
-
-  @Bean
-  open fun tokenStore(): TokenStore = JwtTokenStore(accessTokenConverter())
-
-  @Bean
-  open fun accessTokenConverter(): JwtAccessTokenConverter {
-    val converter = JwtAccessTokenConverter()
-    converter.setVerifierKey(String(Base64.decodeBase64(jwtPublicKey)))
-    return converter
-  }
-
-  @Bean
-  @Primary
-  open fun tokenServices(): DefaultTokenServices {
-    val defaultTokenServices = DefaultTokenServices()
-    defaultTokenServices.setTokenStore(tokenStore())
-    return defaultTokenServices
-  }
-
-  @Bean
-  @ConfigurationProperties("prisontonhs.client")
-  open fun prisonToNhsClientCredentials(): ClientCredentialsResourceDetails = ClientCredentialsResourceDetails()
+    @Bean
+    open fun api(): Docket {
+        val apiInfo = ApiInfo("Prison To NHS API Documentation", "API for providing Prisoner Information to NHS",
+                version, "", Contact("HMPPS Digital Studio", "", "feedback@digital.justice.gov.uk"),
+                "", "", emptyList())
+        val docket = Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(PrisonerListResource::class.java.getPackage().getName()))
+                .paths(PathSelectors.any())
+                .build()
+        docket.genericModelSubstitutes(Optional::class.java)
+        docket.directModelSubstitute(ZonedDateTime::class.java, Date::class.java)
+        docket.directModelSubstitute(LocalDateTime::class.java, Date::class.java)
+        return docket
+    }
 }

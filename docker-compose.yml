@@ -7,14 +7,17 @@ services:
     depends_on:
       - localstack
       - elite2-api
+      - prison-estate
     ports:
       - "8084:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
     environment:
       - SERVER_PORT=8080
-      - OAUTH_ENDPOINT_URL=http://localhost:8090/auth
-      - ELITE2_ENDPOINT_URL=http://localhost:8093
+      - API_BASE_URL_OAUTH=http://localhost:8090/auth
+      - API_BASE_URL_NOMIS=http://localhost:8093
+      - API_BASE_URL_PRISON_ESTATE=http://localhost:8094
+      - API_BASE_URL_NHS=http://localhost:8095
       - SQS_ENDPOINT_URL=http://localhost:4576
       - SQS_PROVIDER=localstack
       - SQS_AWS_ACCESS_KEY_ID=foobar
@@ -45,6 +48,19 @@ services:
       - "8090:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_PROFILES_ACTIVE=dev
+
+  prison-estate:
+    image: quay.io/hmpps/prison-estate:latest
+    networks:
+      - hmpps
+    container_name: prison-estate
+    ports:
+      - "8094:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
     environment:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev

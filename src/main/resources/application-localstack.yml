@@ -1,0 +1,14 @@
+sqs:
+  endpoint.url: http://localhost:4576
+  provider: localstack
+
+api:
+  base:
+    url:
+      oauth: http://localhost:8090/auth
+      nomis: http://localhost:8093
+      nhs: http://localhost:7080
+      prison-estate: http://localhost:7070
+
+graceful:
+  shutdown.enabled: false

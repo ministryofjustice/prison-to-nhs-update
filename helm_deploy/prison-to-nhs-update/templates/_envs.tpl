@@ -14,13 +14,19 @@ env:
     value: "{{ .Values.env.JWT_PUBLIC_KEY }}"
 
   - name: SPRING_PROFILES_ACTIVE
-    value: "logstash"
+    value: "postgres,logstash"
 
-  - name: OAUTH_ENDPOINT_URL
-    value: "{{ .Values.env.OAUTH_ENDPOINT_URL }}"
+  - name: API_BASE_URL_OAUTH
+    value: "{{ .Values.env.API_BASE_URL_OAUTH }}"
 
-  - name: ELITE2_ENDPOINT_URL
-    value: "{{ .Values.env.ELITE2_ENDPOINT_URL }}"
+  - name: API_BASE_URL_NOMIS
+    value: "{{ .Values.env.API_BASE_URL_NOMIS }}"
+
+  - name: API_BASE_URL_PRISON_ESTATE
+    value: "{{ .Values.env.API_BASE_URL_PRISON_ESTATE }}"
+
+  - name: API_BASE_URL_NHS
+    value: "{{ .Values.env.API_BASE_URL_NHS }}"
 
   - name: PRISONTONHS_ONLY_PRISONS
     value: "{{ .Values.env.PRISONTONHS_ONLY_PRISONS }}"
@@ -78,4 +84,35 @@ env:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output
         key: sqs_ptnhs_name
+
+  - name: DATABASE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: dps-rds-instance-output
+        key: offender_events_password
+
+  - name: SUPERUSER_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: dps-rds-instance-output
+        key: database_username
+
+  - name: SUPERUSER_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: dps-rds-instance-output
+        key: database_password
+
+  - name: DATABASE_NAME
+    valueFrom:
+      secretKeyRef:
+        name: dps-rds-instance-output
+        key: database_name
+
+  - name: DATABASE_ENDPOINT
+    valueFrom:
+      secretKeyRef:
+        name: dps-rds-instance-output
+        key: rds_instance_endpoint
+
 {{- end -}}

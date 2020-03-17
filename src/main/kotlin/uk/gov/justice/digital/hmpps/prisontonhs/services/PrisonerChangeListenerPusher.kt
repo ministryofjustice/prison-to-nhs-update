@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service
 
 
 @Service
-open class PrisonerMovementListenerPusher(
-    private val prisonMovementService: PrisonMovementService
+open class PrisonerChangeListenerPusher(
+    private val prisonerPatientUpdateService: PrisonerPatientUpdateService
 ) {
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -18,16 +18,17 @@ open class PrisonerMovementListenerPusher(
   }
 
   @JmsListener(destination = "\${sqs.queue.name}")
-  open fun pushPrisonUpdateToProbation(requestJson: String?) {
+  open fun pushPrisonUpdateToNhs(requestJson: String?) {
     log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
     val eventType = messageAttributes.eventType.Value
     log.info("Received message $messageId type $eventType")
 
     when (eventType) {
-      "EXTERNAL_MOVEMENT_RECORD-INSERTED" -> prisonMovementService.checkMovementAndUpdateProbation(fromJson(message))
-      else -> log.warn("We received a message of event type $eventType which I really wasn't expecting")
+      "EXTERNAL_MOVEMENT_RECORD-INSERTED" -> prisonerPatientUpdateService.externalMovement(fromJson(message))
+      else -> prisonerPatientUpdateService.offenderChange(fromJson(message))
     }
+
   }
 
   private inline fun <reified T> fromJson(message: String): T {
@@ -38,4 +39,13 @@ open class PrisonerMovementListenerPusher(
 data class EventType(val Value: String)
 data class MessageAttributes(val eventType: EventType)
 data class Message(val Message: String, val MessageId: String, val MessageAttributes: MessageAttributes)
-data class ExternalPrisonerMovementMessage(val bookingId: Long, val movementSeq: Long)
+
+data class ExternalPrisonerMovementMessage(val bookingId: Long,
+                                           val movementSeq: Long,
+                                           val offenderIdDisplay: String,
+                                           val fromAgencyLocationId: String,
+                                           val toAgencyLocationId: String,
+                                           val directionCode: String,
+                                           val movementType: String)
+
+data class OffenderChangedMessage(val bookingId: Long)

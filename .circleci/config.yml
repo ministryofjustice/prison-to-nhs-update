@@ -93,7 +93,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - gradle-{{ checksum "build.gradle" }}
+            - gradle-{{ checksum "build.gradle.kts" }}
             - gradle-
       - run:
           environment:
@@ -107,16 +107,12 @@ jobs:
             rm BOOT-INF/classes/META-INF/build-info.properties
 
             # make up a good version name
-            TAG=${APP_VERSION}.${CIRCLE_BRANCH}
-            if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-              TAG=${APP_VERSION}
-            fi
-            echo $TAG > ./app_version.txt
+            ( [[ "$CIRCLE_BRANCH" == "master" ]] && echo "$APP_VERSION" || echo "$APP_VERSION.$CIRCLE_BRANCH" ) > ./app_version.txt
 
       - save_cache:
           paths:
             - ~/.gradle
-          key: gradle-{{ checksum "build.gradle" }}
+          key: gradle-{{ checksum "build.gradle.kts" }}
       - store_test_results:
           path: build/test-results
       - store_artifacts:
@@ -125,7 +121,7 @@ jobs:
           root: .
           paths:
             - build/libs
-            - build.gradle
+            - build.gradle.kts
             - app_version.txt
 
   build_docker:

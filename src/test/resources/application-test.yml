@@ -1,0 +1,31 @@
+graceful:
+  shutdown.enabled: false
+
+api:
+  base:
+    url:
+      oauth: http://localhost:8090/auth
+      nomis: http://localhost:8093
+      nhs: http://localhost:7080
+      prison-estate: http://localhost:7070
+
+spring:
+  jpa:
+    show-sql: true
+
+sqs:
+  provider: embedded-localstack
+  endpoint.url: http://localhost:4576
+
+oauth:
+  client:
+    id: prisontonhs-api-client
+    secret: clientsecret
+
+management.endpoint:
+  health.cache.time-to-live: 0
+  info.cache.time-to-live: 0
+
+prisontonhs:
+  only:
+    prisons: "LEI,MDI"
