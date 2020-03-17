@@ -89,7 +89,7 @@ env:
     valueFrom:
       secretKeyRef:
         name: dps-rds-instance-output
-        key: offender_events_password
+        key: prison_to_nhs_update_password
 
   - name: SUPERUSER_USERNAME
     valueFrom:
