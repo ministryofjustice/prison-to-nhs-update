@@ -17,7 +17,7 @@ abstract class HealthCheck(private val webClient: WebClient,
                     .uri(uri)
                     .exchange()
                     .block(timeout)
-            Health.up().withDetail("HttpStatus", response.statusCode()).build()
+            Health.up().withDetail("HttpStatus", response?.statusCode()).build()
         } catch (e: Exception) {
             Health.down(e).build()
         }

@@ -55,7 +55,7 @@ data class NhsPrisoner(
         @ApiModelProperty(value = "Requested Name", example = "Dave", position = 7) val requestedName: String?,
         @ApiModelProperty(value = "Date of Birth", example = "1970-05-01", required = true, position = 8) val dateOfBirth: LocalDate,
         @ApiModelProperty(value = "Gender", example = "Male", required = true, position = 9) val gender: String,
-        @ApiModelProperty(value = "Indicated that is English speaking", example = "true", required = true, position = 10) val englishSpeaking: String,
+        @ApiModelProperty(value = "Indicated that is English speaking", example = "true", required = true, position = 10) val englishSpeaking: Boolean,
         @ApiModelProperty(value = "Level 1 Location Unit Code", example = "A", required = true, position = 11) val unitCode1: String,
         @ApiModelProperty(value = "Level 2 Location Unit Code", example = "2", position = 12) val unitCode2: String?,
         @ApiModelProperty(value = "Level 3 Location Unit Code", example = "003", position = 13) val unitCode3: String?,

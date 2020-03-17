@@ -1,3 +1,6 @@
+graceful:
+  shutdown.enabled: false
+
 api:
   base:
     url:
@@ -18,3 +21,11 @@ oauth:
   client:
     id: prisontonhs-api-client
     secret: clientsecret
+
+management.endpoint:
+  health.cache.time-to-live: 0
+  info.cache.time-to-live: 0
+
+prisontonhs:
+  only:
+    prisons: "LEI,MDI"

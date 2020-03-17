@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -9,12 +8,15 @@ import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.prisontonhs.controllers.NhsPrisoner
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
+import java.lang.reflect.Type
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.persistence.EntityNotFoundException
 
 
 @Service
-open class PrisonerPatientUpdateService(
+class PrisonerPatientUpdateService(
         private val offenderService: OffenderService,
         private val prisonEstateService: PrisonEstateService,
         private val nhsReceiveService: NhsReceiveService,
@@ -23,7 +25,9 @@ open class PrisonerPatientUpdateService(
 ) {
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
-        val gson: Gson = GsonBuilder().create()
+        val gson: Gson = GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+                .create();
     }
 
     fun externalMovement(externalMovement: ExternalPrisonerMovementMessage) {
@@ -34,12 +38,13 @@ open class PrisonerPatientUpdateService(
 
             if ((externalMovement.movementType === "ADM" && externalMovement.toAgencyLocationId in allowedPrisons)
                     || (externalMovement.movementType === "REL" && externalMovement.fromAgencyLocationId in allowedPrisons)) {
-                log.debug("Offender Movement {}", externalMovement)
+                log.debug("Offender Movement $externalMovement")
                 processPrisoner(externalMovement.offenderIdDisplay, changeType)
             } else {
-
-                log.debug("Skipping movement {} as not in allowed prisons yet", externalMovement)
+                log.debug("Skipping movement as not in allowed prisons yet $externalMovement")
             }
+        } else {
+            log.debug("Ignored movement type $externalMovement")
         }
 
     }
@@ -47,11 +52,11 @@ open class PrisonerPatientUpdateService(
     fun offenderChange(message: OffenderChangedMessage) {
         log.debug("Offender Change {}", message)
         // check if the offender is in an allowed prison
-        val let = offenderService.getOffenderForBookingId(message.bookingId)?.let {
+        offenderService.getOffenderForBookingId(message.bookingId)?.let {
             if (it.agencyId in allowedPrisons) {
                 processPrisoner(it.offenderNo, ChangeType.AMENDMENT)
             } else {
-                log.debug("$it.offenderNo not in allowed list of prisons")
+                log.debug("${it.offenderNo} not in allowed list of prisons")
             }
         }
     }
@@ -59,22 +64,26 @@ open class PrisonerPatientUpdateService(
     private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
         offenderService.getOffender(offenderNo)?.let { offender ->
 
-        // check if changed
-        offenderPatientRecordRepository.findById(offenderNo)
-            .map {
-                val prisonerData = fromJson<PrisonerStatus>(it.patientRecord)
+            // check if changed
+            val existingRecord = offenderPatientRecordRepository.findById(offenderNo)
+            if (existingRecord.isPresent) {
+                val prisonerData = fromJson<PrisonerStatus>(existingRecord.get().patientRecord)
                 if (prisonerData != offender) {
+                    log.debug("Offender record ${offender.nomsId} has changed")
                     updateNhsSystem(offender, changeType)
                 } else {
-                    log.debug("offender {} data not changed", offender.nomsId)
+                    log.debug("Offender ${offender.nomsId} data not changed")
                 }
-            } ?: updateNhsSystem(offender, changeType)
-        } ?: log.error("Offender not found {}", offenderNo)
+            } else {
+                updateNhsSystem(offender, changeType)
+            }
+        } ?: log.error("Offender not found $offenderNo")
 
     }
 
 
-    private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType) {
+    private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType) : Boolean {
+        log.debug("Saving patient record {}", offender.nomsId)
         offenderPatientRecordRepository.save(OffenderPatientRecord(offender.nomsId, gson.toJson(offender), LocalDateTime.now()))
 
         // look up the establishment code to get gp code
@@ -82,13 +91,15 @@ open class PrisonerPatientUpdateService(
 
             // map the option to NhsPrisoner
             with(offender) {
-                val nhsPrisoner = NhsPrisoner(nomsId, establishmentCode, prison.gpPracticeCode, givenName1, givenName2, lastName,
+                val nhsPrisoner = NhsPrisoner(nomsId, prison.gpPracticeCode, establishmentCode, givenName1, givenName2, lastName,
                         requestedName, dateOfBirth, gender, englishSpeaking, unitCode1, unitCode2, unitCode3,
                         bookingBeginDate, admissionDate, releaseDate, categoryCode, communityStatus, legalStatus)
 
                 nhsReceiveService.postNhsData(nhsPrisoner, changeType)
             }
-        } ?: throw EntityNotFoundException("Prison with prison id $offender.establishmentCode not found")
+        } ?: throw EntityNotFoundException("Prison with prison id ${offender.establishmentCode} not found")
+
+        return true;
     }
 
     private inline fun <reified T> fromJson(message: String): T {
@@ -96,5 +107,13 @@ open class PrisonerPatientUpdateService(
     }
 }
 
+internal class LocalDateAdapter : JsonSerializer<LocalDate?>, JsonDeserializer<LocalDate?> {
+    override fun serialize(src: LocalDate?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
+        return JsonPrimitive(src?.format(DateTimeFormatter.ISO_LOCAL_DATE))
+    }
 
+    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LocalDate? {
+        return LocalDate.parse(json?.asJsonPrimitive?.asString);
+    }
+}
 

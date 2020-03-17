@@ -126,6 +126,7 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
   testImplementation("com.nhaarman:mockito-kotlin-kt1.1:1.6.0")
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.26.0")
+  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.12.0")
   testImplementation("org.testcontainers:localstack:1.12.5")
 }
 

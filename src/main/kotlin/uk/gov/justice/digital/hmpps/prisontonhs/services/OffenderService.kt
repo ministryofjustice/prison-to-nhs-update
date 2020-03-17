@@ -66,7 +66,7 @@ data class PrisonerStatus (
         val requestedName: String?,
         val dateOfBirth: LocalDate,
         val gender: String,
-        val englishSpeaking: String,
+        val englishSpeaking: Boolean,
         val unitCode1: String,
         val unitCode2: String?,
         val unitCode3: String?,
