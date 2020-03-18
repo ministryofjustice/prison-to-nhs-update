@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
-import uk.gov.justice.digital.hmpps.prisontonhs.controllers.NhsPrisoner
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
 import java.time.LocalDate
@@ -38,7 +37,7 @@ class PrisonerPatientUpdateServiceTest {
         whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(createOffenderPatientRecord()))
         whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
         verify(nhsReceiveService).postNhsData(createNhsPrisoner(), ChangeType.AMENDMENT)
     }
@@ -49,16 +48,28 @@ class PrisonerPatientUpdateServiceTest {
         whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
         whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(updatedOffenderPatientRecord()))
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
         verifyZeroInteractions(nhsReceiveService)
+    }
+
+    @Test
+    fun `will update NHS service for small change of record`() {
+        whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBooking())
+        whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
+        whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(updatedOffenderPatientRecordSmallChange()))
+        whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
+
+        verify(nhsReceiveService).postNhsData(createNhsPrisoner(), ChangeType.AMENDMENT)
     }
 
     @Test
     fun `will not update NHS service prisons that are excluded`() {
         whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBookingOtherPrison())
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
         verifyZeroInteractions(nhsReceiveService)
     }
@@ -70,7 +81,7 @@ class PrisonerPatientUpdateServiceTest {
         whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.empty())
         whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
         verify(nhsReceiveService).postNhsData(createNhsPrisoner(), ChangeType.AMENDMENT)
     }
@@ -79,7 +90,7 @@ class PrisonerPatientUpdateServiceTest {
     fun `will not send when no offender found`() {
         whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(null)
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
         verifyZeroInteractions(nhsReceiveService)
     }
@@ -92,7 +103,7 @@ class PrisonerPatientUpdateServiceTest {
         whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(null)
 
         assertThatExceptionOfType(EntityNotFoundException::class.java).isThrownBy {
-            service.offenderChange(OffenderChangedMessage(12345L))
+            service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
         }
         verifyZeroInteractions(nhsReceiveService)
     }
@@ -102,7 +113,7 @@ class PrisonerPatientUpdateServiceTest {
         whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBooking())
         whenever(offenderService.getOffender(anyString())).thenReturn(null)
 
-        service.offenderChange(OffenderChangedMessage(12345L))
+        service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
         verifyZeroInteractions(nhsReceiveService)
     }
 
@@ -227,6 +238,32 @@ class PrisonerPatientUpdateServiceTest {
                     "      \"unitCode1\": \"A\",\n" +
                     "      \"unitCode2\": \"1\",\n" +
                     "      \"unitCode3\": \"005\",\n" +
+                    "      \"bookingBeginDate\": \"2019-01-02\",\n" +
+                    "      \"admissionDate\": \"2020-01-02\",\n" +
+                    "      \"releaseDate\": \"2025-01-02\",\n" +
+                    "      \"categoryCode\": \"C\",\n" +
+                    "      \"communityStatus\": \"ACTIVE IN\",\n" +
+                    "      \"legalStatus\": \"Convicted\"\n" +
+                    "    }",
+            updatedTimestamp = LocalDateTime.now().minusDays(1)
+    )
+
+    private fun updatedOffenderPatientRecordSmallChange() = OffenderPatientRecord(
+            nomsId = "AB1234D",
+            patientRecord = "{\n" +
+                    "      \"nomsId\": \"AB1234D\",\n" +
+                    "      \"establishmentCode\": \"MDI\",\n" +
+                    "      \"bookingId\": 12345,\n" +
+                    "      \"givenName1\": \"Patient 1\",\n" +
+                    "      \"givenName2\": \"John\",\n" +
+                    "      \"lastName\": \"Smith\",\n" +
+                    "      \"requestedName\": \"Bob\",\n" +
+                    "      \"dateOfBirth\": \"1978-01-02\",\n" +
+                    "      \"gender\": \"Male\",\n" +
+                    "      \"englishSpeaking\": false,\n" +
+                    "      \"unitCode1\": \"A\",\n" +
+                    "      \"unitCode2\": \"1\",\n" +
+                    "      \"unitCode3\": \"003\",\n" +
                     "      \"bookingBeginDate\": \"2019-01-02\",\n" +
                     "      \"admissionDate\": \"2020-01-02\",\n" +
                     "      \"releaseDate\": \"2025-01-02\",\n" +
