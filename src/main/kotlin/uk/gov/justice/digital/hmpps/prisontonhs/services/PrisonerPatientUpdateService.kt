@@ -1,11 +1,13 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
+import com.google.common.collect.MapDifference
+import com.google.common.collect.Maps
 import com.google.gson.*
+import com.google.gson.reflect.TypeToken
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.prisontonhs.controllers.NhsPrisoner
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
 import java.lang.reflect.Type
@@ -13,9 +15,11 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.persistence.EntityNotFoundException
+import javax.transaction.Transactional
 
 
 @Service
+@Transactional
 class PrisonerPatientUpdateService(
         private val offenderService: OffenderService,
         private val prisonEstateService: PrisonEstateService,
@@ -50,7 +54,7 @@ class PrisonerPatientUpdateService(
 
     }
 
-    fun offenderChange(message: OffenderChangedMessage) {
+    fun offenderBookingChange(message: OffenderBookingChangedMessage) {
         log.debug("Offender Change [booking ID ${message.bookingId}]")
         // check if the offender is in an allowed prison
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
@@ -62,15 +66,28 @@ class PrisonerPatientUpdateService(
         }
     }
 
+    fun offenderChange(message: OffenderChangedMessage) {
+        log.debug("Offender Change [Noms ID ${message.offenderIdDisplay}]")
+
+        offenderService.getOffender(message.offenderIdDisplay)?.let {
+            // check if the offender is in an allowed prison
+            if (it.establishmentCode in allowedPrisons) {
+                processPrisoner(it.nomsId, ChangeType.AMENDMENT)
+            } else {
+                log.debug("${it.nomsId} not in allowed list of prisons")
+            }
+        }
+    }
+
     private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
         offenderService.getOffender(offenderNo)?.let { offender ->
 
             // check if changed
             val existingRecord = offenderPatientRecordRepository.findById(offenderNo)
             if (existingRecord.isPresent) {
-                val prisonerData = fromJson<PrisonerStatus>(existingRecord.get().patientRecord)
-                if (prisonerData != offender) {
-                    log.debug("Offender record ${offender.nomsId} has changed")
+                val jsonDiff = checkForDifferences(existingRecord.get().patientRecord, gson.toJson(offender))
+                if (!jsonDiff.areEqual()) {
+                    log.debug("Offender record ${offender.nomsId} has changed: $jsonDiff")
                     updateNhsSystem(offender, changeType)
                 } else {
                     log.debug("Offender ${offender.nomsId} data not changed")
@@ -82,6 +99,12 @@ class PrisonerPatientUpdateService(
 
     }
 
+    private fun checkForDifferences(existingRecord: String, newRecord: String): MapDifference<String, Any> {
+        val type: Type = object : TypeToken<Map<String?, Any?>?>() {}.type
+        val leftMap: Map<String, Any> = gson.fromJson(existingRecord, type)
+        val rightMap: Map<String, Any> = gson.fromJson(newRecord, type)
+        return Maps.difference(leftMap, rightMap)
+    }
 
     private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType) : Boolean {
         log.debug("Saving patient record {}", offender.nomsId)

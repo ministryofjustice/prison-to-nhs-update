@@ -26,7 +26,17 @@ open class PrisonerChangeListenerPusher(
 
     when (eventType) {
       "EXTERNAL_MOVEMENT_RECORD-INSERTED" -> prisonerPatientUpdateService.externalMovement(fromJson(message))
-      else -> prisonerPatientUpdateService.offenderChange(fromJson(message))
+      "BED_ASSIGNMENT_HISTORY-INSERTED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "IMPRISONMENT_STATUS-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "SENTENCE_CALCULATION_DATES-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "ASSESSMENT-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "OFFENDER_BOOKING-REASSIGNED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "OFFENDER_BOOKING-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "OFFENDER_DETAILS-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "BOOKING_NUMBER-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "OFFENDER-UPDATED" -> prisonerPatientUpdateService.offenderChange(fromJson(message))
+
+      else -> log.warn("We received a message of event type $eventType which I really wasn't expecting")
     }
 
   }
@@ -48,4 +58,6 @@ data class ExternalPrisonerMovementMessage(val bookingId: Long,
                                            val directionCode: String,
                                            val movementType: String)
 
-data class OffenderChangedMessage(val bookingId: Long)
+data class OffenderBookingChangedMessage(val bookingId: Long)
+
+data class OffenderChangedMessage(val offenderIdDisplay: String)
