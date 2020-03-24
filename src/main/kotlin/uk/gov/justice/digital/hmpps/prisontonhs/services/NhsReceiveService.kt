@@ -19,7 +19,7 @@ open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
-  fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) {
+  fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) : Boolean {
     log.debug("Sending patient record to NHS: $nhsPrisonerData")
 
     if (nhsServerEnabled) {
@@ -31,9 +31,10 @@ open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
               .retrieve()
               .bodyToMono(String::class.java)
               .block(timeout)
-    } else {
-      log.warn("NHS Server sending not enabled")
+      return true;
     }
+    log.warn("NHS Server sending not enabled")
+    return false;
   }
 
 }

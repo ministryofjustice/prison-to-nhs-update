@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
 
@@ -7,13 +8,13 @@ import javax.persistence.EntityNotFoundException
 class EstablishmentService(private val prisonEstateService: PrisonEstateService,
                            private val offenderService: OffenderService) {
 
-    fun getPrisonersByGpPracticeCode(gpPracticeCode: String): List<NhsPrisoner> {
+    fun getPrisonersByGpPracticeCode(gpPracticeCode: String, page : Integer, size : Integer): Page<NhsPrisoner> {
         return prisonEstateService.getPrisonEstateByGpPracticeCode(gpPracticeCode)?.let {
-            offenderService.getOffendersInEstablishment(it.prisonId)?.let { offenders ->
+            offenderService.getOffendersInEstablishment(it.prisonId, page, size)?.let { offenders ->
                 offenders.map { offender ->
                     (
                             with(offender) {
-                                NhsPrisoner(nomsId, establishmentCode, gpPracticeCode, givenName1, givenName2, lastName,
+                                NhsPrisoner(nomsId, gpPracticeCode, establishmentCode, givenName1, givenName2, lastName,
                                         requestedName, dateOfBirth, gender, englishSpeaking, unitCode1, unitCode2, unitCode3,
                                         bookingBeginDate, admissionDate, releaseDate, categoryCode, communityStatus, legalStatus)
                             }

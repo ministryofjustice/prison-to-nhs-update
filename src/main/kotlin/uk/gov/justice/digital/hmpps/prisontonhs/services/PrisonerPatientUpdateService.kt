@@ -2,18 +2,17 @@ package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import com.google.common.collect.MapDifference
 import com.google.common.collect.Maps
-import com.google.gson.*
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
 import java.lang.reflect.Type
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.persistence.EntityNotFoundException
 import javax.transaction.Transactional
 
@@ -25,13 +24,11 @@ class PrisonerPatientUpdateService(
         private val prisonEstateService: PrisonEstateService,
         private val nhsReceiveService: NhsReceiveService,
         private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
-        @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>
+        @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>,
+        @Qualifier("gson") private val gson : Gson
 ) {
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
-        val gson: Gson = GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
-                .create();
     }
 
     fun externalMovement(externalMovement: ExternalPrisonerMovementMessage) {
@@ -131,13 +128,4 @@ class PrisonerPatientUpdateService(
     }
 }
 
-internal class LocalDateAdapter : JsonSerializer<LocalDate?>, JsonDeserializer<LocalDate?> {
-    override fun serialize(src: LocalDate?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-        return JsonPrimitive(src?.format(DateTimeFormatter.ISO_LOCAL_DATE))
-    }
-
-    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LocalDate? {
-        return LocalDate.parse(json?.asJsonPrimitive?.asString);
-    }
-}
 
