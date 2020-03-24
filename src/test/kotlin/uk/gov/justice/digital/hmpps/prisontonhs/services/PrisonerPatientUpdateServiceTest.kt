@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
+import uk.gov.justice.digital.hmpps.prisontonhs.config.JsonConfig
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
 import java.time.LocalDate
@@ -27,7 +28,7 @@ class PrisonerPatientUpdateServiceTest {
 
     @BeforeEach
     fun before() {
-        service = PrisonerPatientUpdateService(offenderService, prisonEstateService, nhsReceiveService, offenderPatientRecordRepository, listOf("MDI", "LEI"))
+        service = PrisonerPatientUpdateService(offenderService, prisonEstateService, nhsReceiveService, offenderPatientRecordRepository, listOf("MDI", "LEI"), JsonConfig().gson())
     }
 
     @Test
@@ -65,6 +66,16 @@ class PrisonerPatientUpdateServiceTest {
         verify(nhsReceiveService).postNhsData(createNhsPrisoner(), ChangeType.AMENDMENT)
     }
 
+    @Test
+    fun `will update NHS service offender change`() {
+        whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
+        whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(updatedOffenderPatientRecordSmallChange()))
+        whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+
+        service.offenderChange(OffenderChangedMessage("AB1234D"))
+
+        verify(nhsReceiveService).postNhsData(createNhsPrisoner(), ChangeType.AMENDMENT)
+    }
     @Test
     fun `will not update NHS service prisons that are excluded`() {
         whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBookingOtherPrison())

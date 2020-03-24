@@ -56,8 +56,7 @@ open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
                             ).permitAll()
                             .anyRequest()
                             .authenticated()
-                }.oauth2ResourceServer()
-                .jwt()
+                }.oauth2ResourceServer().jwt().jwtAuthenticationConverter(AuthAwareTokenConverter())
     }
 
     @Bean
