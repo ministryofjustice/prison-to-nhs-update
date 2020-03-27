@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/patient-upsert"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody":
+    {
+      "nomsId": "A5089DY"
+      }
+    }
+  }
+

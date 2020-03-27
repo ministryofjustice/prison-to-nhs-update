@@ -6,7 +6,11 @@ import com.github.tomakehurst.wiremock.http.HttpHeader
 import com.github.tomakehurst.wiremock.http.HttpHeaders
 import com.google.gson.GsonBuilder
 
-class NomisMockServer : WireMockServer(8093)
+class PrisonMockServer : WireMockServer(8093)
+
+class PrisonEstateMockServer : WireMockServer(7070)
+
+class NhsMockServer : WireMockServer(7080)
 
 class OAuthMockServer : WireMockServer(8090) {
   private val gson = GsonBuilder().create()

@@ -1,24 +1,24 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Service
 
 
 @Service
 open class PrisonerChangeListenerPusher(
-    private val prisonerPatientUpdateService: PrisonerPatientUpdateService
+    private val prisonerPatientUpdateService: PrisonerPatientUpdateService,
+    @Qualifier("gson") private val gson : Gson
 ) {
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
-    val gson: Gson = GsonBuilder().create()
   }
 
   @JmsListener(destination = "\${sqs.queue.name}")
-  open fun pushPrisonUpdateToNhs(requestJson: String?) {
+  fun pushPrisonUpdateToNhs(requestJson: String?) {
     log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
     val eventType = messageAttributes.eventType.Value
