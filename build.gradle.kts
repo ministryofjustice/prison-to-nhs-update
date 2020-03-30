@@ -13,7 +13,7 @@ plugins {
   kotlin("plugin.jpa") version "1.3.61"
   id("org.springframework.boot") version "2.2.5.RELEASE"
   id("io.spring.dependency-management") version "1.0.9.RELEASE"
-  id("org.owasp.dependencycheck") version "5.3.0"
+  id("org.owasp.dependencycheck") version "5.3.1"
   id("com.github.ben-manes.versions") version "0.28.0"
   id("com.gorylenko.gradle-git-properties") version "2.2.2"
 }
@@ -91,42 +91,46 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-
+  implementation("org.springframework.boot:spring-boot-starter-security")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+  implementation("org.springframework.boot:spring-boot-devtools")
+
   implementation("org.springframework.security:spring-security-oauth2-jose")
   implementation("org.springframework:spring-webflux")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
   implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
-
-  implementation("io.springfox:springfox-swagger2:2.9.2")
-  implementation("io.springfox:springfox-swagger-ui:2.9.2")
-  implementation("io.springfox:springfox-bean-validators:2.9.2")
-
-  implementation( "com.google.code.gson:gson:2.8.6")
-
-  implementation("org.springframework:spring-jms")
-  implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.735"))
-
-  runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:6.2.4")
-  runtimeOnly("org.postgresql:postgresql:42.2.10")
 
   implementation("net.logstash.logback:logstash-logback-encoder:6.3")
   implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.5.1")
   implementation("com.microsoft.azure:applicationinsights-logging-logback:2.5.1")
   implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.0")
 
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.2")
+  implementation("io.springfox:springfox-swagger2:2.9.2")
+  implementation("io.springfox:springfox-swagger-ui:2.9.2")
+  implementation("io.springfox:springfox-bean-validators:2.9.2")
+
+  implementation( "com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:28.2-jre")
+
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
+
+  implementation("org.springframework:spring-jms")
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.750"))
+  implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
+
+  runtimeOnly("com.h2database:h2:1.4.200")
+  runtimeOnly("org.flywaydb:flyway-core:6.2.4")
+  runtimeOnly("org.postgresql:postgresql:42.2.10")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude("org.junit.vintage", "junit-vintage-engine")
   }
+  testImplementation("org.springframework.security:spring-security-test")
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-  testImplementation("com.nhaarman:mockito-kotlin-kt1.1:1.6.0")
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.26.3")
   testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.15.0")
+  testImplementation("com.nhaarman:mockito-kotlin-kt1.1:1.6.0")
   testImplementation("org.testcontainers:localstack:1.13.0")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.2")
 }

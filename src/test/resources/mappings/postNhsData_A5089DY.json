@@ -1,7 +1,7 @@
 {
   "request": {
-    "method": "GET",
-    "url": "/api/prisoners/A5089DY/full-status"
+    "method": "POST",
+    "urlPath": "/patient-upsert"
   },
   "response": {
     "status": 200,
@@ -10,8 +10,8 @@
     },
     "jsonBody": {
       "nomsId": "A5089DY",
-      "bookingId": 1200835,
       "establishmentCode": "MDI",
+      "gpPracticeCode": "V123223",
       "givenName1": "Patient 1",
       "givenName2": "John",
       "lastName": "Smith",
@@ -31,3 +31,4 @@
     }
   }
 }
+

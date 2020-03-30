@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/patient-upsert"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "nomsId": "A5089EY",
+      "establishmentCode": "OUT",
+      "gpPracticeCode": "V123223",
+      "givenName1": "Patient 2",
+      "givenName2": "John",
+      "lastName": "Smith",
+      "requestedName": "Bill",
+      "dateOfBirth": "1978-01-03",
+      "gender": "Male",
+      "englishSpeaking": false,
+      "unitCode1": "OUT",
+      "bookingBeginDate": "2019-01-02",
+      "admissionDate": "2020-01-02",
+      "releaseDate": "2020-03-20",
+      "categoryCode": "C",
+      "communityStatus": "INACTIVE OUT",
+      "legalStatus": "Convicted"
+    }
+  }
+}
+

@@ -9,8 +9,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
 
 
   @Test
-  fun `will consume a prison movement message, update nhs`() {
-    val message = "/messages/externalMovement.json".readResourceAsText()
+  fun `will consume a prison movement message in, update nhs`() {
+    val message = "/messages/externalMovementIn.json".readResourceAsText()
 
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
@@ -18,12 +18,25 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     awsSqsClient.sendMessage(queueUrl, message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
-    await untilCallTo { prisonRequestCountFor("/api/bookings/1200835") } matches { it == 1 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089DY/full-status") } matches { it == 1 }
-    await untilCallTo { estateRequestCountFor("/prisons/gp-practice/Y1234AD") } matches { it == 1 }
+    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
   }
 
+  @Test
+  fun `will consume a prison movement message out, update nhs`() {
+    val message = "/messages/externalMovementOut.json".readResourceAsText()
+
+    // wait until our queue has been purged
+    await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
+
+    awsSqsClient.sendMessage(queueUrl, message)
+
+    await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
+    await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089EY/full-status") } matches { it == 1 }
+    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
+  }
 }
 
 private fun String.readResourceAsText(): String {

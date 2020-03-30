@@ -5,11 +5,11 @@ import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.ActiveProfiles
-import uk.gov.justice.digital.hmpps.prisontonhs.health.IntegrationTest
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 
 
 @ActiveProfiles(profiles = ["test", "test-queue"])
-class QueueIntegrationTest : IntegrationTest() {
+abstract class QueueIntegrationTest : IntegrationTest() {
 
     @Autowired
     lateinit var queueUrl: String

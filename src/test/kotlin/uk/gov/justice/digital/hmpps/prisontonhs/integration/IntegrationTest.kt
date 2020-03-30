@@ -1,7 +1,7 @@
-package uk.gov.justice.digital.hmpps.prisontonhs.health
+package uk.gov.justice.digital.hmpps.prisontonhs.integration
 
 import com.amazonaws.services.sqs.AmazonSQS
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.gson.Gson
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -16,10 +16,10 @@ import org.springframework.http.MediaType
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
-import uk.gov.justice.digital.hmpps.whereabouts.integration.wiremock.NhsMockServer
-import uk.gov.justice.digital.hmpps.whereabouts.integration.wiremock.OAuthMockServer
-import uk.gov.justice.digital.hmpps.whereabouts.integration.wiremock.PrisonEstateMockServer
-import uk.gov.justice.digital.hmpps.whereabouts.integration.wiremock.PrisonMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.NhsMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.OAuthMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonEstateMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonMockServer
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -32,7 +32,7 @@ abstract class IntegrationTest {
   internal lateinit var awsSqsClient: AmazonSQS
 
   @Autowired
-  private lateinit var objectMapper: ObjectMapper
+  private lateinit var gson: Gson
 
   companion object {
     internal val prisonMockServer = PrisonMockServer()
@@ -44,18 +44,18 @@ abstract class IntegrationTest {
     @JvmStatic
     fun startMocks() {
       prisonMockServer.start()
-      oauthMockServer.start()
       prisonEstateMockServer.start()
       nhsMockServer.start()
+      oauthMockServer.start()
     }
 
     @AfterAll
     @JvmStatic
     fun stopMocks() {
       prisonMockServer.stop()
-      oauthMockServer.stop()
       prisonEstateMockServer.stop()
       nhsMockServer.stop()
+      oauthMockServer.stop()
     }
   }
 
@@ -67,11 +67,10 @@ abstract class IntegrationTest {
 
   @BeforeEach
   fun resetStubs() {
-    oauthMockServer.resetAll()
     prisonMockServer.resetAll()
     prisonEstateMockServer.resetAll()
     nhsMockServer.resetAll()
-
+    oauthMockServer.resetAll()
     oauthMockServer.stubGrantToken()
   }
 
@@ -82,6 +81,6 @@ abstract class IntegrationTest {
     return HttpEntity(entity, headers)
   }
 
-  internal fun Any.asJson() = objectMapper.writeValueAsBytes(this)
+  internal fun Any.asJson() = gson.toJson(this)
 
 }

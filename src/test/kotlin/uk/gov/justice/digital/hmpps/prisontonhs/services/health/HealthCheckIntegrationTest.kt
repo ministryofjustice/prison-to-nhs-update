@@ -1,4 +1,4 @@
-package uk.gov.justice.digital.hmpps.prisontonhs.health
+package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
 import com.amazonaws.services.sqs.model.GetQueueAttributesRequest
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult
@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.util.ReflectionTestUtils
 import org.springframework.test.web.reactive.server.WebTestClient
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes
-import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueHealth
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 
 
 @ExtendWith(SpringExtension::class)

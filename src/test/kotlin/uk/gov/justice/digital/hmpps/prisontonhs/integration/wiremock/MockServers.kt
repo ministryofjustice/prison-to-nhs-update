@@ -1,5 +1,4 @@
-package uk.gov.justice.digital.hmpps.whereabouts.integration.wiremock
-
+package uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.http.HttpHeader
@@ -20,7 +19,7 @@ class OAuthMockServer : WireMockServer(8090) {
         WireMock.post(WireMock.urlEqualTo("/auth/oauth/token"))
             .willReturn(WireMock.aResponse()
                 .withHeaders(HttpHeaders(HttpHeader("Content-Type", "application/json")))
-                .withBody(gson.toJson(mapOf("access_token" to "ABCDE"))))
+                .withBody(gson.toJson(mapOf("access_token" to "ABCDE",  "token_type" to "bearer"))))
     )
   }
 }
