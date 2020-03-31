@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/prisoners/A5089DY/full-status"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "nomsId": "A5089DY",
+      "bookingId": 1200835,
+      "establishmentCode": "MDI",
+      "givenName1": "Patient 1",
+      "givenName2": "John",
+      "lastName": "Smith",
+      "requestedName": "Bob",
+      "dateOfBirth": "1978-01-02",
+      "gender": "Male",
+      "englishSpeaking": false,
+      "unitCode1": "A",
+      "unitCode2": "1",
+      "unitCode3": "005",
+      "bookingBeginDate": "2019-01-02",
+      "admissionDate": "2020-01-02",
+      "releaseDate": "2025-01-02",
+      "categoryCode": "C",
+      "communityStatus": "ACTIVE IN",
+      "legalStatus": "Convicted"
+    }
+  }
+}

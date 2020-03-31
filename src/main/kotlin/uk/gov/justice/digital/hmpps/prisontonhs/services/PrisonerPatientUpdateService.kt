@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
+import uk.gov.justice.digital.hmpps.prisontonhs.services.ChangeType.REGISTRATION
 import java.lang.reflect.Type
 import java.time.LocalDateTime
 import javax.persistence.EntityNotFoundException
@@ -35,15 +36,15 @@ class PrisonerPatientUpdateService(
         // only interested in ADM (Admissions) or REL (Releases)
         if (externalMovement.movementType in listOf("ADM", "REL")) {
 
-            val changeType = if (externalMovement.movementType === "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
+            val changeType = if (externalMovement.movementType == "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
+            val establishmentCode = if (changeType == REGISTRATION) externalMovement.toAgencyLocationId else externalMovement.fromAgencyLocationId
 
             // only support admission into an allowed prison or release from an allowed prison
-            if ((externalMovement.movementType === "ADM" && externalMovement.toAgencyLocationId in allowedPrisons)
-                    || (externalMovement.movementType === "REL" && externalMovement.fromAgencyLocationId in allowedPrisons)) {
+            if ((establishmentCode in allowedPrisons)) {
                 log.debug("Offender Movement $externalMovement")
-                processPrisoner(externalMovement.offenderIdDisplay, changeType)
+                processPrisoner(externalMovement.offenderIdDisplay, changeType, establishmentCode)
             } else {
-                log.debug("Skipping movement as not in allowed this prison yet $externalMovement")
+                log.debug("Skipping movement as not in allowed this [${establishmentCode}] prison yet $externalMovement")
             }
         } else {
             log.debug("Ignored movement type $externalMovement")
@@ -56,7 +57,7 @@ class PrisonerPatientUpdateService(
         // check if the offender is in an allowed prison
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
             if (it.agencyId in allowedPrisons) {
-                processPrisoner(it.offenderNo, ChangeType.AMENDMENT)
+                processPrisoner(it.offenderNo, ChangeType.AMENDMENT, it.agencyId)
             } else {
                 log.debug("${it.offenderNo} not in allowed list of prisons")
             }
@@ -69,14 +70,14 @@ class PrisonerPatientUpdateService(
         offenderService.getOffender(message.offenderIdDisplay)?.let {
             // check if the offender is in an allowed prison
             if (it.establishmentCode in allowedPrisons) {
-                processPrisoner(it.nomsId, ChangeType.AMENDMENT)
+                processPrisoner(it.nomsId, ChangeType.AMENDMENT, it.establishmentCode)
             } else {
                 log.debug("${it.nomsId} not in allowed list of prisons")
             }
         }
     }
 
-    private fun processPrisoner(offenderNo: String, changeType: ChangeType) {
+    private fun processPrisoner(offenderNo: String, changeType: ChangeType, establishmentCode : String) {
         offenderService.getOffender(offenderNo)?.let { offender ->
 
             // check if changed
@@ -85,12 +86,12 @@ class PrisonerPatientUpdateService(
                 val jsonDiff = checkForDifferences(existingRecord.get().patientRecord, gson.toJson(offender))
                 if (!jsonDiff.areEqual()) {
                     log.debug("Offender record ${offender.nomsId} has changed: $jsonDiff")
-                    updateNhsSystem(offender, changeType)
+                    updateNhsSystem(offender, changeType, establishmentCode)
                 } else {
                     log.debug("Offender ${offender.nomsId} data not changed")
                 }
             } else {
-                updateNhsSystem(offender, changeType)
+                updateNhsSystem(offender, changeType, establishmentCode)
             }
         } ?: log.error("Offender not found $offenderNo")
 
@@ -103,12 +104,12 @@ class PrisonerPatientUpdateService(
         return Maps.difference(leftMap, rightMap)
     }
 
-    private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType) : Boolean {
+    private fun updateNhsSystem(offender: PrisonerStatus, changeType: ChangeType, establishmentCode : String) : Boolean {
         log.debug("Saving patient record {}", offender.nomsId)
         offenderPatientRecordRepository.save(OffenderPatientRecord(offender.nomsId, gson.toJson(offender), LocalDateTime.now()))
 
         // look up the establishment code to get gp code
-        prisonEstateService.getPrisonEstateByPrisonId(offender.establishmentCode)?.let { prison ->
+        prisonEstateService.getPrisonEstateByPrisonId(establishmentCode)?.let { prison ->
 
             // map the option to NhsPrisoner
             with(offender) {

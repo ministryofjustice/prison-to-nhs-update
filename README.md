@@ -1,6 +1,10 @@
 # Prison 2 NHS Update
 
-Self-contained fat-jar micro-service to listen for events from Prison systems (NOMIS) to update NHS system of record via the TTP SystmOne
+[![CircleCI](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update/tree/master.svg?style=svg)](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update)
+[![Known Vulnerabilities](https://snyk.io/test/github/ministryofjustice/prison-to-nhs-update/badge.svg)](https://snyk.io/test/github/ministryofjustice/prison-to-nhs-update)
+
+
+Self-contained fat-jar micro-service to listen for events from Prison systems (NOMIS) to update NHS system of record via the TPP SystmOne
 
 ### Pre-requisite
 
