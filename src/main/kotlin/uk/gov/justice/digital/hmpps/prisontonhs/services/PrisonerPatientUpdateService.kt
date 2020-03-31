@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
+import uk.gov.justice.digital.hmpps.prisontonhs.services.ChangeType.REGISTRATION
 import java.lang.reflect.Type
 import java.time.LocalDateTime
 import javax.persistence.EntityNotFoundException
@@ -36,15 +37,14 @@ class PrisonerPatientUpdateService(
         if (externalMovement.movementType in listOf("ADM", "REL")) {
 
             val changeType = if (externalMovement.movementType == "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
+            val establishmentCode = if (changeType == REGISTRATION) externalMovement.toAgencyLocationId else externalMovement.fromAgencyLocationId
 
             // only support admission into an allowed prison or release from an allowed prison
-            if ((externalMovement.movementType == "ADM" && externalMovement.toAgencyLocationId in allowedPrisons)
-                    || (externalMovement.movementType == "REL" && externalMovement.fromAgencyLocationId in allowedPrisons)) {
+            if ((establishmentCode in allowedPrisons)) {
                 log.debug("Offender Movement $externalMovement")
-                val establishmentCode = if (externalMovement.movementType == "ADM") externalMovement.toAgencyLocationId else externalMovement.fromAgencyLocationId
                 processPrisoner(externalMovement.offenderIdDisplay, changeType, establishmentCode)
             } else {
-                log.debug("Skipping movement as not in allowed this prison yet $externalMovement")
+                log.debug("Skipping movement as not in allowed this [${establishmentCode}] prison yet $externalMovement")
             }
         } else {
             log.debug("Ignored movement type $externalMovement")
