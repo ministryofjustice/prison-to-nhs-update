@@ -42,19 +42,19 @@ class PrisonerPatientUpdateService(
 
             // only support admission into an allowed prison or release from an allowed prison
             if ((establishmentCode in allowedPrisons)) {
-                log.debug("Offender Movement $externalMovement")
+                log.debug("Offender Movement {}", externalMovement)
                 processPrisoner(externalMovement.offenderIdDisplay, changeType, establishmentCode)
             } else {
                 log.debug("Skipping movement as not in allowed this [{}] prison yet {}", establishmentCode, externalMovement)
             }
         } else {
-            log.debug("Ignored movement type $externalMovement")
+            log.debug("Ignored movement type {}", externalMovement)
         }
 
     }
 
     fun offenderBookingChange(message: OffenderBookingChangedMessage) {
-        log.debug("Offender Booking Change [booking ID ${message.bookingId}]")
+        log.debug("Offender Booking Change [booking ID {}]", message.bookingId)
 
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
             // check if the offender is in an allowed prison
@@ -86,7 +86,7 @@ class PrisonerPatientUpdateService(
             if (existingRecord.isPresent) {
                 val jsonDiff = checkForDifferences(existingRecord.get().patientRecord, gson.toJson(offender))
                 if (!jsonDiff.areEqual()) {
-                    log.debug("Offender record ${offender.nomsId} has changed: $jsonDiff")
+                    log.debug("Offender record {} has changed: {}", offender.nomsId, jsonDiff)
                     updateNhsSystem(offender, changeType, establishmentCode)
                 } else {
                     log.debug("Offender {} data not changed", offender.nomsId)
@@ -94,7 +94,7 @@ class PrisonerPatientUpdateService(
             } else {
                 updateNhsSystem(offender, changeType, establishmentCode)
             }
-        } ?: log.error("Offender not found $offenderNo")
+        } ?: log.error("Offender not found {}", offenderNo)
 
     }
 

@@ -22,7 +22,7 @@ open class PrisonerChangeListenerPusher(
     log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
     val eventType = messageAttributes.eventType.Value
-    log.info("Received message $messageId type $eventType")
+    log.info("Received message {} type {}", messageId, eventType)
 
     when (eventType) {
       "EXTERNAL_MOVEMENT_RECORD-INSERTED" -> prisonerPatientUpdateService.externalMovement(fromJson(message))
@@ -36,7 +36,7 @@ open class PrisonerChangeListenerPusher(
       "BOOKING_NUMBER-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "OFFENDER-UPDATED" -> prisonerPatientUpdateService.offenderChange(fromJson(message))
 
-      else -> log.warn("We received a message of event type $eventType which I really wasn't expecting")
+      else -> log.warn("We received a message of event type {} which I really wasn't expecting", eventType)
     }
 
   }
