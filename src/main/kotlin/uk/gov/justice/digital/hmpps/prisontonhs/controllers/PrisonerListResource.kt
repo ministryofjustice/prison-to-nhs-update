@@ -31,8 +31,8 @@ class PrisonerListResource(private val establishmentService: EstablishmentServic
     ])
     @PreAuthorize("hasAnyRole('SYSTEM_USER')")
     fun getPrisonersByGpPracticeCode(@ApiParam("GP Practice Code", example = "Y05537") @PathVariable @Size(max = 6) gpPracticeCode: String,
-                                     @ApiParam("Page Number offset (detault 0)", example = "0", defaultValue = "0") @RequestParam(value = "page", required = false, defaultValue = "0") page : Integer,
-                                     @ApiParam("Number of records returned", example = "10", defaultValue = "10") @RequestParam(value = "size", required = false, defaultValue = "10") size : Integer)
+                                     @ApiParam("Page Number offset (detault 0)", example = "0", defaultValue = "0") @RequestParam(value = "page", required = false, defaultValue = "0") page : Int,
+                                     @ApiParam("Number of records returned", example = "10", defaultValue = "10") @RequestParam(value = "size", required = false, defaultValue = "10") size : Int)
         : Page<NhsPrisoner> {
         return establishmentService.getPrisonersByGpPracticeCode(gpPracticeCode, page, size)
     }

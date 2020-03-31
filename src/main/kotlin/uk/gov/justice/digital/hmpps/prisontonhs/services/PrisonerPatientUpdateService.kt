@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
+import uk.gov.justice.digital.hmpps.prisontonhs.services.ChangeType.AMENDMENT
 import uk.gov.justice.digital.hmpps.prisontonhs.services.ChangeType.REGISTRATION
 import java.lang.reflect.Type
 import java.time.LocalDateTime
@@ -44,7 +45,7 @@ class PrisonerPatientUpdateService(
                 log.debug("Offender Movement $externalMovement")
                 processPrisoner(externalMovement.offenderIdDisplay, changeType, establishmentCode)
             } else {
-                log.debug("Skipping movement as not in allowed this [${establishmentCode}] prison yet $externalMovement")
+                log.debug("Skipping movement as not in allowed this [{}] prison yet {}", establishmentCode, externalMovement)
             }
         } else {
             log.debug("Ignored movement type $externalMovement")
@@ -53,27 +54,27 @@ class PrisonerPatientUpdateService(
     }
 
     fun offenderBookingChange(message: OffenderBookingChangedMessage) {
-        log.debug("Offender Change [booking ID ${message.bookingId}]")
-        // check if the offender is in an allowed prison
+        log.debug("Offender Booking Change [booking ID ${message.bookingId}]")
+
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
-            if (it.agencyId in allowedPrisons) {
-                processPrisoner(it.offenderNo, ChangeType.AMENDMENT, it.agencyId)
-            } else {
-                log.debug("${it.offenderNo} not in allowed list of prisons")
-            }
+            // check if the offender is in an allowed prison
+            checkLocationAndProcessOffender(it)
         }
     }
 
     fun offenderChange(message: OffenderChangedMessage) {
-        log.debug("Offender Change [Noms ID ${message.offenderIdDisplay}]")
+        log.debug("Offender Change [Noms ID {}]", message.offenderIdDisplay)
 
-        offenderService.getOffender(message.offenderIdDisplay)?.let {
-            // check if the offender is in an allowed prison
-            if (it.establishmentCode in allowedPrisons) {
-                processPrisoner(it.nomsId, ChangeType.AMENDMENT, it.establishmentCode)
-            } else {
-                log.debug("${it.nomsId} not in allowed list of prisons")
-            }
+        offenderService.getOffenderForNomsId(message.offenderIdDisplay)?.let {
+            checkLocationAndProcessOffender(it)
+        }
+    }
+
+    private fun checkLocationAndProcessOffender(booking: OffenderBooking) {
+        if (booking.agencyId in allowedPrisons) {
+            processPrisoner(booking.offenderNo, AMENDMENT, booking.agencyId)
+        } else {
+            log.debug("{} not in allowed list of prisons", booking.offenderNo)
         }
     }
 
@@ -88,7 +89,7 @@ class PrisonerPatientUpdateService(
                     log.debug("Offender record ${offender.nomsId} has changed: $jsonDiff")
                     updateNhsSystem(offender, changeType, establishmentCode)
                 } else {
-                    log.debug("Offender ${offender.nomsId} data not changed")
+                    log.debug("Offender {} data not changed", offender.nomsId)
                 }
             } else {
                 updateNhsSystem(offender, changeType, establishmentCode)

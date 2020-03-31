@@ -28,7 +28,7 @@ open class PrisonerChangeListenerPusher(
       "EXTERNAL_MOVEMENT_RECORD-INSERTED" -> prisonerPatientUpdateService.externalMovement(fromJson(message))
       "BED_ASSIGNMENT_HISTORY-INSERTED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "IMPRISONMENT_STATUS-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
-      "SENTENCE_CALCULATION_DATES-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "SENTENCE_DATES-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "ASSESSMENT-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "OFFENDER_BOOKING-REASSIGNED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "OFFENDER_BOOKING-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))

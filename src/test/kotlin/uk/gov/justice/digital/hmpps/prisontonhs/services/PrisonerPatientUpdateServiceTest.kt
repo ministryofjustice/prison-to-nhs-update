@@ -68,6 +68,7 @@ class PrisonerPatientUpdateServiceTest {
 
     @Test
     fun `will update NHS service offender change`() {
+        whenever(offenderService.getOffenderForNomsId(anyString())).thenReturn(createOffenderBooking())
         whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
         whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(updatedOffenderPatientRecordSmallChange()))
         whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())

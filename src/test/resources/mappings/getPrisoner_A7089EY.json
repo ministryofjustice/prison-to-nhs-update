@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/prisoners/A7089EY/full-status"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "nomsId": "A7089EY",
+      "bookingId": 1800835,
+      "establishmentCode": "MDI",
+      "givenName1": "Patient 4",
+      "givenName2": "John",
+      "lastName": "Smith",
+      "requestedName": "Blobby",
+      "dateOfBirth": "1980-01-02",
+      "gender": "Female",
+      "englishSpeaking": true,
+      "unitCode1": "B",
+      "unitCode2": "1",
+      "unitCode3": "009",
+      "bookingBeginDate": "2017-01-02",
+      "admissionDate": "2019-02-02",
+      "releaseDate": "2024-01-02",
+      "categoryCode": "D",
+      "communityStatus": "ACTIVE IN",
+      "legalStatus": "Remand"
+    }
+  }
+}
