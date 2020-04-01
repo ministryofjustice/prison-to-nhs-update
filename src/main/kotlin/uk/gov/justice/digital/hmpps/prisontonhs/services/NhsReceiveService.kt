@@ -20,7 +20,7 @@ open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
   }
 
   fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) : Boolean {
-    log.debug("Sending patient record to NHS: $nhsPrisonerData")
+    log.debug("Sending patient record to NHS: {}", nhsPrisonerData)
 
     if (nhsServerEnabled) {
       webClient.post()

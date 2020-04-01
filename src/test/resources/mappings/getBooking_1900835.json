@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPath": "/api/bookings/1200835"
+    "urlPath": "/api/bookings/1900835"
   },
   "response": {
     "status": 200,
@@ -10,15 +10,15 @@
     },
     "jsonBody":
     {
-      "bookingId": 1200835,
+      "bookingId": 1900835,
       "bookingNo": "38339A",
-      "offenderNo": "A5089DY",
-      "firstName": "Patient 1",
+      "offenderNo": "A6089DY",
+      "firstName": "Patient 3",
       "lastName": "Smith",
       "agencyId": "MDI",
       "assignedLivingUnitId": 25638,
       "activeFlag": true,
-      "dateOfBirth": "1978-01-02"
+      "dateOfBirth": "1979-01-02"
     }
   }
 }

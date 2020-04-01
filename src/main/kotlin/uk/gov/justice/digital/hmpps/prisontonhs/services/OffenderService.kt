@@ -29,6 +29,15 @@ class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
         .block(offenderTimeout)
   }
 
+  fun getOffenderForNomsId(nomsId: String): OffenderBooking? {
+    return webClient.get()
+        .uri("$baseUri/api/bookings/offenderNo/$nomsId")
+        .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+        .retrieve()
+        .bodyToMono(OffenderBooking::class.java)
+        .block(offenderTimeout)
+  }
+
   fun getOffender(offenderNo: String): PrisonerStatus? {
     return webClient
         .get()
@@ -39,7 +48,7 @@ class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
         .block(offenderTimeout);
   }
 
-  fun getOffendersInEstablishment(establishmentCode: String, page : Integer, size : Integer): Page<PrisonerStatus>? {
+  fun getOffendersInEstablishment(establishmentCode: String, page : Int, size : Int): Page<PrisonerStatus>? {
     val response = webClient
         .get()
         .uri("$baseUri/api/prisoners/by-establishment/${establishmentCode}?page=${page}&size=${size}&sort=nomsId")
