@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
+import com.microsoft.applicationinsights.TelemetryClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -14,13 +15,16 @@ import java.time.Duration
 open class NhsReceiveService(@Qualifier("webClient") val webClient: WebClient,
                              @Value("\${api.base.url.nhs}") val baseUri: String,
                              @Value("\${api.nhs.timeout:30s}") val timeout: Duration,
-                             @Value("\${nhs.server.enabled:false}") val nhsServerEnabled: Boolean) {
+                             @Value("\${nhs.server.enabled:false}") val nhsServerEnabled: Boolean,
+                             val telemetryClient: TelemetryClient) {
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
   fun postNhsData(nhsPrisonerData : NhsPrisoner, changeType: ChangeType) : Boolean {
     log.debug("Sending patient record to NHS: {}", nhsPrisonerData)
+    val trackingAttributes = mapOf("nomsId" to nhsPrisonerData.nomsId, "change-type" to changeType.name)
+    telemetryClient.trackEvent("p2nhs-send-to-nhs", trackingAttributes, null)
 
     if (nhsServerEnabled) {
       webClient.post()

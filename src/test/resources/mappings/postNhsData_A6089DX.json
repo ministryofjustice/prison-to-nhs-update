@@ -10,25 +10,25 @@
       "change-type": "AMENDMENT"
     },
     "jsonBody": {
-      "nomsId": "A7089EY",
+      "nomsId": "A6089DX",
       "establishmentCode": "MDI",
       "gpPracticeCode": "Y05537",
-      "givenName1": "Patient 4",
+      "givenName1": "Patient 5",
       "givenName2": "John",
       "lastName": "Smith",
       "requestedName": "Blobby",
-      "dateOfBirth": "1980-01-02",
+      "dateOfBirth": "1980-12-31",
       "gender": "Female",
       "englishSpeaking": true,
-      "unitCode1": "B",
+      "unitCode1": "C",
       "unitCode2": "1",
-      "unitCode3": "009",
-      "bookingBeginDate": "2017-01-02",
-      "admissionDate": "2019-02-02",
-      "releaseDate": "2024-01-02",
-      "categoryCode": "D",
+      "unitCode3": "001",
+      "bookingBeginDate": "2018-01-02",
+      "admissionDate": "2020-02-02",
+      "releaseDate": "2023-01-02",
+      "categoryCode": "C",
       "communityStatus": "ACTIVE IN",
-      "legalStatus": "Remand"
+      "legalStatus": "Convicted"
     }
   }
 }

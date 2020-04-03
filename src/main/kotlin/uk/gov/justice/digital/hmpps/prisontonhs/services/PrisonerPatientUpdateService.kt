@@ -4,6 +4,7 @@ import com.google.common.collect.MapDifference
 import com.google.common.collect.Maps
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.microsoft.applicationinsights.TelemetryClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -22,12 +23,13 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 class PrisonerPatientUpdateService(
-        private val offenderService: OffenderService,
-        private val prisonEstateService: PrisonEstateService,
-        private val nhsReceiveService: NhsReceiveService,
-        private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
-        @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>,
-        @Qualifier("gson") private val gson : Gson
+    private val offenderService: OffenderService,
+    private val prisonEstateService: PrisonEstateService,
+    private val nhsReceiveService: NhsReceiveService,
+    private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
+    private val telemetryClient: TelemetryClient,
+    @Value("\${prisontonhs.only.prisons}") private val allowedPrisons: List<String>,
+    @Qualifier("gson") private val gson : Gson
 ) {
     companion object {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -57,7 +59,6 @@ class PrisonerPatientUpdateService(
         log.debug("Offender Booking Change [booking ID {}]", message.bookingId)
 
         offenderService.getOffenderForBookingId(message.bookingId)?.let {
-            // check if the offender is in an allowed prison
             checkLocationAndProcessOffender(it)
         }
     }
@@ -71,6 +72,7 @@ class PrisonerPatientUpdateService(
     }
 
     private fun checkLocationAndProcessOffender(booking: OffenderBooking) {
+        // check if the offender is in an allowed prison
         if (booking.agencyId in allowedPrisons) {
             processPrisoner(booking.offenderNo, AMENDMENT, booking.agencyId)
         } else {
@@ -86,12 +88,16 @@ class PrisonerPatientUpdateService(
             if (existingRecord.isPresent) {
                 val jsonDiff = checkForDifferences(existingRecord.get().patientRecord, gson.toJson(offender))
                 if (!jsonDiff.areEqual()) {
-                    log.debug("Offender record {} has changed: {}", offender.nomsId, jsonDiff)
+                    val trackingAttributes = mapOf("nomsId" to offender.nomsId, "delta" to jsonDiff.toString())
+                    telemetryClient.trackEvent("p2nhs-prisoner-change", trackingAttributes, null)
+
                     updateNhsSystem(offender, changeType, establishmentCode)
                 } else {
                     log.debug("Offender {} data not changed", offender.nomsId)
                 }
             } else {
+                val trackingAttributes = mapOf("nomsId" to offender.nomsId)
+                telemetryClient.trackEvent("p2nhs-prisoner-new", trackingAttributes, null)
                 updateNhsSystem(offender, changeType, establishmentCode)
             }
         } ?: log.error("Offender not found {}", offenderNo)

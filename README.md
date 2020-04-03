@@ -54,5 +54,10 @@ local test data:
 ./create-prison-movements-messages-local.bash 
 ```
 
+Purging a local queue
+```bash
+aws --endpoint-url=http://localhost:4576 sqs purge-queue --queue-url http://localhost:4576/queue/prison_to_nhs_queue
+```
+
 #### Running without queues
 This can be done using the `dev` spring profile

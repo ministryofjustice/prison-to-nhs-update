@@ -29,7 +29,7 @@ class PrisonerListResource(private val establishmentService: EstablishmentServic
         ApiResponse(code = 400, message = "Bad request.  Wrong format for GP Code.", response = ErrorResponse::class),
         ApiResponse(code = 404, message = "GP Practice Code not found.", response = ErrorResponse::class)
     ])
-    @PreAuthorize("hasAnyRole('SYSTEM_USER')")
+    @PreAuthorize("hasAnyRole('PRISONER_ROLLCALL')")
     fun getPrisonersByGpPracticeCode(@ApiParam("GP Practice Code", example = "Y05537") @PathVariable @Size(max = 6) gpPracticeCode: String,
                                      @ApiParam("Page Number offset (detault 0)", example = "0", defaultValue = "0") @RequestParam(value = "page", required = false, defaultValue = "0") page : Int,
                                      @ApiParam("Number of records returned", example = "10", defaultValue = "10") @RequestParam(value = "size", required = false, defaultValue = "10") size : Int)

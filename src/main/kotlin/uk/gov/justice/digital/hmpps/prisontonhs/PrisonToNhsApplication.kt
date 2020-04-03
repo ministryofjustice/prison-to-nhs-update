@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-open class PrisonToNhsUpdateApplication
+class PrisonToNhsUpdateApplication
 
 fun main(args: Array<String>) {
   runApplication<PrisonToNhsUpdateApplication>(*args)

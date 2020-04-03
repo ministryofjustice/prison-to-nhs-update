@@ -6,12 +6,13 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "change-type": "REDUCTION"
     },
     "jsonBody": {
       "nomsId": "A5089EY",
       "establishmentCode": "OUT",
-      "gpPracticeCode": "V123223",
+      "gpPracticeCode": "Y05537",
       "givenName1": "Patient 2",
       "givenName2": "John",
       "lastName": "Smith",

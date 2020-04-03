@@ -6,12 +6,13 @@
   "response": {
     "status": 200,
     "headers": {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "change-type": "AMENDMENT"
     },
     "jsonBody": {
       "nomsId": "A6089EY",
       "establishmentCode": "MDI",
-      "gpPracticeCode": "V123223",
+      "gpPracticeCode": "Y05537",
       "givenName1": "Patient 3",
       "givenName2": "John",
       "lastName": "Smith",

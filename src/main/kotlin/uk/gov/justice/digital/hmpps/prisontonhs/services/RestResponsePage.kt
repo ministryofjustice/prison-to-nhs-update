@@ -1,13 +1,14 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import java.util.*
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 internal class RestResponsePage<T> : PageImpl<T> {
   @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
   constructor(content: List<T>,

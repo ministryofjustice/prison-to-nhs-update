@@ -5,7 +5,7 @@ import com.amazonaws.services.sqs.model.GetQueueAttributesResult
 import com.amazonaws.services.sqs.model.QueueAttributeName
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.util.ReflectionTestUtils
-import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 
 
@@ -21,10 +20,6 @@ import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 class HealthCheckIntegrationTest : IntegrationTest() {
   @Autowired
   private lateinit var queueHealth: QueueHealth
-
-  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-  @Autowired
-  private lateinit var webTestClient: WebTestClient
 
   @Autowired
   @Value("\${sqs.queue.name}")

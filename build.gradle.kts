@@ -112,9 +112,11 @@ dependencies {
   implementation( "com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:28.2-jre")
 
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
 
+  implementation("com.nimbusds:nimbus-jose-jwt:8.11")
+
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
   implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.750"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
@@ -126,13 +128,13 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test") {
     exclude("org.junit.vintage", "junit-vintage-engine")
   }
-  testImplementation("org.springframework.security:spring-security-test")
+
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.26.3")
-  testImplementation("net.javacrumbs.json-unit:json-unit-assertj:2.15.0")
-  testImplementation("com.nhaarman:mockito-kotlin-kt1.1:1.6.0")
+  testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
   testImplementation("org.testcontainers:localstack:1.13.0")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.2")
+  testImplementation("io.jsonwebtoken:jjwt:0.9.1")
 }
 
 tasks {
