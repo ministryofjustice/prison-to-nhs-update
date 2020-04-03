@@ -87,6 +87,7 @@ dependencies {
 
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -110,13 +111,8 @@ dependencies {
   implementation("io.springfox:springfox-bean-validators:2.9.2")
 
   implementation( "com.google.code.gson:gson:2.8.6")
-  implementation("com.google.guava:guava:28.2-jre")
-
-
   implementation("com.nimbusds:nimbus-jose-jwt:8.11")
 
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
-  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
   implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.750"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")

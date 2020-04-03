@@ -39,7 +39,7 @@ class OffenderService(val prisonWebClient: WebClient,
         .uri("/api/prisoners/$offenderNo/full-status")
         .retrieve()
         .bodyToMono(PrisonerStatus::class.java)
-        .block(offenderTimeout);
+        .block(offenderTimeout)
   }
 
   fun getOffendersInEstablishment(establishmentCode: String, page : Int, size : Int): Page<PrisonerStatus>? {

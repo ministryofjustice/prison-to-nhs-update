@@ -4,10 +4,10 @@
     "urlPath": "/api/prisoners/by-establishment/MDI",
     "queryParameters" : {
       "size" : {
-        "equalTo" : "10"
+        "equalTo" : "2"
       },
       "page" : {
-        "equalTo" : "0"
+        "equalTo" : "1"
       },
       "sort" : {
         "equalTo" : "nomsId"
@@ -21,48 +21,6 @@
     },
     "jsonBody": {
       "content": [
-        {
-          "nomsId": "A5089DY",
-          "bookingId": 1200835,
-          "establishmentCode": "MDI",
-          "givenName1": "Patient 1",
-          "givenName2": "John",
-          "lastName": "Smith",
-          "requestedName": "Bob",
-          "dateOfBirth": "1978-01-02",
-          "gender": "Male",
-          "englishSpeaking": false,
-          "unitCode1": "A",
-          "unitCode2": "1",
-          "unitCode3": "005",
-          "bookingBeginDate": "2019-01-02",
-          "admissionDate": "2020-01-02",
-          "releaseDate": "2025-01-02",
-          "categoryCode": "C",
-          "communityStatus": "ACTIVE IN",
-          "legalStatus": "Convicted"
-        },
-        {
-          "nomsId": "A6089DX",
-          "bookingId": 1800836,
-          "establishmentCode": "MDI",
-          "givenName1": "Patient 5",
-          "givenName2": "John",
-          "lastName": "Smith",
-          "requestedName": "Blobby",
-          "dateOfBirth": "1980-12-31",
-          "gender": "Female",
-          "englishSpeaking": true,
-          "unitCode1": "C",
-          "unitCode2": "1",
-          "unitCode3": "001",
-          "bookingBeginDate": "2018-01-02",
-          "admissionDate": "2020-02-02",
-          "releaseDate": "2023-01-02",
-          "categoryCode": "C",
-          "communityStatus": "ACTIVE IN",
-          "legalStatus": "Convicted"
-        },
         {
           "nomsId": "A6089DY",
           "bookingId": 1900835,
@@ -112,13 +70,13 @@
           "unsorted": false,
           "empty": false
         },
-        "offset": 0,
-        "pageNumber": 0,
-        "pageSize": 10,
+        "offset": 2,
+        "pageNumber": 1,
+        "pageSize": 2,
         "unpaged": false,
         "paged": true
       },
-      "totalPages": 1,
+      "totalPages": 2,
       "totalElements": 4,
       "last": true,
       "sort": {
@@ -126,10 +84,10 @@
         "unsorted": false,
         "empty": false
       },
-      "first": true,
-      "number": 0,
-      "size": 10,
-      "numberOfElements": 4,
+      "first": false,
+      "number": 1,
+      "size": 2,
+      "numberOfElements": 2,
       "empty": false
     }
   }

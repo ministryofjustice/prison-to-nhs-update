@@ -30,7 +30,15 @@ class PrisonerListResourceTest : IntegrationTest() {
         .expectStatus().isOk
         .expectBody().json("successful_result_list".loadJson())
   }
-  
+
+  @Test
+  fun `can retrieve a paged list of prisoners with correct role`() {
+    webTestClient.get().uri("/prisoner-list/Y05537?page=1&size=2")
+        .headers(setAuthorisation(roles = listOf("ROLE_PRISONER_ROLLCALL")))
+        .exchange()
+        .expectStatus().isOk
+        .expectBody().json("successful_result_list_paged".loadJson())
+  }
   private fun String.loadJson(): String =
       PrisonerListResourceTest::class.java.getResource("$this.json").readText()
 }

@@ -88,6 +88,7 @@ class PrisonerPatientUpdateService(
             if (existingRecord.isPresent) {
                 val jsonDiff = checkForDifferences(existingRecord.get().patientRecord, gson.toJson(offender))
                 if (!jsonDiff.areEqual()) {
+                    log.debug("Offender {} data changed", offender.nomsId)
                     val trackingAttributes = mapOf("nomsId" to offender.nomsId, "delta" to jsonDiff.toString())
                     telemetryClient.trackEvent("p2nhs-prisoner-change", trackingAttributes, null)
 
