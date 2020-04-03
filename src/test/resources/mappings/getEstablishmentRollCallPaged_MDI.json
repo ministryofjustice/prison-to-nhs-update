@@ -1,0 +1,94 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/prisoners/by-establishment/MDI",
+    "queryParameters" : {
+      "size" : {
+        "equalTo" : "2"
+      },
+      "page" : {
+        "equalTo" : "1"
+      },
+      "sort" : {
+        "equalTo" : "nomsId"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "content": [
+        {
+          "nomsId": "A6089DY",
+          "bookingId": 1900835,
+          "establishmentCode": "MDI",
+          "givenName1": "Patient 3",
+          "givenName2": "John",
+          "lastName": "Smith",
+          "requestedName": "Bobby",
+          "dateOfBirth": "1979-01-02",
+          "gender": "Male",
+          "englishSpeaking": false,
+          "unitCode1": "A",
+          "unitCode2": "1",
+          "unitCode3": "005",
+          "bookingBeginDate": "2018-01-02",
+          "admissionDate": "2020-02-02",
+          "releaseDate": "2026-01-02",
+          "categoryCode": "B",
+          "communityStatus": "ACTIVE IN",
+          "legalStatus": "Convicted"
+        },
+        {
+          "nomsId": "A7089EY",
+          "bookingId": 1800835,
+          "establishmentCode": "MDI",
+          "givenName1": "Patient 4",
+          "givenName2": "John",
+          "lastName": "Smith",
+          "requestedName": "Blobby",
+          "dateOfBirth": "1980-01-02",
+          "gender": "Female",
+          "englishSpeaking": true,
+          "unitCode1": "B",
+          "unitCode2": "1",
+          "unitCode3": "009",
+          "bookingBeginDate": "2017-01-02",
+          "admissionDate": "2019-02-02",
+          "releaseDate": "2024-01-02",
+          "categoryCode": "D",
+          "communityStatus": "ACTIVE IN",
+          "legalStatus": "Remand"
+        }
+      ],
+      "pageable": {
+        "sort": {
+          "sorted": true,
+          "unsorted": false,
+          "empty": false
+        },
+        "offset": 2,
+        "pageNumber": 1,
+        "pageSize": 2,
+        "unpaged": false,
+        "paged": true
+      },
+      "totalPages": 2,
+      "totalElements": 4,
+      "last": true,
+      "sort": {
+        "sorted": true,
+        "unsorted": false,
+        "empty": false
+      },
+      "first": false,
+      "number": 1,
+      "size": 2,
+      "numberOfElements": 2,
+      "empty": false
+    }
+  }
+}

@@ -31,6 +31,9 @@ env:
   - name: PRISONTONHS_ONLY_PRISONS
     value: "{{ .Values.env.PRISONTONHS_ONLY_PRISONS }}"
 
+  - name: NHS_SERVER_ENABLED
+    value: "{{ .Values.env.NHS_SERVER_ENABLED }}"
+
   - name: APPLICATION_INSIGHTS_IKEY
     valueFrom:
       secretKeyRef:

@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter
 class JsonConfig() {
 
     @Bean
-    open fun gson() : Gson {
+    fun gson() : Gson {
        return GsonBuilder().setPrettyPrinting()
                 .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
                 .create();

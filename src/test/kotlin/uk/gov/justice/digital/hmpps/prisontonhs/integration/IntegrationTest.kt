@@ -16,11 +16,15 @@ import org.springframework.http.MediaType
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.NhsMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.OAuthMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonEstateMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.services.JwtAuthHelper
+import java.time.Duration
 
+@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 abstract class IntegrationTest {
@@ -34,6 +38,12 @@ abstract class IntegrationTest {
   @Autowired
   private lateinit var gson: Gson
 
+  @Autowired
+  internal lateinit var webTestClient: WebTestClient
+
+  @Autowired
+  internal lateinit var jwtHelper: JwtAuthHelper
+  
   companion object {
     internal val prisonMockServer = PrisonMockServer()
     internal val oauthMockServer = OAuthMockServer()
@@ -82,5 +92,13 @@ abstract class IntegrationTest {
   }
 
   internal fun Any.asJson() = gson.toJson(this)
+
+  internal fun setAuthorisation(user: String = "prison-to-nhs-api-client", roles: List<String> = listOf()): (HttpHeaders) -> Unit {
+    val token = jwtHelper.createJwt(subject = user,
+        scope = listOf("read"),
+        expiryTime = Duration.ofHours(1L),
+        roles = roles)
+    return { it.set(HttpHeaders.AUTHORIZATION, "Bearer $token") }
+  }
 
 }

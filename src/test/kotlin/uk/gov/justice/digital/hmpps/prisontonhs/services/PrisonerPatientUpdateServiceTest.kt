@@ -1,10 +1,12 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.verifyZeroInteractions
-import com.nhaarman.mockito_kotlin.whenever
+import com.microsoft.applicationinsights.TelemetryClient
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyZeroInteractions
+import com.nhaarman.mockitokotlin2.whenever
+
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,12 +25,13 @@ class PrisonerPatientUpdateServiceTest {
     private val prisonEstateService: PrisonEstateService = mock()
     private val nhsReceiveService: NhsReceiveService = mock()
     private val offenderPatientRecordRepository: OffenderPatientRecordRepository = mock()
+    private val telemetryClient: TelemetryClient = mock()
 
     private lateinit var service: PrisonerPatientUpdateService
 
     @BeforeEach
     fun before() {
-        service = PrisonerPatientUpdateService(offenderService, prisonEstateService, nhsReceiveService, offenderPatientRecordRepository, listOf("MDI", "LEI"), JsonConfig().gson())
+        service = PrisonerPatientUpdateService(offenderService, prisonEstateService, nhsReceiveService, offenderPatientRecordRepository, telemetryClient, listOf("MDI", "LEI"), JsonConfig().gson())
     }
 
     @Test

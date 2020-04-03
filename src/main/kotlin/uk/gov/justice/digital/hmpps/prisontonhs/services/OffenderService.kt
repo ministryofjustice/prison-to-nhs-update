@@ -2,62 +2,53 @@
 
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.data.domain.Page
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 import java.time.LocalDate
 
 @Service
-class OffenderService(@Qualifier("oauth2WebClient") val webClient: WebClient,
-                      @Value("\${api.base.url.nomis}") val baseUri: String,
+class OffenderService(val prisonWebClient: WebClient,
                       @Value("\${api.offender.timeout:5s}") val offenderTimeout: Duration,
                       @Value("\${api.nomis.timeout:90s}") val offenderListTimeout: Duration) {
 
   private val prisonerPageType = object : ParameterizedTypeReference<RestResponsePage<PrisonerStatus>>() {}
 
   fun getOffenderForBookingId(bookingId: Long): OffenderBooking? {
-    return webClient.get()
-        .uri("$baseUri/api/bookings/$bookingId")
-        .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+    return prisonWebClient.get()
+        .uri("/api/bookings/$bookingId")
         .retrieve()
         .bodyToMono(OffenderBooking::class.java)
         .block(offenderTimeout)
   }
 
   fun getOffenderForNomsId(nomsId: String): OffenderBooking? {
-    return webClient.get()
-        .uri("$baseUri/api/bookings/offenderNo/$nomsId")
-        .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+    return prisonWebClient.get()
+        .uri("/api/bookings/offenderNo/$nomsId")
         .retrieve()
         .bodyToMono(OffenderBooking::class.java)
         .block(offenderTimeout)
   }
 
   fun getOffender(offenderNo: String): PrisonerStatus? {
-    return webClient
+    return prisonWebClient
         .get()
-        .uri("$baseUri/api/prisoners/$offenderNo/full-status")
-        .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+        .uri("/api/prisoners/$offenderNo/full-status")
         .retrieve()
         .bodyToMono(PrisonerStatus::class.java)
-        .block(offenderTimeout);
+        .block(offenderTimeout)
   }
 
   fun getOffendersInEstablishment(establishmentCode: String, page : Int, size : Int): Page<PrisonerStatus>? {
-    val response = webClient
+    return prisonWebClient
         .get()
-        .uri("$baseUri/api/prisoners/by-establishment/${establishmentCode}?page=${page}&size=${size}&sort=nomsId")
-        .attributes(ServletOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("nomis-api"))
+        .uri("/api/prisoners/by-establishment/${establishmentCode}?page=${page}&size=${size}&sort=nomsId")
         .retrieve()
         .bodyToMono(prisonerPageType)
         .block(offenderListTimeout)
-
-    return response;
   }
 
 }

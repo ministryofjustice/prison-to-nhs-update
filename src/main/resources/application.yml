@@ -11,6 +11,9 @@ spring:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
 
+  codec:
+    max-in-memory-size: 10MB
+
   jpa:
     show-sql: false
     generate-ddl: false
@@ -67,12 +70,6 @@ server:
   tomcat:
     remote-ip-header: x-forwarded-for
     protocol_header: x-forwarded-proto
-
-logging:
-  level:
-    org.springframework: INFO
-    org.springframework.security: INFO
-    uk.gov.justice.digital: DEBUG
 
 management:
   endpoints:
