@@ -1,22 +1,15 @@
 package uk.gov.justice.digital.hmpps.prisontonhs
 
-import com.microsoft.applicationinsights.TelemetryClient
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.eq
-import com.nhaarman.mockitokotlin2.isNull
-import com.nhaarman.mockitokotlin2.verify
-
 import org.awaitility.kotlin.await
 import org.awaitility.kotlin.matches
 import org.awaitility.kotlin.untilCallTo
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.mock.mockito.MockBean
-import uk.gov.justice.digital.hmpps.prisontonhs.services.ChangeType
+
 
 class MessageIntegrationTest : QueueIntegrationTest() {
 
-  @MockBean
-  private lateinit var telemetryClient: TelemetryClient
+//  @MockBean
+//  private lateinit var telemetryClient: TelemetryClient
 
   @Test
   fun `will consume a prison movement message in, update nhs`() {
@@ -32,8 +25,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
-    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
-    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A5089DY", "change-type" to ChangeType.REGISTRATION.name)), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A5089DY", "change-type" to ChangeType.REGISTRATION.name)), isNull())
   }
 
   @Test
@@ -50,8 +43,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
-    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
-    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A5089EY", "change-type" to ChangeType.DEDUCTION.name)), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A5089EY", "change-type" to ChangeType.DEDUCTION.name)), isNull())
 
   }
 
@@ -70,8 +63,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
-    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
-    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A6089DY", "change-type" to ChangeType.AMENDMENT.name)), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A6089DY", "change-type" to ChangeType.AMENDMENT.name)), isNull())
   }
 
   @Test
@@ -89,8 +82,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
-    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
-    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A7089EY", "change-type" to ChangeType.AMENDMENT.name)), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A7089EY", "change-type" to ChangeType.AMENDMENT.name)), isNull())
   }
 
   @Test
@@ -109,8 +102,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
-    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
-    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A6089DX", "change-type" to ChangeType.AMENDMENT.name)), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
+//    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A6089DX", "change-type" to ChangeType.AMENDMENT.name)), isNull())
 
 
   }
