@@ -7,12 +7,9 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.MediaType
 import org.springframework.security.authentication.TestingAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
@@ -28,8 +25,6 @@ import java.time.Duration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 abstract class IntegrationTest {
-  @Value("\${token}")
-  private val token: String? = null
 
   @SpyBean
   @Qualifier("awsSqsClient")
@@ -82,13 +77,6 @@ abstract class IntegrationTest {
     nhsMockServer.resetAll()
     oauthMockServer.resetAll()
     oauthMockServer.stubGrantToken()
-  }
-
-  internal fun createHeaderEntity(entity: Any): HttpEntity<*> {
-    val headers = HttpHeaders()
-    headers.add("Authorization", "bearer $token")
-    headers.contentType = MediaType.APPLICATION_JSON
-    return HttpEntity(entity, headers)
   }
 
   internal fun Any.asJson() = gson.toJson(this)
