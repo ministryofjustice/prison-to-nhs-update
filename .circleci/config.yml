@@ -74,7 +74,6 @@ workflows:
       - dps/deploy_env:
           name: deploy_dev
           env: "dev"
-          image_name: << pipeline.parameters.image_name >>
           filters:
             branches:
               only:
