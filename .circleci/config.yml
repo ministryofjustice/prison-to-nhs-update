@@ -4,13 +4,10 @@ parameters:
   image_name:
     type: string
     default: "quay.io/hmpps/prison-to-nhs-update"
-  app_name:
-    type: string
-    default: "prison-to-nhs-update"
 
 orbs:
-  dps: ministryofjustice/dps@1.1.0
   owasp: entur/owasp@0.0.6
+  dps: ministryofjustice/dps@dev:alpha
 
 executors:
   validator:
@@ -65,6 +62,8 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+      - dps/helm_lint:
+          name: helm_lint
       - dps/build_docker:
           name: build_docker
           image_name: << pipeline.parameters.image_name >>
@@ -82,6 +81,7 @@ workflows:
                 - master
           requires:
             - validate
+            - helm_lint
             - build_docker
       - request-preprod-approval:
           type: approval
@@ -90,7 +90,6 @@ workflows:
       - dps/deploy_env:
           name: deploy_preprod
           env: "preprod"
-          app_name: << pipeline.parameters.app_name >>
           context: prison-to-nhs-update-preprod
           requires:
             - request-preprod-approval
@@ -101,7 +100,6 @@ workflows:
       - dps/deploy_env:
           name: deploy_prod
           env: "prod"
-          app_name: << pipeline.parameters.app_name >>
           slack_notification: true
           context: prison-to-nhs-update-prod
           requires:

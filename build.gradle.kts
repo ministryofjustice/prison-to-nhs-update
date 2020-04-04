@@ -102,9 +102,9 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
 
   implementation("net.logstash.logback:logstash-logback-encoder:6.3")
-  implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.5.1")
-  implementation("com.microsoft.azure:applicationinsights-logging-logback:2.5.1")
-  implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.0")
+  implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:2.6.0")
+  implementation("com.microsoft.azure:applicationinsights-logging-logback:2.6.0")
+  implementation("com.github.timpeeters:spring-boot-graceful-shutdown:2.2.1")
 
   implementation("io.springfox:springfox-swagger2:2.9.2")
   implementation("io.springfox:springfox-swagger-ui:2.9.2")
@@ -112,8 +112,6 @@ dependencies {
 
   implementation( "com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:28.2-jre")
-
-
   implementation("com.nimbusds:nimbus-jose-jwt:8.11")
 
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.3")
