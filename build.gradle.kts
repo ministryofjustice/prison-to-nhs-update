@@ -8,14 +8,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ISO_DATE
 
 plugins {
-  kotlin("jvm") version "1.3.61"
-  kotlin("plugin.spring") version "1.3.61"
-  kotlin("plugin.jpa") version "1.3.61"
-  id("org.springframework.boot") version "2.2.5.RELEASE"
+  kotlin("jvm") version "1.3.71"
+  kotlin("plugin.spring") version "1.3.71"
+  kotlin("plugin.jpa") version "1.3.71"
+  id("org.springframework.boot") version "2.2.6.RELEASE"
   id("io.spring.dependency-management") version "1.0.9.RELEASE"
-  id("org.owasp.dependencycheck") version "5.3.1"
+  id("org.owasp.dependencycheck") version "5.3.2.1"
   id("com.github.ben-manes.versions") version "0.28.0"
   id("com.gorylenko.gradle-git-properties") version "2.2.2"
+  id("se.patrikerdes.use-latest-versions") version "0.2.13"
 }
 
 repositories {
@@ -36,7 +37,7 @@ java {
 
 dependencyCheck {
   failBuildOnCVSS = 5f
-  suppressionFiles = listOf()
+  suppressionFiles = listOf("dependency-check-suppress-spring.xml")
   format = ALL
   analyzers.assemblyEnabled = false
 }
