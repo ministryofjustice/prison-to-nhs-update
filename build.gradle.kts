@@ -58,26 +58,22 @@ tasks.withType<DependencyUpdatesTask> {
 group = "uk.gov.justice.digital.hmpps"
 
 val todaysDate: String = LocalDate.now().format(ISO_DATE)
-val today: Instant = Instant.now()
-version = if (System.getenv().contains("CI")) "${todaysDate}.${System.getenv("CIRCLE_BUILD_NUM")}" else todaysDate
+version = if (System.getenv().contains("BUILD_NUMBER")) System.getenv("BUILD_NUMBER") else todaysDate
 
 springBoot {
   buildInfo {
     properties {
-      time = today
+      time = Instant.now()
       additional = mapOf(
           "by" to System.getProperty("user.name"),
           "operatingSystem" to "${System.getProperty("os.name")} (${System.getProperty("os.version")})",
-          "continuousIntegration" to System.getenv().containsKey("CI"),
           "machine" to InetAddress.getLocalHost().hostName
       )
     }
   }
 }
 
-configurations {
-  implementation { exclude(mapOf("module" to "tomcat-jdbc")) }
-}
+extra["spring-security.version"] = "5.3.0.RELEASE" // Updated since spring-boot-starter-oauth2-resource-server-2.2.5.RELEASE only pulls in 5.2.2.RELEASE (still affected by CVE-2018-1258 though)
 
 dependencyManagement {
   imports { mavenBom(SpringBootPlugin.BOM_COORDINATES) }
@@ -141,7 +137,7 @@ tasks {
 
   val agentDeps by configurations.register("agentDeps") {
     dependencies {
-      "agentDeps"("com.microsoft.azure:applicationinsights-agent:2.5.1") {
+      "agentDeps"("com.microsoft.azure:applicationinsights-agent:2.6.0") {
         isTransitive = false
       }
     }
@@ -153,4 +149,10 @@ tasks {
   }
 
   assemble { dependsOn(copyAgent) }
+
+  bootJar {
+    manifest {
+      attributes("Implementation-Version" to rootProject.version, "Implementation-Title" to rootProject.name)
+    }
+  }
 }
