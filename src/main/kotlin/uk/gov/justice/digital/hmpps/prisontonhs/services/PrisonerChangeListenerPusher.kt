@@ -32,8 +32,8 @@ open class PrisonerChangeListenerPusher(
       "ASSESSMENT-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "OFFENDER_BOOKING-REASSIGNED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "OFFENDER_BOOKING-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
-      "OFFENDER_DETAILS-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
       "BOOKING_NUMBER-CHANGED" -> prisonerPatientUpdateService.offenderBookingChange(fromJson(message))
+      "OFFENDER_DETAILS-CHANGED" -> prisonerPatientUpdateService.offenderChange(fromJson(message))
       "OFFENDER-UPDATED" -> prisonerPatientUpdateService.offenderChange(fromJson(message))
 
       else -> log.warn("We received a message of event type {} which I really wasn't expecting", eventType)

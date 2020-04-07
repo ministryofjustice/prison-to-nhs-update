@@ -25,7 +25,7 @@ env:
   API_BASE_URL_NOMIS: "https://gateway.t3.nomis-api.hmpps.dsd.io/elite2api"
   API_BASE_URL_PRISON_ESTATE: "https://estate-dev.prison.service.justice.gov.uk"
   API_BASE_URL_NHS: "http://localhost:9090"
-  PRISONTONHS_ONLY_PRISONS: "MDI,LEI,PVI,BXI"
+  PRISONTONHS_ONLY_PRISONS: "MDI,LEI,PVI,BXI,LPI,HLI"
   NHS_SERVER_ENABLED: "false"
 
 
