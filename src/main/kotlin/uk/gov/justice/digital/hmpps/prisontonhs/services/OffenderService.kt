@@ -64,15 +64,15 @@ data class PrisonerStatus(
     val dateOfBirth: LocalDate,
     val gender: String,
     val englishSpeaking: Boolean,
-    val unitCode1: String,
+    val unitCode1: String?,
     val unitCode2: String?,
     val unitCode3: String?,
-    val bookingBeginDate: LocalDate,
+    val bookingBeginDate: LocalDate?,
     val admissionDate: LocalDate?,
     val releaseDate: LocalDate?,
     val categoryCode: String?,
     val communityStatus: String,
-    val legalStatus: String
+    val legalStatus: String?
 )
 
 data class Offender(
