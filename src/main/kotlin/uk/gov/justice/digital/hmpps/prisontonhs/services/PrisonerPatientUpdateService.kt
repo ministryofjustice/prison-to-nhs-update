@@ -39,7 +39,7 @@ class PrisonerPatientUpdateService(
         // only interested in ADM (Admissions) or REL (Releases)
         if (externalMovement.movementType in listOf("ADM", "REL")) {
 
-            val changeType = if (externalMovement.movementType == "ADM") ChangeType.REGISTRATION else ChangeType.DEDUCTION
+            val changeType = if (externalMovement.movementType == "ADM") REGISTRATION else ChangeType.DEDUCTION
             val establishmentCode = if (changeType == REGISTRATION) externalMovement.toAgencyLocationId else externalMovement.fromAgencyLocationId
 
             // only support admission into an allowed prison or release from an allowed prison
@@ -129,11 +129,7 @@ class PrisonerPatientUpdateService(
             }
         } ?: throw EntityNotFoundException("Prison with prison id ${offender.establishmentCode} not found")
 
-        return true;
-    }
-
-    private inline fun <reified T> fromJson(message: String): T {
-        return gson.fromJson(message, T::class.java)
+        return true
     }
 }
 
