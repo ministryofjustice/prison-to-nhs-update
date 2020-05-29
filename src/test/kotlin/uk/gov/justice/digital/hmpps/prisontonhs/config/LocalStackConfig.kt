@@ -22,7 +22,7 @@ class LocalStackConfig {
   @Bean
   fun localStackContainer(): LocalStackContainer {
     log.info("Starting localstack...")
-    val localStackContainer: LocalStackContainer = LocalStackContainer("0.11.2")
+    val localStackContainer: LocalStackContainer = LocalStackContainer("0.10.9")
         .withServices(LocalStackContainer.Service.SQS)
         .withEnv("HOSTNAME_EXTERNAL", "localhost")
 
