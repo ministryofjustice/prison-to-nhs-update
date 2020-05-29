@@ -68,8 +68,10 @@ server:
     context-path: /
   forward-headers-strategy: native
   tomcat:
-    remote-ip-header: x-forwarded-for
-    protocol_header: x-forwarded-proto
+    remoteip:
+      remote-ip-header: x-forwarded-for
+      protocol_header: x-forwarded-proto
+  shutdown: graceful
 
 management:
   endpoints:
@@ -95,9 +97,6 @@ sqs:
   queue.name: prison_to_nhs_queue
   dlq.name: prison_to_nhs_dlq
   endpoint.region: eu-west-2
-
-graceful:
-  shutdown.enabled: true
 
 azure:
   application-insights.web.enable-W3C: true
