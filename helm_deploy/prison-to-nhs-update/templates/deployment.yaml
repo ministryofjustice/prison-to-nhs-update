@@ -41,7 +41,6 @@ spec:
       containers:
         - name: prison-to-nhs-update
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.image.port }}
               protocol: TCP
