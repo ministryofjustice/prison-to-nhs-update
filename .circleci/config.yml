@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  owasp: entur/owasp@0.0.6
-  dps: ministryofjustice/dps@1.2.1
+  owasp: entur/owasp@0.0.10
+  hmpps: ministryofjustice/hmpps@1.0.0
 
 executors:
   validator:
@@ -57,15 +57,15 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - dps/helm_lint:
+      - hmpps/helm_lint:
           name: helm_lint
-      - dps/build_docker:
+      - hmpps/build_docker:
           name: build_docker
           filters:
             branches:
               only:
                 - master
-      - dps/deploy_env:
+      - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
           filters:
@@ -80,7 +80,7 @@ workflows:
           type: approval
           requires:
             - deploy_dev
-      - dps/deploy_env:
+      - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
           context: prison-to-nhs-update-preprod
@@ -90,7 +90,7 @@ workflows:
           type: approval
           requires:
             - deploy_preprod
-      - dps/deploy_env:
+      - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
           slack_notification: true
@@ -108,4 +108,4 @@ workflows:
                 - master
     jobs:
       - owasp/gradle_owasp_dependency_check:
-          executor: validator
+          executor: hmpps/java
