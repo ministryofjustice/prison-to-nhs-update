@@ -1,10 +1,8 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "0.4.1"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "0.4.2"
   kotlin("plugin.spring") version "1.3.72"
   kotlin("plugin.jpa") version "1.3.72"
 }
-
-extra["spring-security.version"] = "5.3.2.RELEASE" // Required for CVE-2018-1258
 
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
@@ -30,7 +28,7 @@ dependencies {
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.0")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.800"))
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.804"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")

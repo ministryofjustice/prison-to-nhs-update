@@ -1,6 +1,6 @@
 # Prison 2 NHS Update
 
-[![CircleCI](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update/tree/master.svg?style=svg)](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update)
+[![CircleCI](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/prison-to-nhs-update)
 [![Known Vulnerabilities](https://snyk.io/test/github/ministryofjustice/prison-to-nhs-update/badge.svg)](https://snyk.io/test/github/ministryofjustice/prison-to-nhs-update)
 
 
