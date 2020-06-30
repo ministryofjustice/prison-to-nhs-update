@@ -40,7 +40,7 @@
           "releaseDate": "2025-01-02",
           "categoryCode": "C",
           "communityStatus": "ACTIVE IN",
-          "legalStatus": "Convicted"
+          "legalStatus": "SENTENCED"
         },
         {
           "nomsId": "A6089DX",
@@ -61,7 +61,7 @@
           "releaseDate": "2023-01-02",
           "categoryCode": "C",
           "communityStatus": "ACTIVE IN",
-          "legalStatus": "Convicted"
+          "legalStatus": "SENTENCED"
         },
         {
           "nomsId": "A6089DY",
@@ -82,7 +82,7 @@
           "releaseDate": "2026-01-02",
           "categoryCode": "B",
           "communityStatus": "ACTIVE IN",
-          "legalStatus": "Convicted"
+          "legalStatus": "SENTENCED"
         },
         {
           "nomsId": "A7089EY",
@@ -103,7 +103,7 @@
           "releaseDate": "2024-01-02",
           "categoryCode": "D",
           "communityStatus": "ACTIVE IN",
-          "legalStatus": "Remand"
+          "legalStatus": "REMAND"
         }
       ],
       "pageable": {

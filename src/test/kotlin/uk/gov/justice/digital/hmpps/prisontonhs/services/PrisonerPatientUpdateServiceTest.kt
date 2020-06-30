@@ -206,7 +206,7 @@ class PrisonerPatientUpdateServiceTest {
             releaseDate = LocalDate.of(2025,1,2),
             categoryCode = "C",
             communityStatus = "ACTIVE IN",
-            legalStatus = "Convicted"
+            legalStatus = "SENTENCED"
     )
 
     private fun createNhsPrisoner() = NhsPrisoner(
@@ -228,7 +228,7 @@ class PrisonerPatientUpdateServiceTest {
             releaseDate = LocalDate.of(2025,1,2),
             categoryCode = "C",
             communityStatus = "ACTIVE IN",
-            legalStatus = "Convicted"
+            legalStatus = "SENTENCED"
     )
 
     private fun createOffenderPatientRecord() = OffenderPatientRecord(
@@ -258,7 +258,7 @@ class PrisonerPatientUpdateServiceTest {
                     "      \"releaseDate\": \"2025-01-02\",\n" +
                     "      \"categoryCode\": \"C\",\n" +
                     "      \"communityStatus\": \"ACTIVE IN\",\n" +
-                    "      \"legalStatus\": \"Convicted\"\n" +
+                    "      \"legalStatus\": \"SENTENCED\"\n" +
                     "    }",
             updatedTimestamp = LocalDateTime.now().minusDays(1)
     )
@@ -284,7 +284,7 @@ class PrisonerPatientUpdateServiceTest {
                     "      \"releaseDate\": \"2025-01-02\",\n" +
                     "      \"categoryCode\": \"C\",\n" +
                     "      \"communityStatus\": \"ACTIVE IN\",\n" +
-                    "      \"legalStatus\": \"Convicted\"\n" +
+                    "      \"legalStatus\": \"SENTENCED\"\n" +
                     "    }",
             updatedTimestamp = LocalDateTime.now().minusDays(1)
     )

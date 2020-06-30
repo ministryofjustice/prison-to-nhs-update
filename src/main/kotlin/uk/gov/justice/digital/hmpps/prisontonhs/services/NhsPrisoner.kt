@@ -27,5 +27,5 @@ data class NhsPrisoner(
                 "<h3>Algorithm</h3><ul><li>If there is a confirmed release date, the offender release date is the confirmed release date.</li><li>If there is no confirmed release date for the offender, the offender release date is either the actual parole date or the home detention curfew actual date.</li><li>If there is no confirmed release date, actual parole date or home detention curfew actual date for the offender, the release date is the later of the nonDtoReleaseDate or midTermDate value (if either or both are present)</li></ul>", example = "2021-04-12", position = 16) val releaseDate: LocalDate?,
         @ApiModelProperty(value = "Category of this prisoner", example = "C", position = 17) val categoryCode: String?,
         @ApiModelProperty(value = "Status of prisoner in community", required = true, example = "ACTIVE IN", allowableValues = "ACTIVE IN,ACTIVE OUT,INACTIVE OUT", position = 18) val communityStatus: String,
-        @ApiModelProperty(value = "Legal Status", example = "Convicted", allowableValues = "Convicted,Remand", position = 19) val legalStatus: String?
+        @ApiModelProperty(value = "Legal Status", example = "SENTENCED", allowableValues = "RECALL,DEAD,INDETERMINATE_SENTENCE,SENTENCED,CONVICTED_UNSENTENCED,CIVIL_PRISONER,IMMIGRATION_DETAINEE,REMAND,UNKNOWN,OTHER", position = 19) val legalStatus: String?
 )
