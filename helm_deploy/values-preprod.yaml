@@ -20,8 +20,8 @@ ingress:
 
 env:
   JAVA_OPTS: "-Xmx512m"
-  API_BASE_URL_OAUTH: "https://gateway.preprod.nomis-api.service.hmpps.dsd.io/auth"
-  API_BASE_URL_NOMIS: "https://gateway.preprod.nomis-api.service.hmpps.dsd.io/elite2api"
+  API_BASE_URL_OAUTH: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
+  API_BASE_URL_NOMIS: "https://api-preprod.prison.service.justice.gov.uk"
   API_BASE_URL_PRISON_ESTATE: "https://estate-preprod.prison.service.justice.gov.uk"
   API_BASE_URL_NHS: "http://localhost:9090"
   PRISONTONHS_ONLY_PRISONS: "LEI,MDI,LPI,HLI"
