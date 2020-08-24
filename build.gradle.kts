@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "0.4.6"
-  kotlin("plugin.spring") version "1.3.72"
-  kotlin("plugin.jpa") version "1.3.72"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.0"
+  kotlin("plugin.spring") version "1.4.0"
+  kotlin("plugin.jpa") version "1.4.0"
 }
 
 dependencies {
@@ -23,21 +23,21 @@ dependencies {
 
   implementation( "com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:29.0-jre")
-  implementation("com.nimbusds:nimbus-jose-jwt:8.19")
+  implementation("com.nimbusds:nimbus-jose-jwt:8.20")
 
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.0")
+  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.804"))
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.847"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:6.4.4")
-  runtimeOnly("org.postgresql:postgresql:42.2.14")
+  runtimeOnly("org.flywaydb:flyway-core:6.5.5")
+  runtimeOnly("org.postgresql:postgresql:42.2.16")
 
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-  testImplementation("com.github.tomakehurst:wiremock-standalone:2.26.3")
-  testImplementation("org.testcontainers:localstack:1.13.0")
+  testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.1")
+  testImplementation("org.testcontainers:localstack:1.14.3")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
 }
