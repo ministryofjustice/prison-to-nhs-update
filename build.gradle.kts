@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.2"
   kotlin("plugin.spring") version "1.4.0"
   kotlin("plugin.jpa") version "1.4.0"
 }
@@ -28,7 +28,7 @@ dependencies {
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.847"))
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.854"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")
