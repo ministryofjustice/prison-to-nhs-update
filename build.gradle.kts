@@ -23,7 +23,7 @@ dependencies {
 
   implementation( "com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:29.0-jre")
-  implementation("com.nimbusds:nimbus-jose-jwt:9.0.1")
+  implementation("com.nimbusds:nimbus-jose-jwt:8.20")
 
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
