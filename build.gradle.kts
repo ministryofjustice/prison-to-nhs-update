@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.2"
-  kotlin("plugin.spring") version "1.4.0"
-  kotlin("plugin.jpa") version "1.4.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.4"
+  kotlin("plugin.spring") version "1.4.10"
+  kotlin("plugin.jpa") version "1.4.10"
 }
 
 dependencies {
@@ -28,7 +28,7 @@ dependencies {
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.854"))
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.860"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")
@@ -36,7 +36,7 @@ dependencies {
   runtimeOnly("org.postgresql:postgresql:42.2.16")
 
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-  testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.1")
+  testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
   testImplementation("org.testcontainers:localstack:1.14.3")
   testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
