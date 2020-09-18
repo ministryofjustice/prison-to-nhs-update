@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.4"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "1.0.5"
   kotlin("plugin.spring") version "1.4.10"
   kotlin("plugin.jpa") version "1.4.10"
 }
@@ -28,11 +28,11 @@ dependencies {
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.2")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.860"))
+  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.864"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:6.5.5")
+  runtimeOnly("org.flywaydb:flyway-core:6.5.6")
   runtimeOnly("org.postgresql:postgresql:42.2.16")
 
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
