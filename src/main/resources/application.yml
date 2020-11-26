@@ -5,7 +5,8 @@ info.app:
 spring:
   application:
     name: prison-to-nhs-update
-
+  config:
+    use-legacy-processing: true
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
