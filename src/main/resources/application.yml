@@ -105,3 +105,4 @@ azure:
 logging:
   level:
     com.microsoft: DEBUG
+    org.springframework: DEBUG
