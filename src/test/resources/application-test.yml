@@ -2,7 +2,7 @@ graceful:
   shutdown.enabled: false
 
 sqs:
-  provider: embedded-localstack
+  provider: localstack
   endpoint.url: http://localhost:4576
 
 api:
