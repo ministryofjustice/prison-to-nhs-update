@@ -40,9 +40,6 @@ env:
         name: {{ template "app.name" . }}
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
-  - name: APPLICATIONINSIGHTS_CONNECTION_STRING
-    value: "InstrumentationKey={{ .Values.env.APPINSIGHTS_INSTRUMENTATIONKEY }}"
-
   - name: OAUTH_CLIENT_ID
     valueFrom:
       secretKeyRef:

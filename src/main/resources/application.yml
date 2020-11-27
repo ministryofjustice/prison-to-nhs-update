@@ -110,3 +110,7 @@ logging:
   level:
     com.microsoft: DEBUG
     org.springframework: DEBUG
+
+applicationinsights:
+  connection:
+    string: InstrumentationKey=${appinsights.instrumentationkey}
