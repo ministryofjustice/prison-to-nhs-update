@@ -34,14 +34,11 @@ env:
   - name: NHS_SERVER_ENABLED
     value: "{{ .Values.env.NHS_SERVER_ENABLED }}"
 
-  - name: APPINSIGHTS_INSTRUMENTATIONKEY
+  - name: APPLICATION_INSIGHTS_IKEY
     valueFrom:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: APPINSIGHTS_INSTRUMENTATIONKEY
-
-  - name: APPLICATIONINSIGHTS_CONNECTION_STRING
-    value: "InstrumentationKey={{ .Values.env.APPINSIGHTS_INSTRUMENTATIONKEY }}"
 
   - name: OAUTH_CLIENT_ID
     valueFrom:

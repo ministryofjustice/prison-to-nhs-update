@@ -101,4 +101,3 @@ sqs:
 
 azure:
   application-insights.web.enable-W3C: true
-

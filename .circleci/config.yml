@@ -62,7 +62,6 @@ workflows:
             branches:
               only:
                 - main
-                - DT-1368-upgrade-dps-gradle-plugin
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -70,7 +69,6 @@ workflows:
             branches:
               only:
                 - main
-                - DT-1368-upgrade-dps-gradle-plugin
           requires:
             - validate
             - helm_lint
