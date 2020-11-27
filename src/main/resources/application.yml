@@ -102,6 +102,3 @@ sqs:
 azure:
   application-insights.web.enable-W3C: true
 
-applicationinsights:
-  connection:
-    string: InstrumentationKey=${application.insights.ikey}
