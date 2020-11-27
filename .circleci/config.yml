@@ -69,6 +69,7 @@ workflows:
             branches:
               only:
                 - main
+                - DT-1368-upgrade-dps-gradle-plugin
           requires:
             - validate
             - helm_lint
