@@ -6,7 +6,9 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 
 @Component
-class PrisonEstateApiHealth(webClient: WebClient,
-                            @Value("\${api.base.url.prison-estate}") baseUri: String,
-                            @Value("\${api.health-timeout:1s}") timeout: Duration)
-    : HealthCheck(webClient, baseUri, timeout)
+class PrisonEstateApiHealth(
+  webClient: WebClient,
+  @Value("\${api.base.url.prison-estate}") baseUri: String,
+  @Value("\${api.health-timeout:1s}") timeout: Duration
+) :
+  HealthCheck(webClient, baseUri, timeout)

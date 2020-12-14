@@ -11,8 +11,8 @@ interface OffenderPatientRecordRepository : CrudRepository<OffenderPatientRecord
 
 @Entity
 data class OffenderPatientRecord(
-        @Id
-        val nomsId: String,
-        val patientRecord: String,
-        val updatedTimestamp: LocalDateTime
+  @Id
+  val nomsId: String,
+  val patientRecord: String,
+  val updatedTimestamp: LocalDateTime
 )

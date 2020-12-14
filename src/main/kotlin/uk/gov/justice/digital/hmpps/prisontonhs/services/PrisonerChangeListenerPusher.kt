@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Service
 
-
 @Service
 open class PrisonerChangeListenerPusher(
-    private val prisonerPatientUpdateService: PrisonerPatientUpdateService,
-    @Qualifier("gson") private val gson : Gson
+  private val prisonerPatientUpdateService: PrisonerPatientUpdateService,
+  @Qualifier("gson") private val gson: Gson
 ) {
   companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
@@ -38,7 +37,6 @@ open class PrisonerChangeListenerPusher(
 
       else -> log.warn("We received a message of event type {} which I really wasn't expecting", eventType)
     }
-
   }
 
   private inline fun <reified T> fromJson(message: String): T {
@@ -50,13 +48,15 @@ data class EventType(val Value: String)
 data class MessageAttributes(val eventType: EventType)
 data class Message(val Message: String, val MessageId: String, val MessageAttributes: MessageAttributes)
 
-data class ExternalPrisonerMovementMessage(val bookingId: Long,
-                                           val movementSeq: Long,
-                                           val offenderIdDisplay: String,
-                                           val fromAgencyLocationId: String,
-                                           val toAgencyLocationId: String,
-                                           val directionCode: String,
-                                           val movementType: String)
+data class ExternalPrisonerMovementMessage(
+  val bookingId: Long,
+  val movementSeq: Long,
+  val offenderIdDisplay: String,
+  val fromAgencyLocationId: String,
+  val toAgencyLocationId: String,
+  val directionCode: String,
+  val movementType: String
+)
 
 data class OffenderBookingChangedMessage(val bookingId: Long)
 

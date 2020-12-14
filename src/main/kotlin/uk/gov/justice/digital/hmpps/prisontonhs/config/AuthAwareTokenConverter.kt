@@ -8,9 +8,9 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter
 
-
 class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
-  private val jwtGrantedAuthoritiesConverter: Converter<Jwt, Collection<GrantedAuthority>> = JwtGrantedAuthoritiesConverter()
+  private val jwtGrantedAuthoritiesConverter: Converter<Jwt, Collection<GrantedAuthority>> =
+    JwtGrantedAuthoritiesConverter()
 
   override fun convert(jwt: Jwt): AbstractAuthenticationToken {
     val claims = jwt.claims
@@ -39,9 +39,9 @@ class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
 }
 
 class AuthAwareAuthenticationToken(
-    jwt: Jwt,
-    private val aPrincipal: String,
-    authorities: Collection<GrantedAuthority>
+  jwt: Jwt,
+  private val aPrincipal: String,
+  authorities: Collection<GrantedAuthority>
 ) : JwtAuthenticationToken(jwt, authorities) {
   override fun getPrincipal(): Any {
     return aPrincipal

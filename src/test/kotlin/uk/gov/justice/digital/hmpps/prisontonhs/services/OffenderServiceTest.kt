@@ -21,39 +21,43 @@ class OffenderServiceTest : IntegrationTest() {
   fun `test get offender calls rest endpoint`() {
     val expectedPrisoner = createPrisoner()
 
-    prisonMockServer.stubFor(get(anyUrl()).willReturn(aResponse()
-        .withHeader("Content-Type", "application/json")
-        .withBody(expectedPrisoner.asJson())
-        .withStatus(HTTP_OK)))
+    prisonMockServer.stubFor(
+      get(anyUrl()).willReturn(
+        aResponse()
+          .withHeader("Content-Type", "application/json")
+          .withBody(expectedPrisoner.asJson())
+          .withStatus(HTTP_OK)
+      )
+    )
 
     val offender = service.getOffender("AB123D")
 
     assertThat(offender).isEqualTo(expectedPrisoner)
-    prisonMockServer.verify(getRequestedFor(urlEqualTo("/api/prisoners/AB123D/full-status"))
-        .withHeader("Authorization", equalTo("Bearer ABCDE")))
+    prisonMockServer.verify(
+      getRequestedFor(urlEqualTo("/api/prisoners/AB123D/full-status"))
+        .withHeader("Authorization", equalTo("Bearer ABCDE"))
+    )
   }
 
-
   private fun createPrisoner() = PrisonerStatus(
-      nomsId = "AB123D",
-      establishmentCode = "MDI",
-      bookingId = 1L,
-      givenName1 = "",
-      givenName2 = "",
-      lastName = "",
-      requestedName = "",
-      dateOfBirth = LocalDate.of(1970,1,1),
-      gender = "",
-      englishSpeaking = true,
-      unitCode1 = "",
-      unitCode2 = "",
-      unitCode3 = "",
-      bookingBeginDate = LocalDate.of(2019,1,1),
-      admissionDate = LocalDate.of(2020,1,1),
-      releaseDate = LocalDate.of(2022,1,1),
-      categoryCode = "",
-      communityStatus = "",
-      legalStatus = ""
+    nomsId = "AB123D",
+    establishmentCode = "MDI",
+    bookingId = 1L,
+    givenName1 = "",
+    givenName2 = "",
+    lastName = "",
+    requestedName = "",
+    dateOfBirth = LocalDate.of(1970, 1, 1),
+    gender = "",
+    englishSpeaking = true,
+    unitCode1 = "",
+    unitCode2 = "",
+    unitCode3 = "",
+    bookingBeginDate = LocalDate.of(2019, 1, 1),
+    admissionDate = LocalDate.of(2020, 1, 1),
+    releaseDate = LocalDate.of(2022, 1, 1),
+    categoryCode = "",
+    communityStatus = "",
+    legalStatus = ""
   )
-
 }

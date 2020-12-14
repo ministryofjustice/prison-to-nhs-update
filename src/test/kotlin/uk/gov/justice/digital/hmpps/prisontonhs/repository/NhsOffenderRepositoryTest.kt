@@ -10,7 +10,6 @@ import org.springframework.test.context.transaction.TestTransaction
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
-
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @Transactional
@@ -39,8 +38,4 @@ class NhsOffenderRepositoryTest {
       assertThat(updatedTimestamp).isEqualTo(now)
     }
   }
-
-
 }
-
-

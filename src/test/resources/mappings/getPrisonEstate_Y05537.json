@@ -8,13 +8,11 @@
     "headers": {
       "Content-Type": "application/json"
     },
-    "jsonBody":
-      {
-        "prisonId": "MDI",
-        "name": "Moorland (HMP & YOI)",
-        "active": true,
-        "gpPracticeCode": "Y05537"
-      }
-
+    "jsonBody": {
+      "prisonId": "MDI",
+      "name": "Moorland (HMP & YOI)",
+      "active": true,
+      "gpPracticeCode": "Y05537"
+    }
   }
 }

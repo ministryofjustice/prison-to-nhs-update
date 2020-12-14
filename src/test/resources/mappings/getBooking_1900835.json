@@ -8,8 +8,7 @@
     "headers": {
       "Content-Type": "application/json"
     },
-    "jsonBody":
-    {
+    "jsonBody": {
       "bookingId": 1900835,
       "bookingNo": "38339A",
       "offenderNo": "A6089DY",

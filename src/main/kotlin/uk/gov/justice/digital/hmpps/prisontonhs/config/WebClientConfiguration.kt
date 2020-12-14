@@ -19,9 +19,9 @@ class WebClientConfiguration(@Value("\${api.base.url.nomis}") val baseUri: Strin
     val oauth2Client = ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager)
     oauth2Client.setDefaultClientRegistrationId("nomis-api")
     return WebClient.builder()
-            .baseUrl(baseUri)
-            .apply(oauth2Client.oauth2Configuration())
-            .build()
+      .baseUrl(baseUri)
+      .apply(oauth2Client.oauth2Configuration())
+      .build()
   }
 
   @Bean
@@ -30,10 +30,13 @@ class WebClientConfiguration(@Value("\${api.base.url.nomis}") val baseUri: Strin
   }
 
   @Bean
-  fun authorizedClientManager(clientRegistrationRepository: ClientRegistrationRepository?,
-                                   oAuth2AuthorizedClientService: OAuth2AuthorizedClientService?): OAuth2AuthorizedClientManager? {
+  fun authorizedClientManager(
+    clientRegistrationRepository: ClientRegistrationRepository?,
+    oAuth2AuthorizedClientService: OAuth2AuthorizedClientService?
+  ): OAuth2AuthorizedClientManager? {
     val authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder().clientCredentials().build()
-    val authorizedClientManager = AuthorizedClientServiceOAuth2AuthorizedClientManager(clientRegistrationRepository, oAuth2AuthorizedClientService)
+    val authorizedClientManager =
+      AuthorizedClientServiceOAuth2AuthorizedClientManager(clientRegistrationRepository, oAuth2AuthorizedClientService)
     authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider)
     return authorizedClientManager
   }
