@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.config
 
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
@@ -20,7 +19,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import uk.gov.justice.digital.hmpps.prisontonhs.controllers.PrisonerListResource
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Date
+import java.util.Optional
 
 @Configuration
 @EnableWebSecurity
@@ -28,52 +28,59 @@ import java.util.*
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
 
-    @Autowired(required = false)
-    private val buildProperties: BuildProperties? = null
+  @Autowired(required = false)
+  private val buildProperties: BuildProperties? = null
 
-    /**
-     * @return health data. Note this is unsecured so no sensitive data allowed!
-     */
-    private val version: String
-        get() = if (buildProperties == null) "version not available" else buildProperties.version
+  /**
+   * @return health data. Note this is unsecured so no sensitive data allowed!
+   */
+  private val version: String
+    get() = if (buildProperties == null) "version not available" else buildProperties.version
 
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
+  @Throws(Exception::class)
+  override fun configure(http: HttpSecurity) {
 
-        http.headers().frameOptions().sameOrigin().and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    http.headers().frameOptions().sameOrigin().and()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                // Can't have CSRF protection as requires session
-                .and().csrf().disable()
-                .authorizeRequests { auth ->
-                    auth.antMatchers(
-                                    "/webjars/**", "/favicon.ico", "/csrf",
-                                    "/health/**", "/info", "/h2-console/**",
-                                    "/v2/api-docs",
-                                    "/swagger-ui.html", "/swagger-resources", "/swagger-resources/configuration/ui",
-                                    "/swagger-resources/configuration/security"
-                            ).permitAll()
-                            .anyRequest()
-                            .authenticated()
-                }.oauth2ResourceServer().jwt().jwtAuthenticationConverter(AuthAwareTokenConverter())
-    }
+      // Can't have CSRF protection as requires session
+      .and().csrf().disable()
+      .authorizeRequests { auth ->
+        auth.antMatchers(
+          "/webjars/**", "/favicon.ico", "/csrf",
+          "/health/**", "/info", "/h2-console/**",
+          "/v2/api-docs",
+          "/swagger-ui.html", "/swagger-resources", "/swagger-resources/configuration/ui",
+          "/swagger-resources/configuration/security"
+        ).permitAll()
+          .anyRequest()
+          .authenticated()
+      }.oauth2ResourceServer().jwt().jwtAuthenticationConverter(AuthAwareTokenConverter())
+  }
 
-    @Bean
-    open fun api(): Docket {
-        val apiInfo = ApiInfo("Prison To NHS API Documentation", "API for providing Prisoner Information to NHS",
-                version, "", Contact("HMPPS Digital Studio", "", "feedback@digital.justice.gov.uk"),
-                "", "", emptyList())
-        val docket = Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
-                .apiInfo(apiInfo)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(PrisonerListResource::class.java.getPackage().getName()))
-                .paths(PathSelectors.any())
-                .build()
-        docket.genericModelSubstitutes(Optional::class.java)
-        docket.directModelSubstitute(ZonedDateTime::class.java, Date::class.java)
-        docket.directModelSubstitute(LocalDateTime::class.java, Date::class.java)
-        return docket
-    }
+  @Bean
+  open fun api(): Docket {
+    val apiInfo = ApiInfo(
+      "Prison To NHS API Documentation",
+      "API for providing Prisoner Information to NHS",
+      version,
+      "",
+      Contact("HMPPS Digital Studio", "", "feedback@digital.justice.gov.uk"),
+      "",
+      "",
+      emptyList()
+    )
+    val docket = Docket(DocumentationType.SWAGGER_2)
+      .useDefaultResponseMessages(false)
+      .apiInfo(apiInfo)
+      .select()
+      .apis(RequestHandlerSelectors.basePackage(PrisonerListResource::class.java.getPackage().getName()))
+      .paths(PathSelectors.any())
+      .build()
+    docket.genericModelSubstitutes(Optional::class.java)
+    docket.directModelSubstitute(ZonedDateTime::class.java, Date::class.java)
+    docket.directModelSubstitute(LocalDateTime::class.java, Date::class.java)
+    return docket
+  }
 }

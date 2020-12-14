@@ -11,7 +11,7 @@
       {
         "equalToJson": {
           "nomsId": "A6089DX",
-          "gpPracticeCode" : "Y05537",
+          "gpPracticeCode": "Y05537",
           "establishmentCode": "MDI",
           "givenName1": "Patient 5",
           "givenName2": "John",

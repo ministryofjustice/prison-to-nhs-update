@@ -21,14 +21,14 @@ dependencies {
   implementation("io.springfox:springfox-swagger-ui:2.9.2")
   implementation("io.springfox:springfox-bean-validators:2.9.2")
 
-  implementation( "com.google.code.gson:gson:2.8.6")
+  implementation("com.google.code.gson:gson:2.8.6")
   implementation("com.google.guava:guava:30.0-jre")
   implementation("com.nimbusds:nimbus-jose-jwt:9.1.5")
 
   implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation( platform ("com.amazonaws:aws-java-sdk-bom:1.11.918"))
+  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.918"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")

@@ -2,15 +2,15 @@
   "request": {
     "method": "GET",
     "urlPath": "/api/prisoners/by-establishment/MDI",
-    "queryParameters" : {
-      "size" : {
-        "equalTo" : "10"
+    "queryParameters": {
+      "size": {
+        "equalTo": "10"
       },
-      "page" : {
-        "equalTo" : "0"
+      "page": {
+        "equalTo": "0"
       },
-      "sort" : {
-        "equalTo" : "nomsId"
+      "sort": {
+        "equalTo": "nomsId"
       }
     }
   },

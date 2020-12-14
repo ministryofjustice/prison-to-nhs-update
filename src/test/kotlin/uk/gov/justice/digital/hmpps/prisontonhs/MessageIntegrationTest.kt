@@ -5,7 +5,6 @@ import org.awaitility.kotlin.matches
 import org.awaitility.kotlin.untilCallTo
 import org.junit.jupiter.api.Test
 
-
 class MessageIntegrationTest : QueueIntegrationTest() {
 
 //  @MockBean
@@ -45,7 +44,6 @@ class MessageIntegrationTest : QueueIntegrationTest() {
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
 //    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A5089EY", "change-type" to ChangeType.DEDUCTION.name)), isNull())
-
   }
 
   @Test
@@ -104,8 +102,6 @@ class MessageIntegrationTest : QueueIntegrationTest() {
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
 //    verify(telemetryClient).trackEvent(eq("p2nhs-send-to-nhs"), eq(mapOf("nomsId" to "A6089DX", "change-type" to ChangeType.AMENDMENT.name)), isNull())
-
-
   }
 }
 
