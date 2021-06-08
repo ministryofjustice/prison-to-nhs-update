@@ -1,7 +1,7 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "2.1.2"
-  kotlin("plugin.spring") version "1.4.21"
-  kotlin("plugin.jpa") version "1.4.21"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.3.0"
+  kotlin("plugin.spring") version "1.5.10"
+  kotlin("plugin.jpa") version "1.5.10"
 }
 
 dependencies {
@@ -17,26 +17,23 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
   implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
 
-  implementation("io.springfox:springfox-swagger2:2.9.2")
-  implementation("io.springfox:springfox-swagger-ui:2.9.2")
-  implementation("io.springfox:springfox-bean-validators:2.9.2")
+  implementation("io.springfox:springfox-boot-starter:3.0.0")
 
-  implementation("com.google.code.gson:gson:2.8.6")
-  implementation("com.google.guava:guava:30.1-jre")
-  implementation("com.nimbusds:nimbus-jose-jwt:9.4")
+  implementation("com.google.code.gson:gson:2.8.7")
+  implementation("com.google.guava:guava:30.1.1-jre")
+  implementation("com.nimbusds:nimbus-jose-jwt:9.10")
 
-  implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.springframework:spring-jms")
-  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.11.930"))
+  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.1"))
   implementation("com.amazonaws:amazon-sqs-java-messaging-lib:1.0.8")
 
   runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:7.3.2")
-  runtimeOnly("org.postgresql:postgresql:42.2.18")
+  runtimeOnly("org.flywaydb:flyway-core:7.9.2")
+  runtimeOnly("org.postgresql:postgresql:42.2.20")
 
   testImplementation("org.springframework.boot:spring-boot-starter-webflux")
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
-  testImplementation("org.awaitility:awaitility-kotlin:4.0.3")
+  testImplementation("org.awaitility:awaitility-kotlin:4.1.0")
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
 }
