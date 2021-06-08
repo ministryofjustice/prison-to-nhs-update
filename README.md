@@ -61,3 +61,4 @@ aws --endpoint-url=http://localhost:4576 sqs purge-queue --queue-url http://loca
 
 #### Running without queues
 This can be done using the `dev` spring profile
+
