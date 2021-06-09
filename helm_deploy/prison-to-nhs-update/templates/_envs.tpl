@@ -22,8 +22,8 @@ env:
   - name: API_BASE_URL_NOMIS
     value: "{{ .Values.env.API_BASE_URL_NOMIS }}"
 
-  - name: API_BASE_URL_PRISON_ESTATE
-    value: "{{ .Values.env.API_BASE_URL_PRISON_ESTATE }}"
+  - name: API_BASE_URL_PRISON_REGISTER
+    value: "{{ .Values.env.API_BASE_URL_PRISON_REGISTER }}"
 
   - name: API_BASE_URL_NHS
     value: "{{ .Values.env.API_BASE_URL_NHS }}"

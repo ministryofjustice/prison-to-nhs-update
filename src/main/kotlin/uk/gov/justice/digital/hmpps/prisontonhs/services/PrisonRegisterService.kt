@@ -9,30 +9,30 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 
 @Service
-open class PrisonEstateService(
+open class PrisonRegisterService(
   @Qualifier("webClient") val webClient: WebClient,
-  @Value("\${api.base.url.prison-estate}") val baseUri: String,
-  @Value("\${api.prison-estate.timeout:5s}") val timeout: Duration
+  @Value("\${api.base.url.prison-register}") val baseUri: String,
+  @Value("\${api.prison-register.timeout:5s}") val timeout: Duration
 ) {
 
-  open fun getPrisonEstateByPrisonId(prisonId: String): PrisonEstate? {
+  open fun getPrisonRegisterByPrisonId(prisonId: String): PrisonRegister? {
     return webClient.get()
       .uri("$baseUri/prisons/id/$prisonId")
       .retrieve()
-      .bodyToMono(PrisonEstate::class.java)
+      .bodyToMono(PrisonRegister::class.java)
       .block(timeout)
   }
 
-  open fun getPrisonEstateByGpPracticeCode(gpPracticeCode: String): PrisonEstate? {
+  open fun getPrisonRegisterByGpPracticeCode(gpPracticeCode: String): PrisonRegister? {
     return webClient.get()
       .uri("$baseUri/prisons/gp-practice/$gpPracticeCode")
       .retrieve()
-      .bodyToMono(PrisonEstate::class.java)
+      .bodyToMono(PrisonRegister::class.java)
       .block(timeout)
   }
 }
 
-data class PrisonEstate(
+data class PrisonRegister(
   val prisonId: String,
   val name: String,
   val active: Boolean,

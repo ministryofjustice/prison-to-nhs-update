@@ -20,7 +20,7 @@ import javax.persistence.EntityNotFoundException
 
 class PrisonerPatientUpdateServiceTest {
   private val offenderService: OffenderService = mock()
-  private val prisonEstateService: PrisonEstateService = mock()
+  private val prisonRegisterService: PrisonRegisterService = mock()
   private val nhsReceiveService: NhsReceiveService = mock()
   private val offenderPatientRecordRepository: OffenderPatientRecordRepository = mock()
   private val telemetryClient: TelemetryClient = mock()
@@ -31,7 +31,7 @@ class PrisonerPatientUpdateServiceTest {
   fun before() {
     service = PrisonerPatientUpdateService(
       offenderService,
-      prisonEstateService,
+      prisonRegisterService,
       nhsReceiveService,
       offenderPatientRecordRepository,
       telemetryClient,
@@ -45,7 +45,7 @@ class PrisonerPatientUpdateServiceTest {
     whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBooking())
     whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
     whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(createOffenderPatientRecord()))
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
@@ -76,7 +76,7 @@ class PrisonerPatientUpdateServiceTest {
         updatedOffenderPatientRecordSmallChange()
       )
     )
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
@@ -92,7 +92,7 @@ class PrisonerPatientUpdateServiceTest {
         updatedOffenderPatientRecordSmallChange()
       )
     )
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.offenderChange(OffenderChangedMessage("AB1234D"))
 
@@ -113,7 +113,7 @@ class PrisonerPatientUpdateServiceTest {
     whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBooking())
     whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
     whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.empty())
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
@@ -134,7 +134,7 @@ class PrisonerPatientUpdateServiceTest {
     whenever(offenderService.getOffenderForBookingId(eq(12345L))).thenReturn(createOffenderBooking())
     whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
     whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(createOffenderPatientRecord()))
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(null)
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(null)
 
     assertThatExceptionOfType(EntityNotFoundException::class.java).isThrownBy {
       service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
@@ -155,7 +155,7 @@ class PrisonerPatientUpdateServiceTest {
   fun `will send a REGISTRATION notification to NHS for received offender into prison`() {
     whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
     whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(createOffenderPatientRecord()))
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.externalMovement(ExternalPrisonerMovementMessage(12345L, 1L, "AB1234D", "SCT", "MDI", "IN", "ADM"))
 
@@ -166,7 +166,7 @@ class PrisonerPatientUpdateServiceTest {
   fun `will send a DEDUCTION notification to NHS for released offender from prison`() {
     whenever(offenderService.getOffender(anyString())).thenReturn(createPrisonerStatus())
     whenever(offenderPatientRecordRepository.findById(eq("AB1234D"))).thenReturn(Optional.of(createOffenderPatientRecord()))
-    whenever(prisonEstateService.getPrisonEstateByPrisonId(anyString())).thenReturn(createPrisonEstate())
+    whenever(prisonRegisterService.getPrisonRegisterByPrisonId(anyString())).thenReturn(createPrisonRegister())
 
     service.externalMovement(ExternalPrisonerMovementMessage(12345L, 1L, "AB1234D", "MDI", "OUT", "OUT", "REL"))
 
@@ -308,7 +308,7 @@ class PrisonerPatientUpdateServiceTest {
     updatedTimestamp = LocalDateTime.now().minusDays(1)
   )
 
-  private fun createPrisonEstate() = PrisonEstate(
+  private fun createPrisonRegister() = PrisonRegister(
     prisonId = "MDI",
     name = "Moorlands",
     active = true,

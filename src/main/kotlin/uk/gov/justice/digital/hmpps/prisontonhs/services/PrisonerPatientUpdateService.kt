@@ -23,7 +23,7 @@ import javax.transaction.Transactional
 @Transactional
 class PrisonerPatientUpdateService(
   private val offenderService: OffenderService,
-  private val prisonEstateService: PrisonEstateService,
+  private val prisonRegisterService: PrisonRegisterService,
   private val nhsReceiveService: NhsReceiveService,
   private val offenderPatientRecordRepository: OffenderPatientRecordRepository,
   private val telemetryClient: TelemetryClient,
@@ -121,7 +121,7 @@ class PrisonerPatientUpdateService(
     )
 
     // look up the establishment code to get gp code
-    prisonEstateService.getPrisonEstateByPrisonId(establishmentCode)?.let { prison ->
+    prisonRegisterService.getPrisonRegisterByPrisonId(establishmentCode)?.let { prison ->
 
       // map the option to NhsPrisoner
       with(offender) {

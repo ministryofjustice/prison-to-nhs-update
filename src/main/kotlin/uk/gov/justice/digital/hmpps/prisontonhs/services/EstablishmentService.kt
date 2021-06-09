@@ -6,12 +6,12 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class EstablishmentService(
-  private val prisonEstateService: PrisonEstateService,
+  private val prisonRegisterService: PrisonRegisterService,
   private val offenderService: OffenderService
 ) {
 
   fun getPrisonersByGpPracticeCode(gpPracticeCode: String, page: Int, size: Int): Page<NhsPrisoner> {
-    return prisonEstateService.getPrisonEstateByGpPracticeCode(gpPracticeCode)?.let {
+    return prisonRegisterService.getPrisonRegisterByGpPracticeCode(gpPracticeCode)?.let {
       offenderService.getOffendersInEstablishment(it.prisonId, page, size)?.let { offenders ->
         offenders.map { offender ->
           (

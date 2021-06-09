@@ -7,7 +7,7 @@ services:
     depends_on:
       - localstack
       - elite2-api
-      - prison-estate
+      - prison-register
     ports:
       - "8084:8080"
     healthcheck:
@@ -16,7 +16,7 @@ services:
       - SERVER_PORT=8080
       - API_BASE_URL_OAUTH=http://localhost:8090/auth
       - API_BASE_URL_NOMIS=http://localhost:8093
-      - API_BASE_URL_PRISON_ESTATE=http://localhost:7070
+      - API_BASE_URL_PRISON_REGISTER=http://localhost:7070
       - API_BASE_URL_NHS=http://localhost:7080
       - SQS_ENDPOINT_URL=http://localhost:4566
       - SQS_PROVIDER=localstack
@@ -52,11 +52,11 @@ services:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev
 
-  prison-estate:
-    image: quay.io/hmpps/prison-estate:latest
+  prison-register:
+    image: quay.io/hmpps/prison-register:latest
     networks:
       - hmpps
-    container_name: prison-estate
+    container_name: prison-register
     ports:
       - "8094:8080"
     healthcheck:
