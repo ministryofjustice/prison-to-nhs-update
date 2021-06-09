@@ -35,7 +35,7 @@ class NhsOffenderRepositoryTest {
     with(savedOffenderInformation) {
       assertThat(nomsId).isEqualTo(offenderNomsId)
       assertThat(patientRecord).isEqualTo("{ \"id\": \"test\" }")
-      assertThat(updatedTimestamp).isEqualTo(now)
+      assertThat(updatedTimestamp).isEqualToIgnoringNanos(now)
     }
   }
 }

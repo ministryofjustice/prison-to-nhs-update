@@ -56,8 +56,9 @@ local test data:
 
 Purging a local queue
 ```bash
-aws --endpoint-url=http://localhost:4576 sqs purge-queue --queue-url http://localhost:4576/queue/prison_to_nhs_queue
+aws --endpoint-url=http://localhost:4566 sqs purge-queue --queue-url http://localhost:4566/queue/prison_to_nhs_queue
 ```
 
 #### Running without queues
 This can be done using the `dev` spring profile
+

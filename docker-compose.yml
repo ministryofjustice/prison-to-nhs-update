@@ -18,7 +18,7 @@ services:
       - API_BASE_URL_NOMIS=http://localhost:8093
       - API_BASE_URL_PRISON_ESTATE=http://localhost:7070
       - API_BASE_URL_NHS=http://localhost:7080
-      - SQS_ENDPOINT_URL=http://localhost:4576
+      - SQS_ENDPOINT_URL=http://localhost:4566
       - SQS_PROVIDER=localstack
       - SQS_AWS_ACCESS_KEY_ID=foobar
       - SQS_AWS_SECRET_ACCESS_KEY=foobar
@@ -66,7 +66,7 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
 
   localstack:
-    image: localstack/localstack:0.10.5
+    image: localstack/localstack:0.12.9.1
     networks:
       - hmpps
     container_name: localstack
@@ -76,7 +76,6 @@ services:
       - SERVICES=sqs,sns
       - DATA_DIR=/tmp/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
-
       - DEFAULT_REGION=eu-west-2
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"

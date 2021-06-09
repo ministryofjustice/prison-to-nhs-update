@@ -22,7 +22,7 @@ env:
   JAVA_OPTS: "-Xmx512m"
   API_BASE_URL_OAUTH: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
   API_BASE_URL_NOMIS: "https://api-preprod.prison.service.justice.gov.uk"
-  API_BASE_URL_PRISON_ESTATE: "https://estate-preprod.prison.service.justice.gov.uk"
+  API_BASE_URL_PRISON_ESTATE: "https://prison-register-preprod.prison.service.justice.gov.uk"
   API_BASE_URL_NHS: "http://localhost:9090"
   PRISONTONHS_ONLY_PRISONS: "LEI,MDI,LPI,HLI"
   NHS_SERVER_ENABLED: "false"
@@ -34,3 +34,7 @@ whitelist:
   cloudplatform-live1-1: "35.178.209.113/32"
   cloudplatform-live1-2: "3.8.51.207/32"
   cloudplatform-live1-3: "35.177.252.54/32"
+
+# CloudPlatform AlertManager receiver to route promethues alerts to slack
+generic-prometheus-alerts:
+  alertSeverity: hmpps_tech_non_prod

@@ -1,37 +1,28 @@
 version: 2.1
 
 orbs:
-  owasp: entur/owasp@0.0.10
-  hmpps: ministryofjustice/hmpps@1.0.0
-
-executors:
-  validator:
-    docker:
-      - image: circleci/openjdk:11-jdk
-      - image: localstack/localstack:0.10.5
-        environment:
-          - SERVICES=sqs,sns
-          - DEBUG=${DEBUG- }
-          - DATA_DIR=/tmp/localstack/data
-          - DOCKER_HOST=unix:///var/run/docker.sock
-          - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
-          - AWS_EXECUTION_ENV=True
-          - DEFAULT_REGION=eu-west-2
-          - TMPDIR=/private
-    environment:
-      _JAVA_OPTIONS: -Xmx256m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-XX:+UseContainerSupport
-    working_directory: ~/app
+  hmpps: ministryofjustice/hmpps@3.2
 
 jobs:
   validate:
-    executor: validator
+    executor:
+      name: hmpps/localstack
+      jdk_tag: "16.0"
+      localstack_tag: "0.12.9.1"
     steps:
       - checkout
+      - hmpps/install_aws_cli
+      - run:
+          name: Wait for SQS and SNS to be ready
+          command: curl -4 --connect-timeout 30 --retry-connrefused --retry 20 --retry-delay 5 http://localhost:4566
+      - run:
+          name: Set up queues
+          command: src/test/resources/localstack/setup-sns.sh
       - restore_cache:
           keys:
             - gradle-{{ checksum "build.gradle.kts" }}
             - gradle-
-      - run: ./gradlew check
+      - run: ./gradlew -Dorg.gradle.jvmargs="--illegal-access=permit" -Dkotlin.daemon.jvm.options="--illegal-access=permit" check
       - save_cache:
           paths:
             - ~/.gradle
@@ -80,7 +71,9 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
-          context: prison-to-nhs-update-preprod
+          context:
+            - hmpps-common-vars
+            - prison-to-nhs-update-preprod
           requires:
             - request-preprod-approval
       - request-prod-approval:
@@ -91,7 +84,9 @@ workflows:
           name: deploy_prod
           env: "prod"
           slack_notification: true
-          context: prison-to-nhs-update-prod
+          context:
+            - hmpps-common-vars
+            - prison-to-nhs-update-prod
           requires:
             - request-prod-approval
 
@@ -104,5 +99,10 @@ workflows:
               only:
                 - main
     jobs:
-      - owasp/gradle_owasp_dependency_check:
-          executor: hmpps/java
+      - hmpps/gradle_owasp_dependency_check:
+          context:
+            - hmpps-common-vars
+      - hmpps/veracode_policy_scan:
+          context:
+            - hmpps-common-vars
+            - veracode-credentials
