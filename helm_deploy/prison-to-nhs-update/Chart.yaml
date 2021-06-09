@@ -5,6 +5,9 @@ name: prison-to-nhs-update
 version: 0.1.1
 
 dependencies:
+  - name: generic-service
+    version: 1.0.9
+    repository: https://ministryofjustice.github.io/hmpps-helm-charts
   - name: generic-prometheus-alerts
     version: 0.1.2
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
