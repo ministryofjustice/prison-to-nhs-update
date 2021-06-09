@@ -24,4 +24,3 @@ class ApplicationInsightsConfiguration {
     private val log = LoggerFactory.getLogger(this::class.java)
   }
 }
-
