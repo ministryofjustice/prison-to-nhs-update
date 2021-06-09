@@ -9,6 +9,7 @@ import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration
 import com.amazonaws.services.sqs.AmazonSQS
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
@@ -83,4 +84,13 @@ class JmsConfig {
       .withEndpointConfiguration(EndpointConfiguration(serviceEndpoint, region))
       .withCredentials(AWSStaticCredentialsProvider(AnonymousAWSCredentials()))
       .build()
+
+  @Bean
+  @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "localstack")
+  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
+  fun queueUrl(
+    @Autowired awsSqsClient: AmazonSQS,
+    @Value("\${sqs.queue.name}") queueName: String,
+    @Value("\${sqs.dlq.name}") dlqName: String
+  ): String = awsSqsClient.getQueueUrl(queueName).queueUrl
 }
