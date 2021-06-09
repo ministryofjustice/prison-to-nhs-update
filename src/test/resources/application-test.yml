@@ -3,7 +3,7 @@ graceful:
 
 sqs:
   provider: localstack
-  endpoint.url: http://localhost:4576
+  endpoint.url: http://localhost:4566
 
 api:
   base:

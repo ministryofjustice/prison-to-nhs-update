@@ -27,4 +27,6 @@ env:
   PRISONTONHS_ONLY_PRISONS: "MDI,LEI,PVI,BXI,LPI,HLI"
   NHS_SERVER_ENABLED: "false"
 
-
+# CloudPlatform AlertManager receiver to route promethues alerts to slack
+generic-prometheus-alerts:
+  alertSeverity: hmpps_tech_non_prod
