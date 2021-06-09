@@ -20,7 +20,7 @@ abstract class QueueIntegrationTest : IntegrationTest() {
 
   fun prisonRequestCountFor(url: String) = prisonMockServer.findAll(getRequestedFor(urlEqualTo(url))).count()
 
-  fun estateRequestCountFor(url: String) = prisonEstateMockServer.findAll(getRequestedFor(urlEqualTo(url))).count()
+  fun registerRequestCountFor(url: String) = prisonRegisterMockServer.findAll(getRequestedFor(urlEqualTo(url))).count()
 
   fun nhsPostCountFor(url: String) = nhsMockServer.findAll(postRequestedFor(urlEqualTo(url))).count()
 }

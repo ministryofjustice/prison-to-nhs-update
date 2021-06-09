@@ -16,8 +16,8 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.NhsMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.OAuthMockServer
-import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonEstateMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonMockServer
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonRegisterMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.services.JwtAuthHelper
 import java.time.Duration
 
@@ -42,14 +42,14 @@ abstract class IntegrationTest {
   companion object {
     internal val prisonMockServer = PrisonMockServer()
     internal val oauthMockServer = OAuthMockServer()
-    internal val prisonEstateMockServer = PrisonEstateMockServer()
+    internal val prisonRegisterMockServer = PrisonRegisterMockServer()
     internal val nhsMockServer = NhsMockServer()
 
     @BeforeAll
     @JvmStatic
     fun startMocks() {
       prisonMockServer.start()
-      prisonEstateMockServer.start()
+      prisonRegisterMockServer.start()
       nhsMockServer.start()
       oauthMockServer.start()
     }
@@ -58,7 +58,7 @@ abstract class IntegrationTest {
     @JvmStatic
     fun stopMocks() {
       prisonMockServer.stop()
-      prisonEstateMockServer.stop()
+      prisonRegisterMockServer.stop()
       nhsMockServer.stop()
       oauthMockServer.stop()
     }
@@ -73,7 +73,7 @@ abstract class IntegrationTest {
   @BeforeEach
   fun resetStubs() {
     prisonMockServer.resetAll()
-    prisonEstateMockServer.resetAll()
+    prisonRegisterMockServer.resetAll()
     nhsMockServer.resetAll()
     oauthMockServer.resetAll()
     oauthMockServer.stubGrantToken()

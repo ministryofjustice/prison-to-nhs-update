@@ -21,7 +21,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089DY/full-status") } matches { it == 1 }
-    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { registerRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
@@ -39,7 +39,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089EY/full-status") } matches { it == 1 }
-    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { registerRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
@@ -58,7 +58,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/1900835") } matches { it == 1 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A6089DY/full-status") } matches { it == 1 }
-    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { registerRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
@@ -77,7 +77,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/offenderNo/A7089EY") } matches { it == 1 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A7089EY/full-status") } matches { it == 1 }
-    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { registerRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())
@@ -97,7 +97,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/1900836") } matches { it == 2 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A6089DX/full-status") } matches { it == 2 }
-    await untilCallTo { estateRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
+    await untilCallTo { registerRequestCountFor("/prisons/id/MDI") } matches { it == 1 }
     await untilCallTo { nhsPostCountFor("/patient-upsert") } matches { it == 1 }
 
 //    verify(telemetryClient).trackEvent(eq("p2nhs-prisoner-new"), any(), isNull())

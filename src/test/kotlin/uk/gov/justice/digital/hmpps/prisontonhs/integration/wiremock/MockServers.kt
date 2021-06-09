@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder
 
 class PrisonMockServer : WireMockServer(8093)
 
-class PrisonEstateMockServer : WireMockServer(7070)
+class PrisonRegisterMockServer : WireMockServer(7070)
 
 class NhsMockServer : WireMockServer(7080)
 
