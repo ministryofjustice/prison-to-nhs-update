@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "url": "/prisons/id/MDI"
+    "url": "/gp/prison/MDI"
   },
   "response": {
     "status": 200,
