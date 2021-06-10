@@ -16,6 +16,7 @@ dependencies {
   implementation("org.springframework:spring-webflux")
   implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
   implementation("org.springframework.boot:spring-boot-starter-reactor-netty")
+  implementation("org.springframework.cloud:spring-cloud-aws-messaging:2.2.6.RELEASE")
 
   implementation("io.springfox:springfox-boot-starter:3.0.0")
 

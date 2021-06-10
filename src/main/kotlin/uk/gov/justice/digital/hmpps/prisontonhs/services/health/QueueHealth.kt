@@ -10,17 +10,16 @@ import com.amazonaws.services.sqs.model.QueueAttributeName.ApproximateNumberOfMe
 import com.amazonaws.services.sqs.model.QueueDoesNotExistException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.Health.Builder
 import org.springframework.boot.actuate.health.HealthIndicator
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.stereotype.Component
+import uk.gov.justice.digital.hmpps.prisontonhs.config.SqsConfigProperties
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus.NOT_ATTACHED
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus.NOT_AVAILABLE
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus.NOT_FOUND
+import uk.gov.justice.digital.hmpps.prisontonhs.services.health.DlqStatus.UP
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes.MESSAGES_IN_FLIGHT
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes.MESSAGES_ON_DLQ
 import uk.gov.justice.digital.hmpps.prisontonhs.services.health.QueueAttributes.MESSAGES_ON_QUEUE
@@ -39,12 +38,11 @@ enum class QueueAttributes(val awsName: String, val healthName: String) {
 }
 
 @Component
-@ConditionalOnExpression("{'aws', 'localstack', 'embedded-localstack'}.contains('\${sqs.provider}')")
+@ConditionalOnExpression("{'aws', 'localstack'}.contains('\${sqs.provider}')")
 class QueueHealth(
-  @Autowired @Qualifier("awsSqsClient") private val awsSqsClient: AmazonSQS,
-  @Autowired @Qualifier("awsSqsDlqClient") private val awsSqsDlqClient: AmazonSQS,
-  @Value("\${sqs.queue.name}") private val queueName: String,
-  @Value("\${sqs.dlq.name}") private val dlqName: String
+  private val awsSqsClient: AmazonSQS,
+  private val awsSqsDlqClient: AmazonSQS,
+  private val sqsConfigProperties: SqsConfigProperties
 ) : HealthIndicator {
 
   companion object {
@@ -53,10 +51,10 @@ class QueueHealth(
 
   override fun health(): Health {
     val queueAttributes = try {
-      val url = awsSqsClient.getQueueUrl(queueName)
+      val url = awsSqsClient.getQueueUrl(sqsConfigProperties.queueName)
       awsSqsClient.getQueueAttributes(getQueueAttributesRequest(url))
     } catch (e: Exception) {
-      log.error("Unable to retrieve queue attributes for queue '{}' due to exception:", queueName, e)
+      log.error("Unable to retrieve queue attributes for queue '{}' due to exception:", sqsConfigProperties.queueName, e)
       return Builder().down().withException(e).build()
     }
     val details = mutableMapOf<String, Any?>(
@@ -64,36 +62,41 @@ class QueueHealth(
       MESSAGES_IN_FLIGHT.healthName to queueAttributes.attributes[MESSAGES_IN_FLIGHT.awsName]?.toInt()
     )
 
-    val health = Builder().up().withDetails(details).addDlqHealth(queueAttributes).build()
-
-    log.info("Found health details for queue '{}': {}", queueName, health)
-    return health
+    return Builder().up().withDetails(details).addDlqHealth(queueAttributes).build()
   }
 
   private fun Builder.addDlqHealth(mainQueueAttributes: GetQueueAttributesResult): Builder {
     if (!mainQueueAttributes.attributes.containsKey("RedrivePolicy")) {
       log.error(
         "Queue '{}' is missing a RedrivePolicy attribute indicating it does not have a dead letter queue",
-        queueName
+        sqsConfigProperties.queueName
       )
       return down().withDetail("dlqStatus", NOT_ATTACHED.description)
     }
 
     val dlqAttributes = try {
-      val url = awsSqsDlqClient.getQueueUrl(dlqName)
+      val url = awsSqsDlqClient.getQueueUrl(sqsConfigProperties.dlqName)
       awsSqsDlqClient.getQueueAttributes(getQueueAttributesRequest(url))
     } catch (e: QueueDoesNotExistException) {
-      log.error("Unable to retrieve dead letter queue URL for queue '{}' due to exception:", queueName, e)
+      log.error("Unable to retrieve dead letter queue URL for queue '{}' due to exception:", sqsConfigProperties.queueName, e)
       return down(e).withDetail("dlqStatus", NOT_FOUND.description)
     } catch (e: Exception) {
-      log.error("Unable to retrieve dead letter queue attributes for queue '{}' due to exception:", queueName, e)
+      log.error("Unable to retrieve dead letter queue attributes for queue '{}' due to exception:", sqsConfigProperties.queueName, e)
       return down(e).withDetail("dlqStatus", NOT_AVAILABLE.description)
     }
 
-    return withDetail("dlqStatus", DlqStatus.UP.description)
+    return withDetail("dlqStatus", UP.description)
       .withDetail(MESSAGES_ON_DLQ.healthName, dlqAttributes.attributes[MESSAGES_ON_DLQ.awsName]?.toInt())
   }
 
   private fun getQueueAttributesRequest(url: GetQueueUrlResult) =
     GetQueueAttributesRequest(url.queueUrl).withAttributeNames(QueueAttributeName.All)
 }
+
+// @Component
+// class PrisonToNHSUpdateQueueHealth
+// constructor(
+//   @Qualifier("awsSqsClient") awsSqsClient: AmazonSQS,
+//   @Qualifier("awsSqsDlqClient") awsSqsDlqClient: AmazonSQS,
+//   sqsConfigProperties: SqsConfigProperties,
+// ) : QueueHealth(awsSqsClient, awsSqsDlqClient, sqsConfigProperties.queueName, sqsConfigProperties.dlqName)

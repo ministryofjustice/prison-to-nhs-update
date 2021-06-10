@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 
 @Service
-open class PrisonRegisterService(
+class PrisonRegisterService(
   @Qualifier("webClient") val webClient: WebClient,
   @Value("\${api.base.url.prison-register}") val baseUri: String,
   @Value("\${api.prison-register.timeout:5s}") val timeout: Duration

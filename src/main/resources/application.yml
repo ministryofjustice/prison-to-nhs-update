@@ -35,9 +35,12 @@ spring:
   datasource:
     # This reopens the H2 database prepared by flyway with default schema and user OFFENDER_EVENTS
     url: 'jdbc:h2:mem:nhs-offender-db;MODE=PostgreSQL;SCHEMA=NHS_OFFENDER;IFEXISTS=TRUE'
-    continue-on-error: true
     username: nhs_offender
     password: dummy
+
+  sql:
+    init:
+      continue-on-error: true
 
     hikari:
       pool-name: NhsOffender-CP
@@ -93,11 +96,19 @@ management:
 prisontonhs:
   only.prisons: ''
 
-sqs:
+aws:
   provider: aws
-  queue.name: prison_to_nhs_queue
-  dlq.name: prison_to_nhs_dlq
-  endpoint.region: eu-west-2
+  region: eu-west-2
+
+sqs:
+  provider: ${aws.provider}
+  queueName: ${sqs.queue.name}
+  queueAccessKeyId: ${sqs.aws.access.key.id}
+  queueSecretAccessKey: ${sqs.aws.secret.access.key}
+  dlqName: ${sqs.dlq.name}
+  dlqAccessKeyId: ${sqs.aws.dlq.access.key.id}
+  dlqSecretAccessKey: ${sqs.aws.dlq.secret.access.key}
+  region: ${aws.region}
 
 azure:
   application-insights.web.enable-W3C: true
