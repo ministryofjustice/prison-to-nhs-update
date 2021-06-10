@@ -17,7 +17,7 @@ open class PrisonRegisterService(
 
   open fun getPrisonRegisterByPrisonId(prisonId: String): PrisonRegister? {
     return webClient.get()
-      .uri("$baseUri/prisons/id/$prisonId")
+      .uri("$baseUri/gp/prison/$prisonId")
       .retrieve()
       .bodyToMono(PrisonRegister::class.java)
       .block(timeout)
@@ -25,7 +25,7 @@ open class PrisonRegisterService(
 
   open fun getPrisonRegisterByGpPracticeCode(gpPracticeCode: String): PrisonRegister? {
     return webClient.get()
-      .uri("$baseUri/prisons/gp-practice/$gpPracticeCode")
+      .uri("$baseUri/gp/practice/$gpPracticeCode")
       .retrieve()
       .bodyToMono(PrisonRegister::class.java)
       .block(timeout)
