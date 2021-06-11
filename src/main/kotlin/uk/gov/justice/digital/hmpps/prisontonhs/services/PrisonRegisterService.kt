@@ -34,7 +34,7 @@ class PrisonRegisterService(
 
 data class PrisonRegister(
   val prisonId: String,
-  val name: String,
+  val prisonName: String,
   val active: Boolean,
   val gpPracticeCode: String
 )
