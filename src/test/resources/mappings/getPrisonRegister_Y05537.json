@@ -10,7 +10,7 @@
     },
     "jsonBody": {
       "prisonId": "MDI",
-      "name": "Moorland (HMP & YOI)",
+      "prisonName": "Moorland (HMP & YOI)",
       "active": true,
       "gpPracticeCode": "Y05537"
     }

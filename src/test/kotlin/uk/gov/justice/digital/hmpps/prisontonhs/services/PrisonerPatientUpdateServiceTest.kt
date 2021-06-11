@@ -310,7 +310,7 @@ class PrisonerPatientUpdateServiceTest {
 
   private fun createPrisonRegister() = PrisonRegister(
     prisonId = "MDI",
-    name = "Moorlands",
+    prisonName = "Moorlands",
     active = true,
     gpPracticeCode = "V123223"
   )
