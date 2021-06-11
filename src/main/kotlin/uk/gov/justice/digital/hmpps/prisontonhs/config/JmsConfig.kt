@@ -1,3 +1,4 @@
+package uk.gov.justice.digital.hmpps.prisontonhs.config
 
 import com.amazon.sqs.javamessaging.ProviderConfiguration
 import com.amazon.sqs.javamessaging.SQSConnectionFactory
