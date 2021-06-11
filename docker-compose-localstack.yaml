@@ -12,10 +12,10 @@ services:
       - DATA_DIR=/tmp/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
       - DEFAULT_REGION=eu-west-2
+      - PORT_WEB_UI=${PORT_WEB_UI- }
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - ./src/test/resources/localstack:/docker-entrypoint-initaws.d
 
 networks:
   hmpps:

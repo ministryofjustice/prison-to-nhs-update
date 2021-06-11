@@ -17,7 +17,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089DY/full-status") } matches { it == 1 }
@@ -35,7 +35,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/prisoners/A5089EY/full-status") } matches { it == 1 }
@@ -53,7 +53,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/1900835") } matches { it == 1 }
@@ -72,7 +72,7 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
 
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/offenderNo/A7089EY") } matches { it == 1 }
@@ -91,8 +91,8 @@ class MessageIntegrationTest : QueueIntegrationTest() {
     // wait until our queue has been purged
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
 
-    awsSqsClient.sendMessage(queueUrl, message)
-    awsSqsClient.sendMessage(queueUrl, message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
+    awsSqsClient.sendMessage(sqsConfigProperties.queueName.queueUrl(), message)
 
     await untilCallTo { getNumberOfMessagesCurrentlyOnQueue() } matches { it == 0 }
     await untilCallTo { prisonRequestCountFor("/api/bookings/1900836") } matches { it == 2 }

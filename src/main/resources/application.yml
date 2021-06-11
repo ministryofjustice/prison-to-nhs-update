@@ -6,6 +6,11 @@ spring:
   application:
     name: prison-to-nhs-update
 
+  profiles:
+    group:
+      test:
+        - "stdout"
+
   jackson:
     date-format: "yyyy-MM-dd HH:mm:ss"
     serialization:
@@ -35,9 +40,12 @@ spring:
   datasource:
     # This reopens the H2 database prepared by flyway with default schema and user OFFENDER_EVENTS
     url: 'jdbc:h2:mem:nhs-offender-db;MODE=PostgreSQL;SCHEMA=NHS_OFFENDER;IFEXISTS=TRUE'
-    continue-on-error: true
     username: nhs_offender
     password: dummy
+
+  sql:
+    init:
+      continue-on-error: true
 
     hikari:
       pool-name: NhsOffender-CP
@@ -70,6 +78,7 @@ server:
     remoteip:
       remote-ip-header: x-forwarded-for
       protocol_header: x-forwarded-proto
+      internal-proxies: 10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|169\.254\.\d{1,3}\.\d{1,3}|127\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.1[6-9]{1}\.\d{1,3}\.\d{1,3}|172\.2[0-9]{1}\.\d{1,3}\.\d{1,3}|172\.3[0-1]{1}\.\d{1,3}\.\d{1,3}|0:0:0:0:0:0:0:1|::1|100\.6[4-9]\.\d{1,3}\.\d{1,3}|100\.[7-9][0-9]{1}\.\d{1,3}\.\d{1,3}|100\.1[0-1][0-9]{1}\.\d{1,3}\.\d{1,3}|100\.12[0-7]\.\d{1,3}\.\d{1,3}
   shutdown: graceful
 
 management:
@@ -93,11 +102,19 @@ management:
 prisontonhs:
   only.prisons: ''
 
-sqs:
+aws:
   provider: aws
-  queue.name: prison_to_nhs_queue
-  dlq.name: prison_to_nhs_dlq
-  endpoint.region: eu-west-2
+  region: eu-west-2
+
+sqs:
+  provider: ${aws.provider}
+  queueName: ${sqs.queue.name}
+  queueAccessKeyId: ${sqs.aws.access.key.id}
+  queueSecretAccessKey: ${sqs.aws.secret.access.key}
+  dlqName: ${sqs.dlq.name}
+  dlqAccessKeyId: ${sqs.aws.dlq.access.key.id}
+  dlqSecretAccessKey: ${sqs.aws.dlq.secret.access.key}
+  region: ${aws.region}
 
 azure:
   application-insights.web.enable-W3C: true

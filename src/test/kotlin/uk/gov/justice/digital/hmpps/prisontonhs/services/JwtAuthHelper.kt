@@ -3,6 +3,7 @@ package uk.gov.justice.digital.hmpps.prisontonhs.services
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpHeaders
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
 import org.springframework.stereotype.Component
@@ -11,7 +12,6 @@ import java.security.KeyPairGenerator
 import java.security.interfaces.RSAPublicKey
 import java.time.Duration
 import java.util.Date
-import java.util.HashMap
 import java.util.UUID
 
 @Component
@@ -26,6 +26,19 @@ class JwtAuthHelper {
 
   @Bean
   fun jwtDecoder(): JwtDecoder = NimbusJwtDecoder.withPublicKey(keyPair.public as RSAPublicKey).build()
+
+  internal fun setAuthorisation(
+    user: String = "prison-to-nhs-api-client",
+    roles: List<String> = listOf()
+  ): (HttpHeaders) -> Unit {
+    val token = createJwt(
+      subject = user,
+      scope = listOf("read"),
+      expiryTime = Duration.ofHours(1L),
+      roles = roles
+    )
+    return { it.set(HttpHeaders.AUTHORIZATION, "Bearer $token") }
+  }
 
   fun createJwt(
     subject: String,

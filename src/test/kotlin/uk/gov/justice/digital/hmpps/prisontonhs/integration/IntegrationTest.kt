@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.http.HttpHeaders
-import org.springframework.security.authentication.TestingAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.NhsMockServer
@@ -19,7 +17,6 @@ import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.OAuthMockSe
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonRegisterMockServer
 import uk.gov.justice.digital.hmpps.prisontonhs.services.JwtAuthHelper
-import java.time.Duration
 
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -37,7 +34,7 @@ abstract class IntegrationTest {
   internal lateinit var webTestClient: WebTestClient
 
   @Autowired
-  internal lateinit var jwtHelper: JwtAuthHelper
+  internal lateinit var jwtAuthHelper: JwtAuthHelper
 
   companion object {
     internal val prisonMockServer = PrisonMockServer()
@@ -64,12 +61,6 @@ abstract class IntegrationTest {
     }
   }
 
-  init {
-    SecurityContextHolder.getContext().authentication = TestingAuthenticationToken("user", "pw")
-    // Resolves an issue where Wiremock keeps previous sockets open from other tests causing connection resets
-    System.setProperty("http.keepAlive", "false")
-  }
-
   @BeforeEach
   fun resetStubs() {
     prisonMockServer.resetAll()
@@ -83,14 +74,6 @@ abstract class IntegrationTest {
 
   internal fun setAuthorisation(
     user: String = "prison-to-nhs-api-client",
-    roles: List<String> = listOf()
-  ): (HttpHeaders) -> Unit {
-    val token = jwtHelper.createJwt(
-      subject = user,
-      scope = listOf("read"),
-      expiryTime = Duration.ofHours(1L),
-      roles = roles
-    )
-    return { it.set(HttpHeaders.AUTHORIZATION, "Bearer $token") }
-  }
+    roles: List<String> = listOf(),
+  ): (HttpHeaders) -> Unit = jwtAuthHelper.setAuthorisation(user, roles)
 }

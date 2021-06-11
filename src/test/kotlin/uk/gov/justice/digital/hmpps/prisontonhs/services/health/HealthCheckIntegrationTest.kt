@@ -1,39 +1,37 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services.health
 
-import com.amazonaws.services.sqs.model.GetQueueAttributesRequest
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult
-import com.amazonaws.services.sqs.model.QueueAttributeName
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.nhaarman.mockitokotlin2.whenever
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doReturn
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.util.ReflectionTestUtils
+import uk.gov.justice.digital.hmpps.prisontonhs.config.SqsConfigProperties
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 
 @ExtendWith(SpringExtension::class)
 class HealthCheckIntegrationTest : IntegrationTest() {
   @Autowired
-  private lateinit var queueHealth: QueueHealth
+  private lateinit var sqsConfigProperties: SqsConfigProperties
+  private var queueName: String? = null
+  private var dlqName: String? = null
 
-  @Autowired
-  @Value("\${sqs.queue.name}")
-  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-  private lateinit var queueName: String
-
-  @Autowired
-  @Value("\${sqs.dlq.name}")
-  @Suppress("SpringJavaInjectionPointsAutowiringInspection")
-  private lateinit var dlqName: String
+  @BeforeEach
+  fun setup() {
+    queueName = sqsConfigProperties.queueName
+    dlqName = sqsConfigProperties.dlqName
+  }
 
   @AfterEach
   fun tearDown() {
-    ReflectionTestUtils.setField(queueHealth, "queueName", queueName)
-    ReflectionTestUtils.setField(queueHealth, "dlqName", dlqName)
+    ReflectionTestUtils.setField(sqsConfigProperties, "queueName", queueName)
+    ReflectionTestUtils.setField(sqsConfigProperties, "dlqName", dlqName)
   }
 
   @Test
@@ -100,7 +98,7 @@ class HealthCheckIntegrationTest : IntegrationTest() {
 
   @Test
   fun `Queue does not exist reports down`() {
-    ReflectionTestUtils.setField(queueHealth, "queueName", "missing_queue")
+    ReflectionTestUtils.setField(sqsConfigProperties, "queueName", "missing_queue")
     subPing(200)
 
     webTestClient.get()
@@ -174,7 +172,7 @@ class HealthCheckIntegrationTest : IntegrationTest() {
   @Test
   fun `Dlq not found reports dlq down`() {
     subPing(200)
-    ReflectionTestUtils.setField(queueHealth, "dlqName", "missing_queue")
+    ReflectionTestUtils.setField(sqsConfigProperties, "dlqName", "missing_queue")
 
     webTestClient.get()
       .uri("/health")
@@ -231,17 +229,6 @@ class HealthCheckIntegrationTest : IntegrationTest() {
   }
 
   private fun mockQueueWithoutRedrivePolicyAttributes() {
-    val queueName = ReflectionTestUtils.getField(queueHealth, "queueName") as String
-    val queueUrl = awsSqsClient.getQueueUrl(queueName)
-    whenever(
-      awsSqsClient.getQueueAttributes(
-        GetQueueAttributesRequest(queueUrl.queueUrl).withAttributeNames(
-          listOf(
-            QueueAttributeName.All.toString()
-          )
-        )
-      )
-    )
-      .thenReturn(GetQueueAttributesResult())
+    doReturn(GetQueueAttributesResult()).`when`(awsSqsClient).getQueueAttributes(any())
   }
 }
