@@ -1,2 +1,10 @@
-sqs:
-  provider: none
+api:
+  base:
+    url:
+      oauth: http://localhost:8090/auth
+      nomis: http://localhost:8093
+      nhs: http://localhost:7080
+      prison-register: http://localhost:7070
+
+server:
+  shutdown: immediate

@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Primary
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "sqs")
@@ -32,7 +31,6 @@ data class SqsConfigProperties(
 class SqsConfig {
 
   @Bean
-  @Primary
   @ConditionalOnProperty(name = ["sqs.provider"], havingValue = "aws")
   fun awsSqsClient(sqsConfigProperties: SqsConfigProperties): AmazonSQSAsync =
     AmazonSQSAsyncClientBuilder.standard()

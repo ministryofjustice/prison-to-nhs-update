@@ -54,13 +54,13 @@ env:
         name: {{ template "app.name" . }}
         key: PRISON_TO_NHS_CLIENT_SECRET
 
-  - name: SQS_AWS_ACCESS_KEY_ID
+  - name: SQS_QUEUE_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-instance-output
         key: access_key_id
 
-  - name: SQS_AWS_SECRET_ACCESS_KEY
+  - name: SQS_QUEUE_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-instance-output
@@ -72,13 +72,13 @@ env:
         name: ptnhs-sqs-instance-output
         key: sqs_ptnhs_name
 
-  - name: SQS_AWS_DLQ_ACCESS_KEY_ID
+  - name: SQS_DLQ_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output
         key: access_key_id
 
-  - name: SQS_AWS_DLQ_SECRET_ACCESS_KEY
+  - name: SQS_DLQ_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output

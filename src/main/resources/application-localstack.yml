@@ -1,19 +1,6 @@
-aws:
-  provider: localstack
-
 sqs:
-  provider: ${aws.provider}
+  provider: localstack
   localstackUrl: http://localhost:4566
   queueName: ${random.uuid}
   dlqName: ${random.uuid}
 
-api:
-  base:
-    url:
-      oauth: http://localhost:8090/auth
-      nomis: http://localhost:8093
-      nhs: http://localhost:7080
-      prison-register: http://localhost:7070
-
-server:
-  shutdown: immediate
