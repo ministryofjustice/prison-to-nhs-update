@@ -3,22 +3,20 @@ package uk.gov.justice.digital.hmpps.prisontonhs.services
 import com.google.gson.Gson
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jms.annotation.JmsListener
 import org.springframework.stereotype.Service
 
 @Service
 class PrisonerChangeListenerPusher(
   private val prisonerPatientUpdateService: PrisonerPatientUpdateService,
-  @Qualifier("gson") private val gson: Gson
+  private val gson: Gson,
 ) {
-  companion object {
+  private companion object {
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
   @JmsListener(destination = "#{@'sqs-uk.gov.justice.digital.hmpps.prisontonhs.config.SqsConfigProperties'.queueName}")
   fun pushPrisonUpdateToNhs(requestJson: String?) {
-    log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
     val eventType = messageAttributes.eventType.Value
     log.info("Received message {} type {}", messageId, eventType)
@@ -39,9 +37,7 @@ class PrisonerChangeListenerPusher(
     }
   }
 
-  private inline fun <reified T> fromJson(message: String): T {
-    return gson.fromJson(message, T::class.java)
-  }
+  private inline fun <reified T> fromJson(message: String): T = gson.fromJson(message, T::class.java)
 }
 
 data class EventType(val Value: String)
