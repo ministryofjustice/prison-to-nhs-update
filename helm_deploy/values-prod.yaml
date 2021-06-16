@@ -26,6 +26,7 @@ env:
   API_BASE_URL_NHS: "http://localhost:9090"
   PRISONTONHS_ONLY_PRISONS: "LEI,MDI,LPI,HLI"
   NHS_SERVER_ENABLED: "false"
+  APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
 
 whitelist:
   office: "217.33.148.210/32"
@@ -38,4 +39,3 @@ whitelist:
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
-
