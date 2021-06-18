@@ -4,6 +4,10 @@ plugins {
   kotlin("plugin.jpa") version "1.5.10"
 }
 
+configurations {
+  implementation { exclude(module = "spring-boot-graceful-shutdown") }
+}
+
 dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
