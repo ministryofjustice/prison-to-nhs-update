@@ -49,6 +49,6 @@ class PrisonerListResource(private val establishmentService: EstablishmentServic
     ) size: Int
   ):
     Page<NhsPrisoner> {
-      return establishmentService.getPrisonersByGpPracticeCode(gpPracticeCode, page, size)
-    }
+    return establishmentService.getPrisonersByGpPracticeCode(gpPracticeCode, page, size)
+  }
 }
