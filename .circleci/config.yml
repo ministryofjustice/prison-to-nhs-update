@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.6
+  hmpps: ministryofjustice/hmpps@dev:2ab16b4
 
 jobs:
   validate:
@@ -42,6 +42,10 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+      - hmpps/veracode_policy_scan:
+          context:
+            - hmpps-common-vars
+            - veracode-credentials
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
