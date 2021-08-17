@@ -22,9 +22,9 @@ class HealthCheckTest : IntegrationTest() {
       .expectStatus()
       .isOk
       .expectBody()
-      .jsonPath("components.OAuthApiHealth.details.HttpStatus").isEqualTo("OK")
-      .jsonPath("components.NomisApiHealth.details.HttpStatus").isEqualTo("OK")
-      .jsonPath("components.PrisonRegistryApiHealth.details.HttpStatus").isEqualTo("OK")
+      .jsonPath("components.oauthApiHealth.details.HttpStatus").isEqualTo("OK")
+      .jsonPath("components.nomisApiHealth.details.HttpStatus").isEqualTo("OK")
+      .jsonPath("components.prisonRegisterApiHealth.details.HttpStatus").isEqualTo("OK")
       .jsonPath("status").isEqualTo("UP")
   }
 
@@ -78,7 +78,9 @@ class HealthCheckTest : IntegrationTest() {
       .is5xxServerError
       .expectBody()
       .jsonPath("status").isEqualTo("DOWN")
-      .jsonPath("components.OAuthApiHealth.details.HttpStatus").isEqualTo("NOT_FOUND")
+      .jsonPath("components.oauthApiHealth.details.HttpStatus").isEqualTo("NOT_FOUND")
+      .jsonPath("components.nomisApiHealth.details.HttpStatus").isEqualTo("NOT_FOUND")
+      .jsonPath("components.prisonRegisterApiHealth.details.HttpStatus").isEqualTo("NOT_FOUND")
   }
 
   @Test
@@ -91,9 +93,9 @@ class HealthCheckTest : IntegrationTest() {
       .expectStatus()
       .is5xxServerError
       .expectBody()
-      .jsonPath("components.OAuthApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
-      .jsonPath("components.NomisApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
-      .jsonPath("components.PrisonRegistryApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
+      .jsonPath("components.oauthApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
+      .jsonPath("components.nomisApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
+      .jsonPath("components.prisonRegisterApiHealth.details.HttpStatus").isEqualTo("I_AM_A_TEAPOT")
       .jsonPath("status").isEqualTo("DOWN")
   }
 

@@ -10,12 +10,15 @@ import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.LocalStackContainer.setLocalStackProperties
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.NhsExtension
 import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.OAuthExtension
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonExtension
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.wiremock.PrisonRegisterExtension
 import uk.gov.justice.digital.hmpps.prisontonhs.services.JwtAuthHelper
 import uk.gov.justice.hmpps.sqs.HmppsQueue
 import uk.gov.justice.hmpps.sqs.HmppsQueueService
 
-@ExtendWith(OAuthExtension::class)
+@ExtendWith(OAuthExtension::class, PrisonExtension::class, PrisonRegisterExtension::class, NhsExtension::class)
 @Suppress("SpringJavaInjectionPointsAutowiringInspection")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
