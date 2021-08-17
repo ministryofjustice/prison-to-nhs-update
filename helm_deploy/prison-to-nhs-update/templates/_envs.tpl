@@ -57,37 +57,37 @@ env:
         name: {{ template "app.name" . }}
         key: PRISON_TO_NHS_CLIENT_SECRET
 
-  - name: SQS_QUEUE_ACCESS_KEY_ID
+  - name: HMPPS_SQS_QUEUES_EVENT_QUEUE_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-instance-output
         key: access_key_id
 
-  - name: SQS_QUEUE_SECRET_ACCESS_KEY
+  - name: HMPPS_SQS_QUEUES_EVENT_QUEUE_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-instance-output
         key: secret_access_key
 
-  - name: SQS_QUEUE_NAME
+  - name: HMPPS_SQS_QUEUES_EVENT_QUEUE_NAME
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-instance-output
         key: sqs_ptnhs_name
 
-  - name: SQS_DLQ_ACCESS_KEY_ID
+  - name: HMPPS_SQS_QUEUES_EVENT_DLQ_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output
         key: access_key_id
 
-  - name: SQS_DLQ_SECRET_ACCESS_KEY
+  - name: HMPPS_SQS_QUEUES_EVENT_DLQ_SECRET_ACCESS_KEY
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output
         key: secret_access_key
 
-  - name: SQS_DLQ_NAME
+  - name: HMPPS_SQS_QUEUES_EVENT_DLQ_NAME
     valueFrom:
       secretKeyRef:
         name: ptnhs-sqs-dl-instance-output
