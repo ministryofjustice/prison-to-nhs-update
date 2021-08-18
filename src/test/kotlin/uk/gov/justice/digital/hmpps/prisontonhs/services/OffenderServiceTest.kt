@@ -18,7 +18,7 @@ class OffenderServiceTest : IntegrationTest() {
   fun `test get offender calls rest endpoint`() {
     val expectedPrisoner = createPrisoner()
 
-    PrisonExtension.prisonApi.stubGetPrisoner(expectedPrisoner)
+    PrisonExtension.prisonApi.stubGetPrisoner(expectedPrisoner.asJson())
 
     val offender = service.getOffender("AB123D")
 

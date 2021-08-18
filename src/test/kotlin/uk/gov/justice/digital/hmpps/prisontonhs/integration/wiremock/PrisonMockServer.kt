@@ -5,13 +5,10 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
-import com.google.gson.Gson
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.BeforeEachCallback
 import org.junit.jupiter.api.extension.ExtensionContext
-import org.springframework.beans.factory.annotation.Autowired
-import uk.gov.justice.digital.hmpps.prisontonhs.services.PrisonerStatus
 import java.net.HttpURLConnection.HTTP_OK
 
 class PrisonExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback {
@@ -35,14 +32,9 @@ class PrisonExtension : BeforeAllCallback, AfterAllCallback, BeforeEachCallback 
 }
 
 class PrisonMockServer : WireMockServer(WIREMOCK_PORT) {
-  @Autowired
-  private lateinit var gson: Gson
-
   companion object {
     private const val WIREMOCK_PORT = 8093
   }
-
-  internal fun Any.asJson() = gson.toJson(this)
 
   fun prisonRequestCountFor(url: String) =
     PrisonExtension.prisonApi.findAll(WireMock.getRequestedFor(WireMock.urlEqualTo(url))).count()
@@ -58,12 +50,12 @@ class PrisonMockServer : WireMockServer(WIREMOCK_PORT) {
     )
   }
 
-  fun stubGetPrisoner(expectedPrisoner: PrisonerStatus) {
+  fun stubGetPrisoner(expectedPrisoner: String) {
     stubFor(
       get(anyUrl()).willReturn(
         aResponse()
           .withHeader("Content-Type", "application/json")
-          .withBody(expectedPrisoner.asJson())
+          .withBody(expectedPrisoner)
           .withStatus(HTTP_OK)
       )
     )
