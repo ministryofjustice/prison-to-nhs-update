@@ -3,17 +3,13 @@ package uk.gov.justice.digital.hmpps.prisontonhs.repository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.transaction.TestTransaction
 import org.springframework.transaction.annotation.Transactional
+import uk.gov.justice.digital.hmpps.prisontonhs.integration.IntegrationTest
 import java.time.LocalDateTime
 
-@ActiveProfiles("test")
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @Transactional
-class NhsOffenderRepositoryTest {
+class NhsOffenderRepositoryTest : IntegrationTest() {
 
   @Autowired
   lateinit var repository: OffenderPatientRecordRepository

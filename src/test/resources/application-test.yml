@@ -1,8 +1,13 @@
-sqs:
+hmpps.sqs:
   provider: localstack
-  localstackUrl: http://localhost:4566
-  queueName: ${random.uuid}
-  dlqName: ${random.uuid}
+  queues:
+    event:
+      queueName: ${random.uuid}
+      dlqName: ${random.uuid}
+      subscribeTopicId: offenderevents
+  topics:
+    offenderevents:
+      arn: arn:aws:sns:eu-west-2:000000000000:${random.uuid}
 
 api:
   base:

@@ -1,6 +1,10 @@
-sqs:
+hmpps.sqs:
   provider: localstack
-  localstackUrl: http://localhost:4566
-  queueName: ${random.uuid}
-  dlqName: ${random.uuid}
-
+  queues:
+    event:
+      queueName: prison_to_nhs_event_queue
+      dlqName: prison_to_nhs_event_dl_queue
+      subscribeTopicId: offenderevents
+  topics:
+    offenderevents:
+      arn: arn:aws:sns:eu-west-2:000000000000:offender_events

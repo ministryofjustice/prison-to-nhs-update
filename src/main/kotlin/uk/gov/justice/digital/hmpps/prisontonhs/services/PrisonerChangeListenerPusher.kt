@@ -16,7 +16,7 @@ class PrisonerChangeListenerPusher(
     val log: Logger = LoggerFactory.getLogger(this::class.java)
   }
 
-  @JmsListener(destination = "#{@'sqs-uk.gov.justice.digital.hmpps.prisontonhs.config.SqsConfigProperties'.queueName}")
+  @JmsListener(destination = "event", containerFactory = "hmppsQueueContainerFactoryProxy")
   fun pushPrisonUpdateToNhs(requestJson: String?) {
     log.debug(requestJson)
     val (message, messageId, messageAttributes) = gson.fromJson(requestJson, Message::class.java)
