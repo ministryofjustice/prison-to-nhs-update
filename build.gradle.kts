@@ -40,3 +40,15 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
   testImplementation("org.testcontainers:localstack:1.16.0")
 }
+
+java {
+  toolchain.languageVersion.set(JavaLanguageVersion.of(16))
+}
+
+tasks {
+  withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+      jvmTarget = "16"
+    }
+  }
+}
