@@ -1,5 +1,5 @@
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.3.7-beta"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "3.3.7"
   kotlin("plugin.spring") version "1.5.30"
   kotlin("plugin.jpa") version "1.5.30"
 }
@@ -22,17 +22,17 @@ dependencies {
 
   implementation("io.springfox:springfox-boot-starter:3.0.0")
 
-  implementation("com.google.code.gson:gson:2.8.7")
+  implementation("com.google.code.gson:gson:2.8.8")
   implementation("com.google.guava:guava:30.1.1-jre")
-  implementation("com.nimbusds:nimbus-jose-jwt:9.12.1")
+  implementation("com.nimbusds:nimbus-jose-jwt:9.13")
   implementation("org.apache.commons:commons-text:1.9")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.47"))
-  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:0.9.0")
+  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.62"))
+  implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:1.0.2")
 
   runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:7.13.0")
+  runtimeOnly("org.flywaydb:flyway-core:7.15.0")
   runtimeOnly("org.postgresql:postgresql:42.2.23")
 
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
