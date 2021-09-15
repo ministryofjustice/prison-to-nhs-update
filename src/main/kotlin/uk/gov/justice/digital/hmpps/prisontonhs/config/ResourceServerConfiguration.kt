@@ -43,7 +43,6 @@ open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
     http.headers().frameOptions().sameOrigin().and()
       .sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
       // Can't have CSRF protection as requires session
       .and().csrf().disable()
       .authorizeRequests { auth ->
