@@ -1,33 +1,17 @@
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+---
+# Environment specific values, override helm_deploy/prison-to-probation-update/values.yaml
+generic-service:
+  replicaCount: 2
+  ingress:
+    host: prison-to-nhs-update-dev.prison.service.justice.gov.uk
 
-replicaCount: 2
+  allowlist: null
 
-image:
-  repository: quay.io/hmpps/prison-to-nhs-update
-  tag: latest
-  port: 8080
+  env:
+    API_BASE_URL_OAUTH: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    API_BASE_URL_NOMIS: "https://api-dev.prison.service.justice.gov.uk"
+    API_BASE_URL_PRISON_REGISTER: "https://prison-register-dev.hmpps.service.justice.gov.uk"
+    API_BASE_URL_NHS: "http://localhost:9090"
+    PRISONTONHS_ONLY_PRISONS: "MDI,LEI,PVI,BXI,LPI,HLI"
+    NHS_SERVER_ENABLED: "false"
 
-ingress:
-  enabled: true
-  enable_whitelist: false
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-  hosts:
-    - host: prison-to-nhs-update-dev.prison.service.justice.gov.uk
-      cert_secret: prison-to-nhs-update-cert
-  path: /
-
-env:
-  JAVA_OPTS: "-Xmx512m"
-  API_BASE_URL_OAUTH: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-  API_BASE_URL_NOMIS: "https://api-dev.prison.service.justice.gov.uk"
-  API_BASE_URL_PRISON_REGISTER: "https://prison-register-dev.hmpps.service.justice.gov.uk"
-  API_BASE_URL_NHS: "http://localhost:9090"
-  PRISONTONHS_ONLY_PRISONS: "MDI,LEI,PVI,BXI,LPI,HLI"
-  NHS_SERVER_ENABLED: "false"
-  APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.dev.json
-
-# CloudPlatform AlertManager receiver to route promethues alerts to slack
-generic-prometheus-alerts:
-  alertSeverity: hmpps_tech_non_prod
