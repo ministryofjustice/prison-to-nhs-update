@@ -1,41 +1,20 @@
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+---
+# Environment specific values, override helm_deploy/prison-to-probation-update/values.yaml
+generic-service:
+  replicaCount: 2
+  ingress:
+    host: prison-to-nhs-update.prison.service.justice.gov.uk
 
-replicaCount: 1
-
-image:
-  repository: quay.io/hmpps/prison-to-nhs-update
-  tag: latest
-  port: 8080
-
-ingress:
-  enabled: true
-  enable_whitelist: true
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-  hosts:
-    - host: prison-to-nhs-update.prison.service.justice.gov.uk
-      cert_secret: prison-to-nhs-update-cert
-  path: /
-
-env:
-  JAVA_OPTS: "-Xmx512m"
-  API_BASE_URL_OAUTH: "https://sign-in.hmpps.service.justice.gov.uk/auth"
-  API_BASE_URL_NOMIS: "https://api.prison.service.justice.gov.uk"
-  API_BASE_URL_PRISON_REGISTER: "https://prison-register.hmpps.service.justice.gov.uk"
-  API_BASE_URL_NHS: "http://localhost:9090"
-  PRISONTONHS_ONLY_PRISONS: "LEI,MDI,LPI,HLI"
-  NHS_SERVER_ENABLED: "false"
-  APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
-
-whitelist:
-  office: "217.33.148.210/32"
-  health-kick: "35.177.252.195/32"
-  mojvpn: "81.134.202.29/32"
-  cloudplatform-live1-1: "35.178.209.113/32"
-  cloudplatform-live1-2: "3.8.51.207/32"
-  cloudplatform-live1-3: "35.177.252.54/32"
-
+  env:
+    JAVA_OPTS: "-Xmx512m"
+    API_BASE_URL_OAUTH: "https://sign-in.hmpps.service.justice.gov.uk/auth"
+    API_BASE_URL_NOMIS: "https://api.prison.service.justice.gov.uk"
+    API_BASE_URL_PRISON_REGISTER: "https://prison-register.hmpps.service.justice.gov.uk"
+    API_BASE_URL_NHS: "http://localhost:9090"
+    PRISONTONHS_ONLY_PRISONS: "LEI,MDI,LPI,HLI"
+    NHS_SERVER_ENABLED: "false"
+    APPLICATIONINSIGHTS_CONFIGURATION_FILE: applicationinsights.json
+  
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
   alertSeverity: digital-prison-service
