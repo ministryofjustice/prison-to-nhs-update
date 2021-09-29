@@ -23,17 +23,19 @@ dependencies {
   implementation("io.springfox:springfox-boot-starter:3.0.0")
 
   implementation("com.google.code.gson:gson:2.8.8")
-  implementation("com.google.guava:guava:30.1.1-jre")
-  implementation("com.nimbusds:nimbus-jose-jwt:9.13")
+  implementation("com.google.guava:guava:31.0.1-jre")
+  implementation("com.nimbusds:nimbus-jose-jwt:9.15.2")
   implementation("org.apache.commons:commons-text:1.9")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.62"))
+  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.76"))
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:1.0.2")
 
   runtimeOnly("com.h2database:h2:1.4.200")
   runtimeOnly("org.flywaydb:flyway-core:7.15.0")
-  runtimeOnly("org.postgresql:postgresql:42.2.23")
+  runtimeOnly("org.postgresql:postgresql:42.2.24")
+
+  agentDeps("com.microsoft.azure:applicationinsights-agent:3.2.0-BETA.3")
 
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
   testImplementation("org.awaitility:awaitility-kotlin:4.1.0")
