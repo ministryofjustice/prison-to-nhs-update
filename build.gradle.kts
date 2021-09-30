@@ -35,7 +35,7 @@ dependencies {
   runtimeOnly("org.flywaydb:flyway-core:7.15.0")
   runtimeOnly("org.postgresql:postgresql:42.2.24")
 
-  agentDeps("com.microsoft.azure:applicationinsights-agent:3.2.0-BETA.3")
+  agentDeps("com.microsoft.azure:applicationinsights-agent:3.2.0-BETA.4")
 
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
   testImplementation("org.awaitility:awaitility-kotlin:4.1.0")
