@@ -28,17 +28,17 @@ dependencies {
   implementation("org.apache.commons:commons-text:1.9")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.76"))
+  implementation(platform("com.amazonaws:aws-java-sdk-bom:1.12.93"))
   implementation("uk.gov.justice.service.hmpps:hmpps-sqs-spring-boot-starter:1.0.2")
 
   runtimeOnly("com.h2database:h2:1.4.200")
-  runtimeOnly("org.flywaydb:flyway-core:7.15.0")
-  runtimeOnly("org.postgresql:postgresql:42.2.24")
+  runtimeOnly("org.flywaydb:flyway-core:8.0.2")
+  runtimeOnly("org.postgresql:postgresql:42.3.0")
 
   testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
   testImplementation("org.awaitility:awaitility-kotlin:4.1.0")
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
-  testImplementation("org.testcontainers:localstack:1.16.0")
+  testImplementation("org.testcontainers:localstack:1.16.1")
 }
 
 java {
