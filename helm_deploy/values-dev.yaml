@@ -4,6 +4,7 @@ generic-service:
   replicaCount: 2
   ingress:
     host: prison-to-nhs-update-dev.prison.service.justice.gov.uk
+    contextColour: green
 
   allowlist: null
 
