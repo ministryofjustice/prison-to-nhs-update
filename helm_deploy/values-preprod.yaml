@@ -3,7 +3,7 @@
 generic-service:
   replicaCount: 2
   ingress:
-    host: prison-to-nhs-update-preprod.prison.service.justice.gov.uk
+    host: prison-to-nhs-update-preprod.prison.service.justice.gov.ukn    contextColour: green
   
   env:
     API_BASE_URL_OAUTH: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
