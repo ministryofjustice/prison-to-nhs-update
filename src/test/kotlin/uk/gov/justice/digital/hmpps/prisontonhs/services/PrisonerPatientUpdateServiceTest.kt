@@ -1,15 +1,15 @@
 package uk.gov.justice.digital.hmpps.prisontonhs.services
 
 import com.microsoft.applicationinsights.TelemetryClient
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyZeroInteractions
-import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.ArgumentMatchers.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.whenever
 import uk.gov.justice.digital.hmpps.prisontonhs.config.JsonConfig
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecord
 import uk.gov.justice.digital.hmpps.prisontonhs.repository.OffenderPatientRecordRepository
@@ -64,7 +64,7 @@ class PrisonerPatientUpdateServiceTest {
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
@@ -105,7 +105,7 @@ class PrisonerPatientUpdateServiceTest {
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
@@ -126,7 +126,7 @@ class PrisonerPatientUpdateServiceTest {
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
@@ -139,7 +139,7 @@ class PrisonerPatientUpdateServiceTest {
     assertThatExceptionOfType(EntityNotFoundException::class.java).isThrownBy {
       service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
     }
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
@@ -148,7 +148,7 @@ class PrisonerPatientUpdateServiceTest {
     whenever(offenderService.getOffender(anyString())).thenReturn(null)
 
     service.offenderBookingChange(OffenderBookingChangedMessage(12345L))
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
@@ -177,21 +177,21 @@ class PrisonerPatientUpdateServiceTest {
   fun `will not send a notification for prisoner released from excluded prison`() {
     service.externalMovement(ExternalPrisonerMovementMessage(12345L, 1L, "AB1234D", "PVI", "OUT", "OUT", "REL"))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
   fun `will not send a notification for prisoner received into excluded prison`() {
     service.externalMovement(ExternalPrisonerMovementMessage(12345L, 1L, "AB1234D", "SCT", "PVI", "IN", "ADM"))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   @Test
   fun `will ignore other movement types`() {
     service.externalMovement(ExternalPrisonerMovementMessage(12345L, 1L, "AB1234D", "MDI", "PVI", "OUT", "TRN"))
 
-    verifyZeroInteractions(nhsReceiveService)
+    verifyNoInteractions(nhsReceiveService)
   }
 
   private fun createOffenderBooking() = OffenderBooking(
