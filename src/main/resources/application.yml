@@ -69,6 +69,11 @@ spring:
         provider:
           hmpps-auth:
             token-uri: ${api.base.url.oauth}/oauth/token
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 server:
   port: 8082
   servlet:

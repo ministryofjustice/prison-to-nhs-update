@@ -40,6 +40,7 @@ dependencies {
   testImplementation("io.jsonwebtoken:jjwt:0.9.1")
   testImplementation("org.testcontainers:localstack:1.16.2")
   testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+  testImplementation("io.swagger.parser.v3:swagger-parser-v3:2.0.20")
 }
 
 java {
