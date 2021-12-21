@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import java.time.LocalDate
 
-@ApiModel("Prisoner Information for NHS")
+@ApiModel(description = "Prisoner Information for NHS")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class NhsPrisoner(
   @ApiModelProperty(

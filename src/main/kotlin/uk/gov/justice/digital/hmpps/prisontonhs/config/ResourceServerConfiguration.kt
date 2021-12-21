@@ -8,11 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @Configuration
 @EnableWebSecurity
-@EnableSwagger2
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
 
@@ -37,9 +35,8 @@ open class ResourceServerConfiguration : WebSecurityConfigurerAdapter() {
         auth.antMatchers(
           "/webjars/**", "/favicon.ico", "/csrf",
           "/health/**", "/info", "/h2-console/**",
-          "/v2/api-docs",
-          "/swagger-ui.html", "/swagger-resources", "/swagger-resources/configuration/ui",
-          "/swagger-resources/configuration/security"
+          "/v3/api-docs", "/swagger-ui/**",
+          "/swagger-resources", "/swagger-resources/configuration/ui", "/swagger-resources/configuration/security",
         ).permitAll()
           .anyRequest()
           .authenticated()
