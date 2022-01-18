@@ -4,6 +4,7 @@ generic-service:
   replicaCount: 2
   ingress:
     host: prison-to-nhs-update.prison.service.justice.gov.uk
+    contextColour: green
 
   env:
     JAVA_OPTS: "-Xmx512m"
